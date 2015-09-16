@@ -1,9 +1,8 @@
 #!/bin/bash
 
-export WORKSPACE="$(dirname $(readlink -f "$0"))"/../
-
 # make sure we're in the correct directory
-cd "$WORKSPACE"
+cd "$(dirname $(readlink -f "$0"))"/../
+export WORKSPACE="$PWD"
 
 # setup haxelib
 mkdir -p haxelib
