@@ -1,8 +1,10 @@
 #!/bin/bash
+set -o verbose
 
 # make sure we're in the correct directory
 cd "$(dirname "$0")"/../
 export WORKSPACE="$PWD"
+echo "WORKSPACE: $WORKSPACE"
 
 # setup haxelib
 mkdir -p haxelib || exit 1
@@ -16,5 +18,5 @@ haxelib install hxcs || exit $?
 haxelib install buddy || exit $?
 
 # build the build scripts
-cd Haxe/BuildTool
+cd Plugins/UE4Haxe/Haxe/BuildTool
 haxe build.hxml || exit 1
