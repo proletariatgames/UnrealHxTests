@@ -1,0 +1,8 @@
+/Binaries
+/Build
+/DerivedDataCache
+/Intermediate
+/Saved
+/*.xcodeproj
+Generated
+/Makefile
