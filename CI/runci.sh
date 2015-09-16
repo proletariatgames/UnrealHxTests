@@ -35,7 +35,7 @@ cd "$UE4"
 
 # build the unit tests
 echo "building unit tests"
-./$BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -progress -noubtmakefiles || exit $?
+$BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -progress -noubtmakefiles || exit $?
 
 echo "running unit tests"
 MAP=/Game/Maps/HaxeTestEntryPoint
