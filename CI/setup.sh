@@ -9,6 +9,7 @@ cd "$WORKSPACE"
 mkdir -p haxelib
 export HAXELIB_PATH="$PWD"/haxelib
 export CI=1
+export CI_RUNNING=1
 
 haxelib install hxcpp || exit $?
 haxelib install hxcs || exit $?
