@@ -4,6 +4,9 @@
 /Intermediate
 /Saved
 /*.xcodeproj
-Generated
 /Makefile
 /haxelib
+
+# UE4Haxe specific files
+/Source/HaxeRuntime/HaxeRuntime.Build.cs
+Generated

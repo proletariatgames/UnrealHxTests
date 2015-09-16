@@ -1,0 +1,3 @@
+[submodule "Plugins/UE4Haxe"]
+	path = Plugins/UE4Haxe
+	url = git@github.com:proletariatgames/ue4hx.git

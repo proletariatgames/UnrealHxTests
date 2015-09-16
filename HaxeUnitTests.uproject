@@ -1,13 +1,1 @@
-{
-	"FileVersion": 3,
-	"EngineAssociation": "",
-	"Category": "",
-	"Description": "",
-	"Modules": [
-		{
-			"Name": "HaxeUnitTests",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		}
-	]
-}
+{"Category":"","Description":"","Modules":[{"Name":"HaxeUnitTests","Type":"Runtime","LoadingPhase":"Default"},{"Name":"HaxeRuntime","Type":"Runtime","LoadingPhase":"Default"}],"FileVersion":3,"EngineAssociation":""}

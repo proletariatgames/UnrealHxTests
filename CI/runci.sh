@@ -9,22 +9,34 @@ if [ -z "$UE4" ]; then
 fi
 
 if [ "$(uname)" == "Darwin" ]; then
-  BUILD_ARGS="Engine/Build/BatchFiles/Mac/Build.sh HaxeUnitTests Mac"
+  # it doesn't work with more than one extra parameter
+  #BUILD_PATH="Engine/Build/BatchFiles/Mac/Build.sh"
+  BUILD_PATH="mono Engine/Binaries/DotNET/UnrealBuildTool.exe"
+  PLATFORM=Mac
   BINPATH=Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor
+
+  cd "$UE4"
+  source Engine/Build/BatchFiles/Mac/SetupMono.sh Engine/Build/BatchFiles/Mac
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-  BUILD_ARGS="Engine/Build/BatchFiles/Linux/Build.sh HaxeUnitTests Linux"
+  BUILD_PATH="Engine/Build/BatchFiles/Linux/Build.sh"
+  PLATFORM=Linux
   BINPATH=Engine/Binaries/Linux/UE4Editor
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
-  BUILD_ARGS="Engine/Build/BatchFiles/Build.bat HaxeUnitTests Win64"
+  BUILD_PATH="Engine/Build/BatchFiles/Build.bat"
+  PLATFORM=Win64
   BINPATH=Engine/Binaries/Win64/UE4Editor.exe
 else
   echo "Platform not supported! ($(uname))"
   exit 1
 fi
 
-# build it
+# build
 cd "$UE4"
-./$BUILD_ARGS Development "-project=$WORKSPACE/HaxeUnitTests.uproject" || exit $?
 
+# build the unit tests
+echo "building unit tests"
+./$BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -progress -noubtmakefiles || exit $?
+
+echo "running unit tests"
 MAP=/Game/Maps/HaxeTestEntryPoint
-"$UE4"/$BINPATH "$PWD"/HaxeUnitTests.uproject -server "$MAP" -log || exit $?
+"$UE4"/$BINPATH "$PWD"/HaxeUnitTests.uproject -server "$MAP" -log -stdout || exit $?
