@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # make sure we're in the correct directory
-cd "$(dirname $(readlink -f "$0"))"/../
+cd "$(dirname "$0")"/../
 export WORKSPACE="$PWD"
 
 # setup haxelib
-mkdir -p haxelib
+mkdir -p haxelib || exit 1
 export HAXELIB_PATH="$PWD"/haxelib
 export CI=1
 export CI_RUNNING=1
