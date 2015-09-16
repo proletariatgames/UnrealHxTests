@@ -40,4 +40,4 @@ $BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTes
 
 echo "running unit tests"
 MAP=/Game/Maps/HaxeTestEntryPoint
-"$UE4"/$BINPATH "$PWD"/HaxeUnitTests.uproject -server "$MAP" -log -stdout || exit $?
+"$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -server "$MAP" -log -stdout || exit $?
