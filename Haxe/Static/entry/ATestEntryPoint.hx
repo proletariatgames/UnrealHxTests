@@ -10,7 +10,7 @@ class ATestEntryPoint extends unreal.AActor {
     var reporter = new buddy.reporting.TraceReporter();
 
     var runner = new buddy.SuitesRunner([
-      new TestBasicExterns()
+      new TestUObjectExterns()
     ], reporter);
 
     runner.run().then(function(success) {
