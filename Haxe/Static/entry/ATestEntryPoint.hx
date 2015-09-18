@@ -13,9 +13,10 @@ class ATestEntryPoint extends unreal.AActor {
       new TestUObjectExterns()
     ], reporter);
 
-    runner.run().then(function(success) {
+    runner.run().then(function(_) {
       if (Sys.getEnv("CI_RUNNING") == "1") {
         trace('Ending stub implementation');
+        var success = !runner.failed();
         Sys.exit(success ? 0 : 2);
       }
     });
