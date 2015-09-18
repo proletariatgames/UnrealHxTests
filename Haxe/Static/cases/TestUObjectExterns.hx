@@ -186,6 +186,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
       it('should be able to be created by Haxe code');
       it('should create a wrapper of the right type');
+      it('should be able to call functions with defaults');
+      it('should be able to call global functions');
     });
   }
 }

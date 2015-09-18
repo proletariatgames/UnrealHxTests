@@ -43,7 +43,6 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 
 @:uclass
 class UHaxeDerived2 extends UHaxeDerived1 {
-  // function setText(txt:unreal.FText):unreal.Int64;
   override public function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool
   {
     return !super.setUI64_I64_Float_Double(ui64, i64 + 42, f, d);
