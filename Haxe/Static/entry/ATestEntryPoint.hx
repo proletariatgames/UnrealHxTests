@@ -3,6 +3,7 @@ package entry;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 using StringTools;
+using haxe.macro.ExprTools;
 #else
 import buddy.*;
 
@@ -13,7 +14,10 @@ class ATestEntryPoint extends unreal.AActor {
 
     var reporter = new buddy.reporting.TraceReporter();
 
-    var runner = new buddy.SuitesRunner(ImportAll.getDefs());
+    var runner = new buddy.SuitesRunner(ImportAll.getDefs(
+      cases.TestUObjectExterns,
+      cases.TestUObjectOverrides
+    ));
 
     runner.run().then(function(_) {
       if (Sys.getEnv("CI_RUNNING") == "1") {
@@ -28,19 +32,21 @@ class ATestEntryPoint extends unreal.AActor {
 #end
 
 class ImportAll {
-  macro public static function getDefs():haxe.macro.Expr {
+  macro public static function getDefs(order:Array<haxe.macro.Expr>):haxe.macro.Expr {
     var cps = Context.getClassPath();
-    var defs = [];
+    var defs = [ for (e in order) e.toString() ];
     for (cp in cps) {
       if (sys.FileSystem.exists('$cp/cases')) {
         for (file in sys.FileSystem.readDirectory('$cp/cases')) {
           if (file.endsWith('.hx')) {
-            defs.push(Context.parse('new cases.' + file.substr(0,-3) + '()', Context.currentPos()));
+            var name = 'cases.' + file.substr(0,-3);
+            if (defs.indexOf(name) < 0)
+              defs.push(name);
           }
         }
       }
     }
 
-    return { expr:EArrayDecl(defs), pos:Context.currentPos() };
+    return { expr:EArrayDecl([ for (def in defs) Context.parse('new $def()', Context.currentPos())]), pos:Context.currentPos() };
   }
 }

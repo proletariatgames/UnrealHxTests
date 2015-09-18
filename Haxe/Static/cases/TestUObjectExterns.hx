@@ -1,6 +1,7 @@
 package cases;
 using buddy.Should;
 import haxe.Int64;
+import UBasicTypesSub;
 
 class TestUObjectExterns extends buddy.BuddySuite {
   public function new() {
@@ -95,9 +96,25 @@ class TestUObjectExterns extends buddy.BuddySuite {
         });
 
         it('should be able to be accessed from subclasses (basic)', {
-        });
+          var sub1 = UBasicTypesSub1.CreateFromCpp();
+          var sub2 = UBasicTypesSub2.CreateFromCpp();
+          var sub3 = UBasicTypesSub3.CreateFromCpp();
+          sub1.isSub1.should.be(true);
+          sub2.isSub2.should.be(true);
+          sub3.isSub2.should.be(true);
+          sub3.isSub3.should.be(true);
 
-        it('should be able to access "const" types');
+          sub1.stringProp = 'Test sub1';
+          sub1.stringProp.should.be('Test sub1');
+          sub2.stringProp = 'Test sub2';
+          sub2.stringProp.should.be('Test sub2');
+          sub3.stringProp = 'Test sub3';
+          sub3.stringProp.should.be('Test sub3');
+
+          sub2 = sub3;
+          sub2.stringProp = 'Test sub3';
+          sub2.stringProp.should.be('Test sub3');
+        });
       });
 
       describe('native functions', {
@@ -127,8 +144,34 @@ class TestUObjectExterns extends buddy.BuddySuite {
         });
 
         it('should be able to be called from subclasses (basic)', {
+          var sub1 = UBasicTypesSub1.CreateFromCpp();
+          var sub2 = UBasicTypesSub2.CreateFromCpp();
+          var sub3 = UBasicTypesSub3.CreateFromCpp();
+
+          Int64.eq(sub1.setText("testing subclass call"), Int64.ofInt(0xD00D)).should.be(true);
+          Int64.eq(sub2.setText("testing subclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
+          Int64.eq(sub3.setText("testing subclass call3"), Int64.make(0,0xDEADF00D)).should.be(true);
+          sub1.textNonProp.should.be("testing subclass call");
+          sub2.textNonProp.should.be("testing subclass call2");
+          sub3.textProp.should.be("testing subclass call3");
+
+          var base1:UBasicTypesUObject = sub1;
+          var base2:UBasicTypesUObject = sub2;
+          var base3:UBasicTypesUObject = sub3;
+
+          Int64.eq(base1.setText("testing baseclass call"), Int64.ofInt(0xD00D)).should.be(true);
+          Int64.eq(base2.setText("testing baseclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
+          Int64.eq(base3.setText("testing baseclass call3"), Int64.make(0,0xDEADF00D)).should.be(true);
+          base1.textNonProp.should.be("testing baseclass call");
+          base2.textNonProp.should.be("testing baseclass call2");
+          base3.textProp.should.be("testing baseclass call3");
+
+          sub2 = sub3;
+          Int64.eq(sub2.setText("testing subclass call3-1"), Int64.make(0,0xDEADF00D)).should.be(true);
+          sub2.textProp.should.be("testing subclass call3-1");
         });
       });
+
       it('should be able to be created by Haxe code');
       it('should create a wrapper of the right type');
     });

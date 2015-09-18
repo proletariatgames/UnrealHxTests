@@ -16,6 +16,8 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       it('should be able to throw inside overridden code');
       it('should be released when UObject is garbage collected');
       it('should be able to access super protected fields');
+
+      it('should be able to define new BlueprintNativeEvent');
     });
   }
 }
