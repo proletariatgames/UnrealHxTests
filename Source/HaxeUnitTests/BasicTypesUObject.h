@@ -86,5 +86,9 @@ class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
 
   UFUNCTION()
   virtual int64 setText(FText text);
+
+  virtual int32 getSomeNumber() const {
+    return 42;
+  }
 };
 

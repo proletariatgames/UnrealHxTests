@@ -69,4 +69,6 @@
   @:final function setUI16_I16_UI32_I32(ui16:unreal.UInt16, i16:unreal.Int16, ui32:unreal.FakeUInt32, i32:unreal.Int32):Void;
   function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool;
   function setText(txt:unreal.FText):unreal.Int64;
+
+  @:thisConst function getSomeNumber():Int;
 }

@@ -1,9 +1,10 @@
 package cases;
 using buddy.Should;
+import UBasicTypesSub;
 
 class TestUObjectOverrides extends buddy.BuddySuite {
   public function new() {
-    describe('Haxe - UObjects overrides', {
+    describe('Haxe: uobjects overrides', {
       it('should be able to access native properties (basic)');
       it('should be able to call native code (basic)');
       it('should be able to have their functions overridden'); // check if native side sees it as well
@@ -22,3 +23,55 @@ class TestUObjectOverrides extends buddy.BuddySuite {
   }
 }
 
+@:uclass
+class UHaxeDerived1 extends UBasicTypesSub1 {
+  override public function getSomeNumber():Int {
+    return this.i32Prop;
+  }
+
+  public function nonNative(i:Int):Int {
+    return i + 10;
+  }
+}
+
+// just make sure this will compile
+@:keep class NonUClass extends UHaxeDerived1 {
+  override public function getSomeNumber():Int {
+    return super.getSomeNumber() + 10;
+  }
+}
+
+@:uclass
+class UHaxeDerived2 extends UHaxeDerived1 {
+  // function setText(txt:unreal.FText):unreal.Int64;
+  override public function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool
+  {
+    return !super.setUI64_I64_Float_Double(ui64, i64 + 42, f, d);
+  }
+
+  override public function nonNative(i:Int):Int {
+    return super.nonNative(i) + 100;
+  }
+}
+
+@:uclass
+class UHaxeDerived3 extends UHaxeDerived2 {
+  override public function setText(txt:unreal.FText):unreal.Int64 {
+    this.setBool_String_UI8_I8(true,txt,100,101);
+    this.textProp = this.test();
+    return unreal.Int64.make(0x0111,0xF0FA);
+  }
+
+  override public function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool
+  {
+    return !super.setUI64_I64_Float_Double(ui64 + 10, i64, f, d);
+  }
+
+  override public function nonNative(i:Int):Int {
+    return super.nonNative(i) + 100;
+  }
+
+  private function test() {
+    return "test()";
+  }
+}

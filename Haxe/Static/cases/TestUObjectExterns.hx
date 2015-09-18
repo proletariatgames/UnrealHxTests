@@ -141,12 +141,18 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
           Int64.eq(basic.setText("Hello, FText!"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
           basic.textNonProp.should.be("Hello, FText!");
+
+          basic.getSomeNumber().should.be(42);
         });
 
         it('should be able to be called from subclasses (basic)', {
           var sub1 = UBasicTypesSub1.CreateFromCpp();
           var sub2 = UBasicTypesSub2.CreateFromCpp();
           var sub3 = UBasicTypesSub3.CreateFromCpp();
+
+          sub1.getSomeNumber().should.be(43);
+          sub2.getSomeNumber().should.be(44);
+          sub3.getSomeNumber().should.be(45);
 
           Int64.eq(sub1.setText("testing subclass call"), Int64.ofInt(0xD00D)).should.be(true);
           Int64.eq(sub2.setText("testing subclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
@@ -159,6 +165,10 @@ class TestUObjectExterns extends buddy.BuddySuite {
           var base2:UBasicTypesUObject = sub2;
           var base3:UBasicTypesUObject = sub3;
 
+          base1.getSomeNumber().should.be(43);
+          base2.getSomeNumber().should.be(44);
+          base3.getSomeNumber().should.be(45);
+
           Int64.eq(base1.setText("testing baseclass call"), Int64.ofInt(0xD00D)).should.be(true);
           Int64.eq(base2.setText("testing baseclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
           Int64.eq(base3.setText("testing baseclass call3"), Int64.make(0,0xDEADF00D)).should.be(true);
@@ -170,6 +180,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(sub2.setText("testing subclass call3-1"), Int64.make(0,0xDEADF00D)).should.be(true);
           sub2.textProp.should.be("testing subclass call3-1");
         });
+
+        it('should be able to be called when overloads exist');
       });
 
       it('should be able to be created by Haxe code');

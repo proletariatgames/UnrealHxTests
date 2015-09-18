@@ -18,6 +18,10 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
   UFUNCTION()
   virtual int64 setText(FText text) override;
 
+  virtual int32 getSomeNumber() const override {
+    return 43;
+  }
+
   static UBasicTypesSub1 *CreateFromCpp() {
     return NewObject<UBasicTypesSub1>();
   }
@@ -33,6 +37,10 @@ class HAXEUNITTESTS_API UBasicTypesSub2 : public UBasicTypesUObject
     
   static UBasicTypesSub2 *CreateFromCpp() {
     return NewObject<UBasicTypesSub2>();
+  }
+
+  virtual int32 getSomeNumber() const override {
+    return 44;
   }
 };
 
@@ -50,6 +58,10 @@ class HAXEUNITTESTS_API UBasicTypesSub3 : public UBasicTypesSub2
 
   static UBasicTypesSub3 *CreateFromCpp() {
     return NewObject<UBasicTypesSub3>();
+  }
+
+  virtual int32 getSomeNumber() const override {
+    return 45;
   }
 };
 
