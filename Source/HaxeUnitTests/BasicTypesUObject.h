@@ -51,5 +51,35 @@ class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
   double doubleProp;
 
   static UBasicTypesUObject *CreateFromCpp();
+
+  UFUNCTION()
+  bool getBoolProp();
+  UFUNCTION()
+  FString getStringProp();
+  UFUNCTION()
+  uint8 getUi8Prop();
+  UFUNCTION()
+  int8 getI8Prop();
+  uint16 getUi16Prop();
+  int16 getI16Prop();
+  UFUNCTION()
+  int32 getI32Prop();
+  UFUNCTION()
+  uint32 getUi32Prop();
+  UFUNCTION()
+  int64 getI64Prop();
+  uint64 getUi64Prop();
+  UFUNCTION()
+  float getFloatProp();
+  UFUNCTION()
+  double getDoubleProp();
+
+  UFUNCTION()
+  UBasicTypesUObject *setBool_String_UI8_I8(bool b, FString str, uint8 ui8, int8 i8);
+
+  void setUI16_I16_UI32_I32(uint16 ui16, int16 i16, uint32 ui32, int32 i32);
+
+  virtual bool setUI64_I64_Float_Double(uint64 ui64, int64 i64, float f, double d);
+
 };
 
