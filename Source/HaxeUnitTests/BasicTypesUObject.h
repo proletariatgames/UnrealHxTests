@@ -14,6 +14,7 @@ class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
   public:
   bool boolNonProp;
   FString stringNonProp;
+  FText textNonProp;
   uint8 ui8NonProp;
   int8 i8NonProp;
   uint16 ui16NonProp;
@@ -29,6 +30,8 @@ class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
   bool boolProp;
   UPROPERTY()
   FString stringProp;
+  UPROPERTY()
+  FText textProp;
   UPROPERTY()
   uint8 ui8Prop;
   UPROPERTY()
@@ -81,5 +84,7 @@ class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
 
   virtual bool setUI64_I64_Float_Double(uint64 ui64, int64 i64, float f, double d);
 
+  UFUNCTION()
+  virtual int64 setText(FText text);
 };
 

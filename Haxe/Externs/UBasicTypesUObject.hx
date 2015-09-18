@@ -3,6 +3,7 @@
 @:uextern extern class UBasicTypesUObject extends unreal.UObject {
   var boolNonProp:Bool;
   var stringNonProp:unreal.FString;
+  var textNonProp:unreal.FText;
   var ui8NonProp:unreal.UInt8;
   var i8NonProp:unreal.Int8;
   var ui16NonProp:unreal.UInt16;
@@ -18,6 +19,8 @@
   var boolProp:Bool;
   @:uproperty
   var stringProp:unreal.FString;
+  @:uproperty
+  var textProp:unreal.FText;
   @:uproperty
   var ui8Prop:unreal.UInt8;
   @:uproperty
@@ -65,4 +68,5 @@
   @:final function setBool_String_UI8_I8(b:Bool, s:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8):UBasicTypesUObject;
   @:final function setUI16_I16_UI32_I32(ui16:unreal.UInt16, i16:unreal.Int16, ui32:unreal.FakeUInt32, i32:unreal.Int32):Void;
   function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool;
+  function setText(txt:unreal.FText):unreal.Int64;
 }

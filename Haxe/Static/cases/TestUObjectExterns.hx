@@ -10,6 +10,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
         basic.boolNonProp = true;
         basic.boolProp = true;
         basic.stringNonProp = 'Hello from Haxe!!';
+        basic.textNonProp = 'Text should also work';
         basic.ui8NonProp = 1;
         basic.i8NonProp = 2;
         basic.ui16NonProp = 3;
@@ -29,6 +30,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           empty.boolNonProp.should.be(false);
           empty.boolProp.should.be(false);
           empty.stringNonProp.should.be('');
+          empty.textNonProp.should.be('');
           empty.ui8NonProp.should.be(0);
           empty.i8NonProp.should.be(0);
           empty.ui16NonProp.should.be(0);
@@ -43,6 +45,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           basic.boolNonProp.should.be(true);
           basic.boolProp.should.be(true);
           basic.stringNonProp.should.be('Hello from Haxe!!');
+          basic.textNonProp.should.be('Text should also work');
           basic.ui8NonProp.should.be(1);
           basic.i8NonProp.should.be(2);
           basic.ui16NonProp.should.be(3);
@@ -62,6 +65,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Reflect.setProperty(basicDyn,"boolProp", true);
           Reflect.setProperty(basicDyn,"stringProp", 'Hello from Haxe reflection!');
           Reflect.setProperty(basicDyn,"stringNonProp", 'Hello from Haxe reflection! (non-prop)');
+          Reflect.setProperty(basicDyn,"textProp", 'Hello from Haxe reflection! (non-prop text)');
           Reflect.setProperty(basicDyn,"ui8NonProp", 10);
           Reflect.setProperty(basicDyn,"i8NonProp", 20);
           Reflect.setProperty(basicDyn,"ui16NonProp", 30);
@@ -77,6 +81,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Reflect.getProperty(basicDyn,"boolProp").should.be(true);
           Reflect.getProperty(basicDyn,"stringProp").should.be('Hello from Haxe reflection!');
           Reflect.getProperty(basicDyn,"stringNonProp").should.be('Hello from Haxe reflection! (non-prop)');
+          Reflect.getProperty(basicDyn,"textProp").should.be('Hello from Haxe reflection! (non-prop text)');
           Reflect.getProperty(basicDyn,"ui8NonProp").should.be(10);
           Reflect.getProperty(basicDyn,"i8NonProp").should.be(20);
           Reflect.getProperty(basicDyn,"ui16NonProp").should.be(30);
@@ -91,6 +96,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
         it('should be able to be accessed from subclasses (basic)', {
         });
+
+        it('should be able to access "const" types');
       });
 
       describe('native functions', {
@@ -114,7 +121,11 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(basic.i64Prop, Int64.make(0xD3AD,0xD00D)).should.be(true);
           basic.floatProp.should.beCloseTo(11.1);
           basic.doubleProp.should.be(22.2);
+
+          Int64.eq(basic.setText("Hello, FText!"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
+          basic.textNonProp.should.be("Hello, FText!");
         });
+
         it('should be able to be called from subclasses (basic)', {
         });
       });

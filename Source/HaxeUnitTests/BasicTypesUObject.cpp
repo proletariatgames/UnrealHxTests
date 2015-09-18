@@ -80,3 +80,9 @@ bool UBasicTypesUObject::setUI64_I64_Float_Double(uint64 ui64, int64 i64, float 
 
   return false;
 }
+
+int64 UBasicTypesUObject::setText(FText txt) {
+  this->textNonProp = txt;
+
+  return 0xDEADBEEF8BADF00DLL;
+}
