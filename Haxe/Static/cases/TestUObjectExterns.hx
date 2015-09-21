@@ -181,9 +181,11 @@ class TestUObjectExterns extends buddy.BuddySuite {
           sub2.textProp.should.be("testing subclass call3-1");
         });
 
-        it('should be able to be called when overloads exist');
       });
 
+      it('should be able to call templated functions');
+      it('should be able to call global functions');
+      it('should be able to be called when overloads exist');
       it('should be able to be created by Haxe code');
       it('should create a wrapper of the right type');
       it('should be able to call functions with defaults');

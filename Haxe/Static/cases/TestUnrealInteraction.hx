@@ -1,7 +1,7 @@
 package cases;
 using buddy.Should;
 
-class TestUnrealInteration extends buddy.BuddySuite {
+class TestUnrealInteraction extends buddy.BuddySuite {
 
   public function new() {
     describe('haxe: blueprint interaction', {

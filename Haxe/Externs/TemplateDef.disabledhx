@@ -1,0 +1,8 @@
+package;
+
+@:uextern
+@:glueCppIncludes("TemplateDef.h")
+@:umodule("HaxeUnitTests")
+extern class UTemplateDef extends unreal.UObject {
+  static function getSomeStaticInt<T>(someInstance:T):Int;
+}
