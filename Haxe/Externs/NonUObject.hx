@@ -12,8 +12,8 @@ import unreal.*;
   public var usedDefaultConstructor:Bool;
 
   public static function getRef():FSimpleStruct;
-  // @:uname('new') public static function create():FSimpleStruct;
-  // @:uname('new') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):FSimpleStruct;
+  @:uname('new') public static function create():PHaxeCreated<FSimpleStruct>;
+  @:uname('new') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):PHaxeCreated<FSimpleStruct>;
 
   @:final public function toString():FString;
 
