@@ -12,6 +12,7 @@ struct FPODStruct {
 class FSimpleStruct {
   public:
     static int32 nDestructorCalled;
+    static int32 nConstructorCalled;
 
     float f1;
     double d1;
@@ -21,6 +22,7 @@ class FSimpleStruct {
     bool usedDefaultConstructor;
 
     FSimpleStruct() : usedDefaultConstructor(true) {
+      nConstructorCalled++;
     }
 
     FSimpleStruct(float iF1, double iD1, int32 iI32, uint32 iUi32) :
@@ -30,6 +32,7 @@ class FSimpleStruct {
       ui32(iUi32),
       usedDefaultConstructor(false)
     {
+      nConstructorCalled++;
     }
 
     static FSimpleStruct *getRef();

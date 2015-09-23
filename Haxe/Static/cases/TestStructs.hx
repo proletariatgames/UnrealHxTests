@@ -30,7 +30,8 @@ class TestStructs extends buddy.BuddySuite {
 
     describe('Haxe - Structs', {
       it('should be able to use simple non-uobject classes', {
-        FSimpleStruct.nDestructorCalled.should.be(0);
+        var nConstructors = FSimpleStruct.nConstructorCalled;
+        var nDestructors = FSimpleStruct.nDestructorCalled;
         // run in a separate function to make sure no hidden references are kept in the stack
         function run() {
           var simple = FSimpleStruct.getRef();
@@ -53,14 +54,18 @@ class TestStructs extends buddy.BuddySuite {
         cpp.vm.Gc.run(true);
         cpp.vm.Gc.run(true);
 
-        FSimpleStruct.nDestructorCalled.should.be(0);
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors);
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors);
       });
 
       it('should be able to instantiate simple non-uobject classes', {
+        var nConstructors = FSimpleStruct.nConstructorCalled;
         var nDestructors = FSimpleStruct.nDestructorCalled;
         // separate function again
+        var nObjects = 0;
         function run() {
           var simple = FSimpleStruct.create();
+          nObjects++;
           setSomeValues(simple, 2);
           checkValues(simple, 2, true);
 
@@ -71,6 +76,7 @@ class TestStructs extends buddy.BuddySuite {
           simple.i32.should.be(0xDEADF00D);
 
           var simple2 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+          nObjects++;
           simple2.f1.should.beCloseTo(100.1);
           simple2.d1.should.beCloseTo(200.2);
           simple2.i32.should.be(5);
@@ -84,7 +90,10 @@ class TestStructs extends buddy.BuddySuite {
         cpp.vm.Gc.run(true);
         cpp.vm.Gc.run(true);
 
-        // FSimpleStruct.nDestructorCalled.should.be(nDestructors + 1);
+        // make sure all objects were deleted
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        // TODO
+        // FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
     });
   }

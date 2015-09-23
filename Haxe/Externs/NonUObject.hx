@@ -4,6 +4,7 @@ import unreal.*;
 @:glueCppIncludes("NonUObject.h")
 @:uextern extern class FSimpleStruct {
   public static var nDestructorCalled:Int32;
+  public static var nConstructorCalled:Int32;
 
   public var f1:Float32;
   public var d1:Float64;
