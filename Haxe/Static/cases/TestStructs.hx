@@ -50,7 +50,7 @@ class TestStructs extends buddy.BuddySuite {
           s2 = null;
         }
         run();
-        // run twice to make sure that the finalizers are run
+        // run twice to make sure that the finalizers run
         cpp.vm.Gc.run(true);
         cpp.vm.Gc.run(true);
 
@@ -86,15 +86,46 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(simple2,10,false);
         }
         run();
-        // run twice to make sure that the finalizers are run
+        // run twice to make sure that the finalizers run
         cpp.vm.Gc.run(true);
         cpp.vm.Gc.run(true);
 
         // make sure all objects were deleted
         FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
-        // TODO
-        // FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
+
+      it('should be able to be disposed when `dispose` is called', {
+        var nConstructors = FSimpleStruct.nConstructorCalled;
+        var nDestructors = FSimpleStruct.nDestructorCalled;
+
+        var nObjects = 0;
+        function run() {
+          var simple = FSimpleStruct.create();
+          nObjects++;
+          simple.dispose();
+          simple.disposed.should.be(true);
+#if UE4_CHECK_POINTER
+          function fail() {
+            return checkValues(simple,1,false);
+          }
+          fail.should.throwType(String);
+#end
+          FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+        }
+        run();
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        // make sure all objects were deleted
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+      });
+
+      it('should be able to use smart pointers');
+
+      it('should be able to use structs');
     });
   }
 

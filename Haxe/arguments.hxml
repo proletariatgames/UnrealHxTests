@@ -2,3 +2,6 @@
 # please do not add a target (like -cpp) as they will be added automatically
 # (see build-scripts.hxml and build-static.hxml)
 -lib buddy
+
+-D UE4_CHECK_POINTER
+-D UE4_POINTER_TESTING
