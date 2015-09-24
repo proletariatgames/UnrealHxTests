@@ -37,6 +37,21 @@ class FSimpleStruct {
 
     static FSimpleStruct *getRef();
 
+    // TODO
+    // static FSimpleStruct& getRef();
+
+    static bool isI32EqualByVal(FSimpleStruct self, int32 i) {
+      return self.i32 == i;
+    }
+
+    static bool isI32Equal(FSimpleStruct *self, int32 i) {
+      return self->i32 == i;
+    }
+
+    static bool isI32EqualRef(FSimpleStruct& self, int32 i) {
+      return self.i32 == i;
+    }
+
     static TSharedPtr<FSimpleStruct> createSharedPtr() {
       return MakeShareable(new FSimpleStruct());
     }
@@ -55,6 +70,6 @@ class FSimpleStruct {
     }
 
     FString toString() {
-      return FString::Printf(TEXT("Simple Struct (%d) { %4.2f, %4.2f, %d, %u }"), usedDefaultConstructor, f1, d1, i32, ui32);
+      return FString::Printf(TEXT("Simple Struct (%d) { %d, %d, %d, %d }"), usedDefaultConstructor, (int)f1, (int)d1, i32, ui32);
     }
 };

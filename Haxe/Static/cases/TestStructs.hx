@@ -1,37 +1,37 @@
 package cases;
 using buddy.Should;
 import NonUObject;
+import helpers.TestHelper;
 
 class TestStructs extends buddy.BuddySuite {
   public function new() {
+    var nDestructors = FSimpleStruct.nDestructorCalled,
+        nConstructors = FSimpleStruct.nConstructorCalled;
     inline function setSomeValues(struct:FSimpleStruct, multiplier:Int) {
-      struct.f1 = 11.1 * multiplier;
-      struct.d1 = 22.2 * multiplier;
+      struct.f1 = 10.2 * multiplier;
+      struct.d1 = 20.2 * multiplier;
       struct.i32 = 33 * multiplier;
       struct.ui32 = 44 * multiplier;
     }
 
     // seems like not using inline here fails. Need to check if that's a buddy, hxcpp or ue4haxe issue
     inline function checkValues(struct:FSimpleStruct, multiplier:Int, usedDefaultConstructor:Bool) {
-      struct.f1.should.beCloseTo(11.1 * multiplier);
-      struct.d1.should.beCloseTo(22.2 * multiplier);
+      struct.f1.should.beCloseTo(10.2 * multiplier);
+      struct.d1.should.beCloseTo(20.2 * multiplier);
       struct.i32.should.be(33 * multiplier);
       struct.ui32.should.be(44 * multiplier);
       struct.usedDefaultConstructor.should.be(usedDefaultConstructor);
+      FSimpleStruct.isI32Equal(struct, 33 * multiplier).should.be(true);
+      FSimpleStruct.isI32EqualByVal(struct, 33 * multiplier).should.be(true);
+      nDestructors++; // for the by val object
 
-      inline function get2Dec(f:Float) {
-        var i = Std.int(f * 100);
-        var ret = Std.string(i);
-        return ret.substr(0,-2) + '.' + ret.substr(-2);
-      }
-
-      struct.toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${get2Dec(struct.f1)}, ${get2Dec(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
+      struct.toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
     }
 
     describe('Haxe - Structs', {
       it('should be able to use simple non-uobject classes', {
-        var nConstructors = FSimpleStruct.nConstructorCalled;
-        var nDestructors = FSimpleStruct.nDestructorCalled;
+        nConstructors = FSimpleStruct.nConstructorCalled;
+        nDestructors = FSimpleStruct.nDestructorCalled;
         // run in a separate function to make sure no hidden references are kept in the stack
         function run() {
           var simple = FSimpleStruct.getRef();
@@ -45,7 +45,7 @@ class TestStructs extends buddy.BuddySuite {
           s2.i32.should.be(10);
           s2.ui32.should.be(20);
           s2.usedDefaultConstructor.should.be(true);
-          s2.toString().should.be('Simple Struct (1) { 1.11, 2.22, 10, 20 }');
+          s2.toString().should.be('Simple Struct (1) { 1, 2, 10, 20 }');
           simple = null;
           s2 = null;
         }
@@ -59,12 +59,13 @@ class TestStructs extends buddy.BuddySuite {
       });
 
       it('should be able to instantiate simple non-uobject classes', {
-        var nConstructors = FSimpleStruct.nConstructorCalled;
-        var nDestructors = FSimpleStruct.nDestructorCalled;
+        nConstructors = FSimpleStruct.nConstructorCalled;
+        nDestructors = FSimpleStruct.nDestructorCalled;
         // separate function again
         var nObjects = 0;
         function run() {
           var simple = FSimpleStruct.create();
+          TestHelper.getType(simple).should.be( TestHelper.getType( (null : unreal.PHaxeCreated<FSimpleStruct>) ));
           nObjects++;
           setSomeValues(simple, 2);
           checkValues(simple, 2, true);
@@ -96,8 +97,8 @@ class TestStructs extends buddy.BuddySuite {
       });
 
       it('should be able to be disposed when `dispose` is called', {
-        var nConstructors = FSimpleStruct.nConstructorCalled;
-        var nDestructors = FSimpleStruct.nDestructorCalled;
+        nConstructors = FSimpleStruct.nConstructorCalled;
+        nDestructors = FSimpleStruct.nDestructorCalled;
 
         var nObjects = 0;
         function run() {
@@ -106,6 +107,10 @@ class TestStructs extends buddy.BuddySuite {
           simple.dispose();
           simple.disposed.should.be(true);
 #if UE4_CHECK_POINTER
+          // when UE4_CHECK_POINTER is on, it will throw if the object is disposed
+          // otherwise, it will just crash.
+          // note that this would print an error message on the log regardless;
+          // what we do is compile with -D UE4_POINTER_TESTING so no rogue error message shows up
           function fail() {
             return checkValues(simple,1,false);
           }
@@ -114,7 +119,7 @@ class TestStructs extends buddy.BuddySuite {
           FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
         }
         run();
-        // run twice to make sure that the finalizers run
+        // run twice to make sure that the finalizers have run
         cpp.vm.Gc.run(true);
         cpp.vm.Gc.run(true);
 
@@ -123,9 +128,45 @@ class TestStructs extends buddy.BuddySuite {
         FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
 
-      it('should be able to use smart pointers');
+      it('should be able to be referenced by value', {
+        nConstructors = FSimpleStruct.nConstructorCalled;
+        nDestructors = FSimpleStruct.nDestructorCalled;
 
-      it('should be able to use structs');
+        var nObjects = 0;
+        function run() {
+          var simple = FSimpleStruct.createStruct();
+          nDestructors++; // one destructor call for the temporary object
+          nObjects++;
+          setSomeValues(simple, 6);
+          checkValues(simple, 6, true);
+          simple.dispose();
+          simple.disposed.should.be(true);
+
+          FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+
+          simple = FSimpleStruct.createWithArgsStruct(1.5,2.5,0xDEADBEE5,0xFFFFFFFF);
+          nDestructors++; // one destructor call for the temporary object
+          nObjects++;
+          simple.f1.should.beCloseTo(1.5);
+          simple.d1.should.be(2.5);
+          simple.i32.should.be(0xDEADBEE5);
+          simple.ui32.should.be(0xFFFFFFFF);
+          setSomeValues(simple, 4);
+          checkValues(simple, 4, false);
+        }
+        run();
+        // run twice to make sure that the finalizers have run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        // make sure all objects were deleted
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        // destructors are called for the temporary created objects too
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+      });
+      it('should be able to use smart pointers');
+      it('should be able to use pointers to structure');
+      it('should be able to use pointers to basic types');
     });
   }
 

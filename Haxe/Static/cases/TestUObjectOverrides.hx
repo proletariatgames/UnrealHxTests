@@ -19,6 +19,10 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       it('should be able to access super protected fields');
 
       it('should be able to define new BlueprintNativeEvent');
+      it('should be able to use pointers to basic types');
+      it('should be able to use structs');
+      it('should be able to use pointers to structs');
+      it('should be able to be referenced by weak pointer');
     });
   }
 }

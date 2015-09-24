@@ -190,6 +190,10 @@ class TestUObjectExterns extends buddy.BuddySuite {
       it('should create a wrapper of the right type');
       it('should be able to call functions with defaults');
       it('should be able to call global functions');
+      it('should be able to use pointers to basic types');
+      it('should be able to use structs');
+      it('should be able to use pointers to structs');
+      it('should be able to be referenced by weak pointer');
     });
   }
 }

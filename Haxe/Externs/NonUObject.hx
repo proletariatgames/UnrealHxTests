@@ -12,12 +12,13 @@ import unreal.*;
   public var ui32:FakeUInt32;
   public var usedDefaultConstructor:Bool;
 
-  public static function getRef():FSimpleStruct;
+  public static function getRef():PExternal<FSimpleStruct>;
   @:uname('new') public static function create():PHaxeCreated<FSimpleStruct>;
   @:uname('new') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):PHaxeCreated<FSimpleStruct>;
 
   @:final public function toString():FString;
 
-  // @:native('()') public static function createStruct():Struct<FSimpleStruct>;
-  // @:native('()') public static function createStructWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):Struct<FSimpleStruct>;
+  static function isI32EqualByVal(self:PStruct<FSimpleStruct>, i:Int32):Bool;
+  static function isI32Equal(self:FSimpleStruct, i:Int32):Bool;
+  // static function isI32EqualByVal(self:PStruct<FSimpleStruct>, i:Int32):Bool
 }
