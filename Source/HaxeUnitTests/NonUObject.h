@@ -60,6 +60,10 @@ class FSimpleStruct {
       return self->i32 == i;
     }
 
+    static bool isI32EqualWeak(TWeakPtr<FSimpleStruct> self, int32 i) {
+      return self.Pin()->i32 == i;
+    }
+
     static TSharedPtr<FSimpleStruct> createSharedPtr() {
       return MakeShareable(new FSimpleStruct());
     }

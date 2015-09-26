@@ -180,15 +180,22 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(simple, 5, true);
 
           var ref = shared.toSharedRef();
-          Sys.println('shared ref');
           ref.i32 = 0x7FFFFFFF;
           FSimpleStruct.isI32EqualSharedRef(ref, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualSharedRef(ref, -1).should.be(false);
-          ref.f1 = 1.1;
           setSomeValues(ref, 6);
           checkValues(ref, 6, true);
           checkValues(ref.toSharedPtr(), 6, true);
           checkValues(simple, 6, true);
+
+          ref.i32 = 0x7FFFFFFF;
+          var weak = shared.toWeakPtr();
+          FSimpleStruct.isI32EqualWeak(weak, 0x7FFFFFFF).should.be(true);
+          FSimpleStruct.isI32EqualWeak(weak, 0).should.be(false);
+          setSomeValues(weak.Pin(), 7);
+          checkValues(weak.Pin(), 7, true);
+          checkValues(weak.toSharedPtr(), 7, true);
+          checkValues(simple, 7, true);
 
         }
         run();
