@@ -23,4 +23,6 @@ import unreal.*;
   static function isI32EqualShared(self:TSharedPtr<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualSharedRef(self:TSharedRef<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualWeak(self:TWeakPtr<FSimpleStruct>, i:Int32):Bool;
+
+  @:final public static function mkShared():TSharedPtr<FSimpleStruct>;
 }

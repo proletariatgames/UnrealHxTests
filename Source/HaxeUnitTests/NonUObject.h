@@ -64,6 +64,10 @@ class FSimpleStruct {
       return self.Pin()->i32 == i;
     }
 
+    static TSharedPtr<FSimpleStruct> mkShared() {
+      return MakeShareable(new FSimpleStruct());
+    }
+
     static TSharedPtr<FSimpleStruct> createSharedPtr() {
       return MakeShareable(new FSimpleStruct());
     }

@@ -197,6 +197,17 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(weak.toSharedPtr(), 7, true);
           checkValues(simple, 7, true);
 
+          var shared = FSimpleStruct.mkShared();
+          shared.i32 = 100;
+          nObjects++;
+          FSimpleStruct.isI32EqualShared(shared, 100).should.be(true);
+          FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
+          shared.i32 = 0x7FFFFFFF;
+          FSimpleStruct.isI32EqualShared(shared, 0x7FFFFFFF).should.be(true);
+          FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
+          setSomeValues(shared, 5);
+          checkValues(shared, 5, true);
+          checkValues(shared.toSharedRef(), 5, true);
         }
         run();
         // run twice to make sure that the finalizers have run
