@@ -22,16 +22,21 @@ class TestStructs extends buddy.BuddySuite {
       struct.ui32.should.be(44 * multiplier);
       struct.usedDefaultConstructor.should.be(usedDefaultConstructor);
       FSimpleStruct.isI32Equal(struct, 33 * multiplier).should.be(true);
+      FSimpleStruct.isI32Equal(struct, -1).should.be(false);
       FSimpleStruct.isI32EqualByVal(struct, 33 * multiplier).should.be(true);
-      nDestructors++; // for the by val object
+      FSimpleStruct.isI32EqualByVal(struct, -1).should.be(false);
+      nDestructors += 2; // for the by val object
 
       struct.toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
     }
 
+    before({
+      nConstructors = FSimpleStruct.nConstructorCalled;
+      nDestructors = FSimpleStruct.nDestructorCalled;
+    });
+
     describe('Haxe - Structs', {
       it('should be able to use simple non-uobject classes', {
-        nConstructors = FSimpleStruct.nConstructorCalled;
-        nDestructors = FSimpleStruct.nDestructorCalled;
         // run in a separate function to make sure no hidden references are kept in the stack
         function run() {
           var simple = FSimpleStruct.getRef();
@@ -59,8 +64,6 @@ class TestStructs extends buddy.BuddySuite {
       });
 
       it('should be able to instantiate simple non-uobject classes', {
-        nConstructors = FSimpleStruct.nConstructorCalled;
-        nDestructors = FSimpleStruct.nDestructorCalled;
         // separate function again
         var nObjects = 0;
         function run() {
@@ -97,9 +100,6 @@ class TestStructs extends buddy.BuddySuite {
       });
 
       it('should be able to be disposed when `dispose` is called', {
-        nConstructors = FSimpleStruct.nConstructorCalled;
-        nDestructors = FSimpleStruct.nDestructorCalled;
-
         var nObjects = 0;
         function run() {
           var simple = FSimpleStruct.create();
@@ -129,9 +129,6 @@ class TestStructs extends buddy.BuddySuite {
       });
 
       it('should be able to be referenced by value', {
-        nConstructors = FSimpleStruct.nConstructorCalled;
-        nDestructors = FSimpleStruct.nDestructorCalled;
-
         var nObjects = 0;
         function run() {
           var simple = FSimpleStruct.createStruct();
@@ -164,7 +161,46 @@ class TestStructs extends buddy.BuddySuite {
         // destructors are called for the temporary created objects too
         FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
-      it('should be able to use smart pointers');
+
+      it('should be able to use smart pointers', {
+        var nObjects = 0;
+        function run() {
+          var simple = FSimpleStruct.create();
+          nObjects++;
+          simple.i32 = 10;
+          var shared = simple.toSharedPtr();
+          FSimpleStruct.isI32EqualShared(shared, 10).should.be(true);
+          FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
+          shared.i32 = 0x7FFFFFFF;
+          FSimpleStruct.isI32EqualShared(shared, 0x7FFFFFFF).should.be(true);
+          FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
+          setSomeValues(shared, 5);
+          checkValues(shared, 5, true);
+          checkValues(shared.toSharedRef(), 5, true);
+          checkValues(simple, 5, true);
+
+          var ref = shared.toSharedRef();
+          Sys.println('shared ref');
+          ref.i32 = 0x7FFFFFFF;
+          FSimpleStruct.isI32EqualSharedRef(ref, 0x7FFFFFFF).should.be(true);
+          FSimpleStruct.isI32EqualSharedRef(ref, -1).should.be(false);
+          ref.f1 = 1.1;
+          setSomeValues(ref, 6);
+          checkValues(ref, 6, true);
+          checkValues(ref.toSharedPtr(), 6, true);
+          checkValues(simple, 6, true);
+
+        }
+        run();
+        // run twice to make sure that the finalizers have run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        // make sure all objects were deleted
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        // destructors are called for the temporary created objects too
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+      });
       it('should be able to use pointers to structure');
       it('should be able to use pointers to basic types');
     });

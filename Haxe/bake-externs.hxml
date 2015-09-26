@@ -5,6 +5,7 @@
 # this pass will bake the extern type definitions into glue code
 -cp /var/dev/projs/HaxeUnitTests/Plugins/UE4Haxe/Haxe/Static
 -D use-rtti-doc
+-D bake-externs
 
 -cpp /var/dev/projs/HaxeUnitTests/Haxe/Generated/Externs
 --no-output

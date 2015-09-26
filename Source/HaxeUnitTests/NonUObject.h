@@ -52,6 +52,14 @@ class FSimpleStruct {
       return self.i32 == i;
     }
 
+    static bool isI32EqualShared(TSharedPtr<FSimpleStruct> self, int32 i) {
+      return self->i32 == i;
+    }
+
+    static bool isI32EqualSharedRef(TSharedRef<FSimpleStruct> self, int32 i) {
+      return self->i32 == i;
+    }
+
     static TSharedPtr<FSimpleStruct> createSharedPtr() {
       return MakeShareable(new FSimpleStruct());
     }

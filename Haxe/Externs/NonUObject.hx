@@ -20,5 +20,6 @@ import unreal.*;
 
   static function isI32EqualByVal(self:PStruct<FSimpleStruct>, i:Int32):Bool;
   static function isI32Equal(self:FSimpleStruct, i:Int32):Bool;
-  // static function isI32EqualByVal(self:PStruct<FSimpleStruct>, i:Int32):Bool
+  static function isI32EqualShared(self:TSharedPtr<FSimpleStruct>, i:Int32):Bool;
+  static function isI32EqualSharedRef(self:TSharedRef<FSimpleStruct>, i:Int32):Bool;
 }
