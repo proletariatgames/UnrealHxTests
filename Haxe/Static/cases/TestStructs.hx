@@ -229,9 +229,35 @@ class TestStructs extends buddy.BuddySuite {
           var hasStruct1 = FHasStructMember1.create();
           nObjects++;
           nStruct1++;
+
+          var simple2 = FSimpleStruct.create();
+          setSomeValues(simple2, 1);
+
           var simple = hasStruct1.simple;
           simple.i32 = 10;
           hasStruct1.simple.i32.should.be(10);
+          hasStruct1.isI32Equal(10).should.be(true);
+          setSomeValues(hasStruct1.simple, 8);
+          checkValues(hasStruct1.simple, 8, true);
+          checkValues(simple, 8, true);
+          hasStruct1.simple = simple2;
+          checkValues(hasStruct1.simple, 1, true);
+          checkValues(simple, 1, true);
+
+          var hasStruct2 = FHasStructMember2.create();
+          nObjects++;
+          nStruct2++;
+          (hasStruct2.shared == null).should.be(true);
+          hasStruct2.shared = simple2.toSharedPtr();
+          checkValues(hasStruct2.shared, 1, true);
+          checkValues(simple2, 1, true);
+          var shared = hasStruct2.shared;
+          shared.i32 = 10;
+          hasStruct2.shared.i32.should.be(10);
+          hasStruct2.isI32Equal(10).should.be(true);
+          setSomeValues(hasStruct2.shared, 8);
+          checkValues(hasStruct2.shared, 8, true);
+          checkValues(shared, 8, true);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -243,10 +269,29 @@ class TestStructs extends buddy.BuddySuite {
         FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
         FHasStructMember1.nConstructorCalled.should.be(nConstructorsStruct1 + nStruct1);
         FHasStructMember1.nDestructorCalled.should.be(nDestructorsStruct1 + nStruct1);
+        FHasStructMember2.nConstructorCalled.should.be(nConstructorsStruct2 + nStruct2);
+        FHasStructMember2.nDestructorCalled.should.be(nDestructorsStruct2 + nStruct2);
       });
-      it('should be able to use pointers (and ref) to structure');
-      it('should be able to use pointers to basic types');
-      // it('should be able to
+      it('should be able to use pointers (and ref) to structure', {
+        // var nStruct3 = 0,
+        //     nConstructorsStruct3 = FHasStructMember3.nConstructorCalled,
+        //     nDestructorsStruct3 = FHasStructMember3.nDestructorCalled,
+        //     nObjects = 0;
+        function run() {
+        }
+        run();
+        // run twice to make sure that the finalizers have run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        // make sure all objects were deleted
+        // FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        // FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+        // FHasStructMember3.nConstructorCalled.should.be(nConstructorsStruct3 + nStruct3);
+        // FHasStructMember3.nDestructorCalled.should.be(nDestructorsStruct3 + nStruct3);
+      });
+      it('should be able to use pointers/ref/shared pointers to basic types');
+      it('should be able to be copied and owned');
     });
   }
 
