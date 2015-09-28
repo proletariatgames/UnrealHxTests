@@ -26,3 +26,27 @@ import unreal.*;
 
   @:final public static function mkShared():TSharedPtr<FSimpleStruct>;
 }
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
+@:uextern extern class FHasStructMember1 {
+  public static var nDestructorCalled:Int32;
+  public static var nConstructorCalled:Int32;
+
+  public var simple:PStruct<FSimpleStruct>;
+  @:uname('new') public static function create():PHaxeCreated<FHasStructMember1>;
+
+  public function isI32Equal(i:Int32):Bool;
+}
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
+@:uextern extern class FHasStructMember2 {
+  public static var nDestructorCalled:Int32;
+  public static var nConstructorCalled:Int32;
+
+  public var shared:TSharedPtr<FSimpleStruct>;
+  @:uname('new') public static function create():PHaxeCreated<FHasStructMember2>;
+
+  public function isI32Equal(i:Int32):Bool;
+}

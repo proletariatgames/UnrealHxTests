@@ -89,3 +89,68 @@ class FSimpleStruct {
       return FString::Printf(TEXT("Simple Struct (%d) { %d, %d, %d, %d }"), usedDefaultConstructor, (int)f1, (int)d1, i32, ui32);
     }
 };
+
+class FHasStructMember1 {
+  public:
+    static int32 nDestructorCalled;
+    static int32 nConstructorCalled;
+
+    FSimpleStruct simple;
+
+    FHasStructMember1() {
+      nConstructorCalled++;
+    }
+
+    bool isI32Equal(int32 i) {
+      return this->simple.i32 == i;
+    }
+
+    ~FHasStructMember1() {
+      nDestructorCalled++;
+    }
+};
+
+class FHasStructMember2 {
+  public:
+    static int32 nDestructorCalled;
+    static int32 nConstructorCalled;
+
+    TSharedPtr<FSimpleStruct> shared;
+
+    FHasStructMember2() {
+      nConstructorCalled++;
+    }
+
+    bool isI32Equal(int32 i) {
+      return this->shared->i32 == i;
+    }
+
+    ~FHasStructMember2() {
+      nDestructorCalled++;
+    }
+};
+
+class FHasStructMember3 {
+  public:
+    static int32 nDestructorCalled;
+    static int32 nConstructorCalled;
+
+    FSimpleStruct& ref;
+    FSimpleStruct simple;
+
+    FHasStructMember3(FSimpleStruct &theref) : ref(theref) {
+      nConstructorCalled++;
+    }
+
+    FHasStructMember3() : ref(simple) {
+      nConstructorCalled++;
+    }
+
+    bool isI32Equal(int32 i) {
+      return this->ref.i32 == i;
+    }
+
+    ~FHasStructMember3() {
+      nDestructorCalled++;
+    }
+};

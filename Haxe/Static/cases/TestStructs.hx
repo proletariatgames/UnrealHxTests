@@ -158,7 +158,6 @@ class TestStructs extends buddy.BuddySuite {
 
         // make sure all objects were deleted
         FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
-        // destructors are called for the temporary created objects too
         FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
 
@@ -216,11 +215,38 @@ class TestStructs extends buddy.BuddySuite {
 
         // make sure all objects were deleted
         FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
-        // destructors are called for the temporary created objects too
         FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
-      it('should be able to use pointers to structure');
+      it('should be able to use structs as member variables of other structs / uclasses', {
+        var nStruct1 = 0,
+            nConstructorsStruct1 = FHasStructMember1.nConstructorCalled,
+            nDestructorsStruct1 = FHasStructMember1.nDestructorCalled,
+            nStruct2 = 0,
+            nConstructorsStruct2 = FHasStructMember2.nConstructorCalled,
+            nDestructorsStruct2 = FHasStructMember2.nDestructorCalled,
+            nObjects = 0;
+        function run() {
+          var hasStruct1 = FHasStructMember1.create();
+          nObjects++;
+          nStruct1++;
+          var simple = hasStruct1.simple;
+          simple.i32 = 10;
+          hasStruct1.simple.i32.should.be(10);
+        }
+        run();
+        // run twice to make sure that the finalizers have run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        // make sure all objects were deleted
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+        FHasStructMember1.nConstructorCalled.should.be(nConstructorsStruct1 + nStruct1);
+        FHasStructMember1.nDestructorCalled.should.be(nDestructorsStruct1 + nStruct1);
+      });
+      it('should be able to use pointers (and ref) to structure');
       it('should be able to use pointers to basic types');
+      // it('should be able to
     });
   }
 

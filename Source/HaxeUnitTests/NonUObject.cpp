@@ -9,3 +9,12 @@ static FSimpleStruct sharedRef = FSimpleStruct();
 FSimpleStruct *FSimpleStruct::getRef() {
   return &sharedRef;
 }
+
+int32 FHasStructMember1::nDestructorCalled = 0;
+int32 FHasStructMember1::nConstructorCalled = 0;
+
+int32 FHasStructMember2::nDestructorCalled = 0;
+int32 FHasStructMember2::nConstructorCalled = 0;
+
+int32 FHasStructMember3::nDestructorCalled = 0;
+int32 FHasStructMember3::nConstructorCalled = 0;
