@@ -137,17 +137,22 @@ class FHasStructMember3 {
 
     FSimpleStruct& ref;
     FSimpleStruct simple;
+    bool usedDefaultConstructor;
 
-    FHasStructMember3(FSimpleStruct &theref) : ref(theref) {
+    FHasStructMember3(FSimpleStruct &theref) : ref(theref), usedDefaultConstructor(false) {
       nConstructorCalled++;
     }
 
-    FHasStructMember3() : ref(simple) {
+    FHasStructMember3() : ref(simple), usedDefaultConstructor(true) {
       nConstructorCalled++;
     }
 
     bool isI32Equal(int32 i) {
       return this->ref.i32 == i;
+    }
+
+    static void setRef(FSimpleStruct &ref, FSimpleStruct to) {
+      ref = to;
     }
 
     ~FHasStructMember3() {

@@ -272,12 +272,44 @@ class TestStructs extends buddy.BuddySuite {
         FHasStructMember2.nConstructorCalled.should.be(nConstructorsStruct2 + nStruct2);
         FHasStructMember2.nDestructorCalled.should.be(nDestructorsStruct2 + nStruct2);
       });
-      it('should be able to use pointers (and ref) to structure', {
-        // var nStruct3 = 0,
-        //     nConstructorsStruct3 = FHasStructMember3.nConstructorCalled,
-        //     nDestructorsStruct3 = FHasStructMember3.nDestructorCalled,
-        //     nObjects = 0;
+      it('should be able to use ref to structure', {
+        var nStruct3 = 0,
+            nConstructorsStruct3 = FHasStructMember3.nConstructorCalled,
+            nDestructorsStruct3 = FHasStructMember3.nDestructorCalled,
+            nObjects = 0;
         function run() {
+          var hasStruct3 = FHasStructMember3.create();
+          nObjects++; nStruct3++;
+          hasStruct3.usedDefaultConstructor.should.be(true);
+          hasStruct3.simple.i32 = 0xF0E;
+          hasStruct3.isI32Equal(0xF0E).should.be(true);
+          setSomeValues(hasStruct3.simple, 9);
+          checkValues(hasStruct3.simple, 9, true);
+          checkValues(hasStruct3.ref, 9, true);
+
+          var simple = FSimpleStruct.createWithArgs(1.1,2.2,3,4);
+          nObjects++;
+          simple.f1.should.beCloseTo(1.1);
+          simple.d1.should.be(2.2);
+          hasStruct3.ref = simple;
+          hasStruct3.ref.f1.should.beCloseTo(1.1);
+          hasStruct3.ref.d1.should.be(2.2);
+          hasStruct3.simple.f1.should.beCloseTo(1.1);
+          hasStruct3.simple.d1.should.be(2.2);
+
+          var hasStruct3_1 = FHasStructMember3.createWithRef( simple );
+          nObjects++; nStruct3++;
+          hasStruct3_1.usedDefaultConstructor.should.be(false);
+          setSomeValues(simple, 10);
+          setSomeValues(hasStruct3_1.simple, 11);
+          checkValues(simple, 10, false);
+          checkValues(hasStruct3_1.ref, 10, false);
+          checkValues(hasStruct3_1.simple, 11, true);
+
+          FHasStructMember3.setRef(simple, hasStruct3_1.simple);
+          nDestructors++; //we're using a pass-by-value struct
+          checkValues(simple, 11, true);
+          checkValues(hasStruct3_1.ref, 11, true);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -285,12 +317,14 @@ class TestStructs extends buddy.BuddySuite {
         cpp.vm.Gc.run(true);
 
         // make sure all objects were deleted
-        // FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
-        // FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
-        // FHasStructMember3.nConstructorCalled.should.be(nConstructorsStruct3 + nStruct3);
-        // FHasStructMember3.nDestructorCalled.should.be(nDestructorsStruct3 + nStruct3);
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+        FHasStructMember3.nConstructorCalled.should.be(nConstructorsStruct3 + nStruct3);
+        FHasStructMember3.nDestructorCalled.should.be(nDestructorsStruct3 + nStruct3);
       });
-      it('should be able to use pointers/ref/shared pointers to basic types');
+      it('should be able to use pointers/ref/shared pointers to basic types', {
+      });
+      it('should be able to use pointers/ref/shared pointers to other pointers/ref/shared pointer types');
       it('should be able to be copied and owned');
     });
   }

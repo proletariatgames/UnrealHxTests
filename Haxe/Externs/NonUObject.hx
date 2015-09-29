@@ -50,3 +50,20 @@ import unreal.*;
 
   public function isI32Equal(i:Int32):Bool;
 }
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
+@:uextern extern class FHasStructMember3 {
+  public static var nDestructorCalled:Int32;
+  public static var nConstructorCalled:Int32;
+
+  public var simple:PStruct<FSimpleStruct>;
+  public var ref:PRef<FSimpleStruct>;
+  public var usedDefaultConstructor:Bool;
+  @:uname('new') public static function create():PHaxeCreated<FHasStructMember3>;
+  @:uname('new') public static function createWithRef(ref:PRef<FSimpleStruct>):PHaxeCreated<FHasStructMember3>;
+
+  public static function setRef(ref:PRef<FSimpleStruct>, to:PStruct<FSimpleStruct>):Void;
+
+  public function isI32Equal(i:Int32):Bool;
+}
