@@ -326,7 +326,7 @@ class TestStructs extends buddy.BuddySuite {
         var nObjects = 0;
         function run() {
           setSomeValues(FSimpleStruct.getRef(), 12);
-          var copy = FSimpleStruct.getRef().copy();
+          var copy = unreal.Wrapper.copy(FSimpleStruct.getRef());
           nObjects++;
           checkValues(copy, 12, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
@@ -336,7 +336,7 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(copy, 13, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
 
-          var copy2 = FSimpleStruct.getRef().copyStruct();
+          var copy2 = unreal.Wrapper.copyStruct(FSimpleStruct.getRef());
           nObjects++;
           nDestructors++;
           setSomeValues(copy2, 14);
