@@ -159,3 +159,21 @@ class FHasStructMember3 {
       nDestructorCalled++;
     }
 };
+
+class FHasPointers {
+  public:
+    int *intptr;
+    int **ptrIntptr;
+    void *voidptr;
+    float *floatptr;
+    TSharedPtr<int> sharedInt;
+    TSharedPtr<int *> sharedIntptr;
+    int &intref;
+    int someInt;
+
+    FHasPointers() : intref(someInt) {
+    }
+
+    FHasPointers(int &ref) : intref(ref) {
+    }
+};

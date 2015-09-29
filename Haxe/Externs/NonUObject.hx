@@ -67,3 +67,15 @@ import unreal.*;
 
   public function isI32Equal(i:Int32):Bool;
 }
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
+@:uextern extern class FHasPointers {
+  // var intptr:cpp.Pointer<Int>;
+  // var ptrIntptr:cpp.Pointer<cpp.Pointer<Int>>;
+  // var voidptr:cpp.Pointer<Dynamic>; // closest possible :(
+  // var floatptr:cpp.Pointer<Float>;
+  // var sharedInt:TSharedPtr<Int>;
+  // var sharedIntptr:TSharedPtr<cpp.Pointer<Int>>;
+  // var intref:PRef<Int>;
+}
