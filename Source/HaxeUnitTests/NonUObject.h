@@ -81,7 +81,7 @@ class FSimpleStruct {
       return TSharedRef<FSimpleStruct>(new FSimpleStruct());
     }
 
-    ~FSimpleStruct() {
+    virtual ~FSimpleStruct() {
       nDestructorCalled++;
     }
 
@@ -175,5 +175,23 @@ class FHasPointers {
     }
 
     FHasPointers(int &ref) : intref(ref) {
+    }
+};
+
+class FBase : public FSimpleStruct {
+  public:
+    float otherValue;
+    virtual int32 getSomeInt() {
+      return 0xDEADF00;
+    }
+
+    static FBase *getOverride();
+};
+
+class FOverride : public FBase {
+  public:
+    double yetAnotherValue;
+    virtual int32 getSomeInt() override {
+      return 0xBA5;
     }
 };

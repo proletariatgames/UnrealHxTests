@@ -354,6 +354,41 @@ class TestStructs extends buddy.BuddySuite {
         FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
       it('should be able to use types with superclasses', {
+        var nObjects = 0;
+        function run() {
+          var base:FBase = FBase.create();
+          nObjects++;
+          setSomeValues(base, 13);
+          checkValues(base, 13, true);
+          base.getSomeInt().should.be(0xDEADF00);
+          base.otherValue = 22.2;
+          base.otherValue.should.beCloseTo(22.2);
+
+          var child = FOverride.create();
+          nObjects++;
+          base = child;
+          base.getSomeInt().should.be(0xBA5);
+          base.otherValue = 33.3;
+          base.otherValue.should.beCloseTo(33.3);
+          child.getSomeInt().should.be(0xBA5);
+          child.otherValue = 33.3;
+          child.otherValue.should.beCloseTo(33.3);
+          setSomeValues(child, 14);
+          checkValues(child, 14, true);
+
+          base = FBase.getOverride();
+          base.getSomeInt().should.be(0xBA5);
+          setSomeValues(base, 15);
+          checkValues(base, 15, true);
+        }
+        run();
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        // make sure all objects were deleted
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
       it('should be able to use pointers/ref/shared pointers to basic types'); // FIXME
       it('should be able to use pointers/ref/shared pointers to other pointers/ref/shared pointer types');

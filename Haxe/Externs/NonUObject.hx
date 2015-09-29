@@ -79,3 +79,22 @@ import unreal.*;
   // var sharedIntptr:TSharedPtr<cpp.Pointer<Int>>;
   // var intref:PRef<Int>;
 }
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
+@:uextern extern class FBase extends FSimpleStruct {
+  var otherValue:Float32;
+
+  @:uname('new') public static function create():PHaxeCreated<FBase>;
+
+  public function getSomeInt():Int;
+  public static function getOverride():PExternal<FBase>;
+}
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
+@:uextern extern class FOverride extends FBase {
+  var yetAnotherValue:Float;
+
+  @:uname('new') public static function create():PHaxeCreated<FOverride>;
+}

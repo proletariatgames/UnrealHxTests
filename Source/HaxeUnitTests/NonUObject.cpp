@@ -18,3 +18,9 @@ int32 FHasStructMember2::nConstructorCalled = 0;
 
 int32 FHasStructMember3::nDestructorCalled = 0;
 int32 FHasStructMember3::nConstructorCalled = 0;
+
+static FOverride sharedOverride = FOverride();
+
+FBase *FBase::getOverride() {
+  return &sharedOverride;
+}
