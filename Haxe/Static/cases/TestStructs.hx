@@ -322,10 +322,41 @@ class TestStructs extends buddy.BuddySuite {
         FHasStructMember3.nConstructorCalled.should.be(nConstructorsStruct3 + nStruct3);
         FHasStructMember3.nDestructorCalled.should.be(nDestructorsStruct3 + nStruct3);
       });
-      it('should be able to use pointers/ref/shared pointers to basic types', {
+      it('should be able to be copied and owned', {
+        var nObjects = 0;
+        function run() {
+          setSomeValues(FSimpleStruct.getRef(), 12);
+          var copy = FSimpleStruct.getRef().copy();
+          nObjects++;
+          checkValues(copy, 12, true);
+          checkValues(FSimpleStruct.getRef(), 12, true);
+          copy.i32 = 0xF1F0;
+          FSimpleStruct.isI32EqualShared(copy.toSharedPtr(), 0xF1F0).should.be(true);
+          setSomeValues(copy, 13);
+          checkValues(copy, 13, true);
+          checkValues(FSimpleStruct.getRef(), 12, true);
+
+          var copy2 = FSimpleStruct.getRef().copyStruct();
+          nObjects++;
+          nDestructors++;
+          setSomeValues(copy2, 14);
+          checkValues(copy2, 14, true);
+          checkValues(copy, 13, true);
+          checkValues(FSimpleStruct.getRef(), 12, true);
+        }
+        run();
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        // make sure all objects were deleted
+        FSimpleStruct.nConstructorCalled.should.be(nConstructors); // note the change here: We're not using the normal constructors
+        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
       });
+      it('should be able to use types with superclasses', {
+      });
+      it('should be able to use pointers/ref/shared pointers to basic types'); // FIXME
       it('should be able to use pointers/ref/shared pointers to other pointers/ref/shared pointer types');
-      it('should be able to be copied and owned');
     });
   }
 
