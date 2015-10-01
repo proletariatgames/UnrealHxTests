@@ -282,6 +282,7 @@ class TestStructs extends buddy.BuddySuite {
           nObjects++; nStruct3++;
           hasStruct3.usedDefaultConstructor.should.be(true);
           hasStruct3.simple.i32 = 0xF0E;
+          @:privateAccess hasStruct3.simple.parent.should.be(hasStruct3);
           hasStruct3.isI32Equal(0xF0E).should.be(true);
           setSomeValues(hasStruct3.simple, 9);
           checkValues(hasStruct3.simple, 9, true);

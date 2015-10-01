@@ -21,8 +21,8 @@ class ATestEntryPoint extends unreal.AActor {
     ));
 
     runner.run().then(function(_) {
+      trace('Ending stub implementation');
       if (Sys.getEnv("CI_RUNNING") == "1") {
-        trace('Ending stub implementation');
         var success = !runner.failed();
         Sys.exit(success ? 0 : 2);
       }
