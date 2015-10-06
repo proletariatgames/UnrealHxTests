@@ -29,6 +29,9 @@ class TestUObjectOverrides extends buddy.BuddySuite {
 
 @:uclass
 class UHaxeDerived1 extends UBasicTypesSub1 {
+  @:uproperty
+  public var fname:unreal.PStruct<unreal.FName>;
+
   override public function getSomeNumber():Int {
     return this.i32Prop;
   }
@@ -45,6 +48,13 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   @:ufunction(BlueprintCallable, Category=Testing)
   public function uFunction2():Int {
     return 442;
+  }
+
+  @:ufunction(BlueprintImplementableEvent)
+  public function uFunction3():Void;
+
+  @:ufunction(BlueprintNativeEvent)
+  public function uFunction4():Void {
   }
 }
 
