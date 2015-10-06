@@ -34,6 +34,7 @@ import unreal.*;
   public static var nConstructorCalled:Int32;
 
   public var simple:PStruct<FSimpleStruct>;
+  public var fname:PStruct<FName>;
   @:uname('new') public static function create():PHaxeCreated<FHasStructMember1>;
 
   public function isI32Equal(i:Int32):Bool;

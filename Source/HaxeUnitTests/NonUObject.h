@@ -96,6 +96,7 @@ class FHasStructMember1 {
     static int32 nConstructorCalled;
 
     FSimpleStruct simple;
+    FName fname;
 
     FHasStructMember1() {
       nConstructorCalled++;

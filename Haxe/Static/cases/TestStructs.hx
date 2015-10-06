@@ -229,6 +229,8 @@ class TestStructs extends buddy.BuddySuite {
           var hasStruct1 = FHasStructMember1.create();
           nObjects++;
           nStruct1++;
+          hasStruct1.fname = "Hello, World!";
+          hasStruct1.fname.toString().should.be("Hello, World!");
 
           var simple2 = FSimpleStruct.create();
           setSomeValues(simple2, 1);
