@@ -36,6 +36,16 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   public function nonNative(i:Int):Int {
     return i + 10;
   }
+
+  @:ufunction
+  public function uFunction1():Int {
+    return 42;
+  }
+
+  @:ufunction(BlueprintCallable, Category=Testing)
+  public function uFunction2():Int {
+    return 442;
+  }
 }
 
 // just make sure this will compile
