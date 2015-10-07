@@ -60,6 +60,9 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 
 // just make sure this will compile
 @:keep class NonUClass extends UHaxeDerived1 {
+  @:uproperty
+  public var other:UHaxeDerived1;
+
   override public function getSomeNumber():Int {
     return super.getSomeNumber() + 10;
   }
