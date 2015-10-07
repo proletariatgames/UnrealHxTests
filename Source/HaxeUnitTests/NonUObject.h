@@ -2,14 +2,14 @@
 
 #include <Engine.h>
 
-struct FPODStruct {
+struct HAXEUNITTESTS_API FPODStruct {
   float f;
   double d;
   int32 i32;
   uint32 ui32;
 };
 
-class FSimpleStruct {
+class HAXEUNITTESTS_API FSimpleStruct {
   public:
     static int32 nDestructorCalled;
     static int32 nConstructorCalled;
@@ -90,7 +90,7 @@ class FSimpleStruct {
     }
 };
 
-class FHasStructMember1 {
+class HAXEUNITTESTS_API FHasStructMember1 {
   public:
     static int32 nDestructorCalled;
     static int32 nConstructorCalled;
@@ -111,7 +111,7 @@ class FHasStructMember1 {
     }
 };
 
-class FHasStructMember2 {
+class HAXEUNITTESTS_API FHasStructMember2 {
   public:
     static int32 nDestructorCalled;
     static int32 nConstructorCalled;
@@ -131,7 +131,7 @@ class FHasStructMember2 {
     }
 };
 
-class FHasStructMember3 {
+class HAXEUNITTESTS_API FHasStructMember3 {
   public:
     static int32 nDestructorCalled;
     static int32 nConstructorCalled;
@@ -161,7 +161,7 @@ class FHasStructMember3 {
     }
 };
 
-class FHasPointers {
+class HAXEUNITTESTS_API FHasPointers {
   public:
     int *intptr;
     int **ptrIntptr;
@@ -179,7 +179,7 @@ class FHasPointers {
     }
 };
 
-class FBase : public FSimpleStruct {
+class HAXEUNITTESTS_API FBase : public FSimpleStruct {
   public:
     float otherValue;
     virtual int32 getSomeInt() {
@@ -189,7 +189,7 @@ class FBase : public FSimpleStruct {
     static FBase *getOverride();
 };
 
-class FOverride : public FBase {
+class HAXEUNITTESTS_API FOverride : public FBase {
   public:
     double yetAnotherValue;
     virtual int32 getSomeInt() override {
