@@ -8,5 +8,5 @@
 /haxelib
 
 # UE4Haxe specific files
-/Source/HaxeRuntime/HaxeRuntime.Build.cs
+/Source/**/*.Build.cs
 Generated

@@ -60,7 +60,6 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 
 // just make sure this will compile
 @:keep class NonUClass extends UHaxeDerived1 {
-  @:uproperty
   public var other:UHaxeDerived1;
 
   override public function getSomeNumber():Int {
@@ -101,3 +100,10 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     return "test()";
   }
 }
+
+// @:uclass
+// @:umodule('HaxeUnitTests')
+// class UImplementedAnotherModule extends unreal.UObject {
+//   // @:uproperty
+//   // public var other:UHaxeDerived1;
+// }

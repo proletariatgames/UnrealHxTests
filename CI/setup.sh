@@ -18,5 +18,5 @@ haxelib install hxcs || exit $?
 haxelib install buddy || exit $?
 
 # build the build scripts
-cd Plugins/UE4Haxe/Haxe/BuildTool
-haxe build.hxml || exit 1
+cd Plugins/UE4Haxe
+haxe init-plugin.hxml || exit 1

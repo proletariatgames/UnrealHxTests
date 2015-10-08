@@ -14,8 +14,8 @@ haxelib install hxcs
 haxelib install buddy
 
 REM build the build scripts
-cd Plugins/UE4Haxe/Haxe/BuildTool
-haxe build.hxml
+cd Plugins/UE4Haxe
+haxe init-plugin.hxml
 
 cd %WORKSPACE%
 

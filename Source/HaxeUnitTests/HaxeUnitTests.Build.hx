@@ -1,18 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+import unrealbuildtool.*;
 
-using UnrealBuildTool;
-
-public class HaxeUnitTests : ModuleRules
+class HaxeUnitTests extends HaxeModuleRules
 {
-	public HaxeUnitTests(TargetInfo Target)
+	public function new(target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		super(target);
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-		
+
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
 		// if ((Target.Platform == UnrealTargetPlatform.Win32) || (Target.Platform == UnrealTargetPlatform.Win64))
