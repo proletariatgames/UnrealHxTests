@@ -9,13 +9,13 @@ REM setup haxelib
 if not exist haxelib mkdir haxelib
 
 REM install all needed libraries
-haxelib install hxcpp
-haxelib install hxcs
-haxelib install buddy
+haxelib install hxcpp || exit /b
+haxelib install hxcs || exit /b
+haxelib install buddy || exit /b
 
 REM build the build scripts
 cd Plugins/UE4Haxe
-haxe init-plugin.hxml
+haxe init-plugin.hxml || exit /b
 
 cd %WORKSPACE%
 
@@ -25,9 +25,9 @@ cd "%UE4%"
 REM build the unit tests
 echo "building unit tests"
 echo "Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development \"-project=%WORKSPACE%/HaxeUnitTests.uproject\" -editorrecompile -noubtmakefiles"
-Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development "-project=%WORKSPACE%/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket
+Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development "-project=%WORKSPACE%/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket || exit /b
 
 echo "running unit tests"
 set MAP=/Game/Maps/HaxeTestEntryPoint
 echo "%UE4%/Engine/Binaries/Win64/UE4Editor.exe %WORKSPACE%/HaxeUnitTests.uproject -server %MAP% -log -stdout
-"%UE4%/Engine/Binaries/Win64/UE4Editor.exe" "%WORKSPACE%/HaxeUnitTests.uproject" -server "%MAP%" -log -stdout
+"%UE4%/Engine/Binaries/Win64/UE4Editor.exe" "%WORKSPACE%/HaxeUnitTests.uproject" -server "%MAP%" -log -stdout || exit /b
