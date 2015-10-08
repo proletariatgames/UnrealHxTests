@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Engine.h>
+#include "SomeEnum.h"
 
 struct HAXEUNITTESTS_API FPODStruct {
   float f;
@@ -97,6 +98,9 @@ class HAXEUNITTESTS_API FHasStructMember1 {
 
     FSimpleStruct simple;
     FName fname;
+    EMyEnum myEnum;
+    EMyCppEnum myCppEnum;
+    EMyNamespacedEnum::Value myNamespacedEnum;
 
     FHasStructMember1() {
       nConstructorCalled++;

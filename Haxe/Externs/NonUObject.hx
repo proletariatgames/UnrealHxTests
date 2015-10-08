@@ -35,6 +35,10 @@ import unreal.*;
 
   public var simple:PStruct<FSimpleStruct>;
   public var fname:PStruct<FName>;
+  public var myEnum:SomeEnum.EMyEnum;
+  public var myCppEnum:SomeEnum.EMyCppEnum;
+  public var myNamespacedEnum:SomeEnum.EMyNamespacedEnum;
+
   @:uname('new') public static function create():PHaxeCreated<FHasStructMember1>;
 
   public function isI32Equal(i:Int32):Bool;
