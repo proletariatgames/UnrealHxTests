@@ -5,7 +5,7 @@
 
 UENUM()
 enum EMyEnum {
-  SomeEnum1,
+  SomeEnum1 = 1,
   SomeEnum2 = 100,
   SomeEnum3 = 200
 };

@@ -8,6 +8,9 @@ class TestUEnum extends buddy.BuddySuite {
     describe('Haxe - UEnums', {
       it('should be able to get/set UEnum fields', {
         var s = FHasStructMember1.create();
+        s.myEnum = SomeEnum1;
+        s.myCppEnum = CppEnum1;
+        s.myNamespacedEnum = NSEnum1;
         s.myEnum.should.be(SomeEnum1);
         s.myCppEnum.should.be(CppEnum1);
         s.myNamespacedEnum.should.be(NSEnum1);
