@@ -29,5 +29,5 @@ Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development "-pro
 
 echo "running unit tests"
 set MAP=/Game/Maps/HaxeTestEntryPoint
-echo "%UE4%/Engine/Binaries/Win64/UE4Editor.exe %WORKSPACE%/HaxeUnitTests.uproject -server %MAP% -log -stdout
-"%UE4%/Engine/Binaries/Win64/UE4Editor.exe" "%WORKSPACE%/HaxeUnitTests.uproject" -server "%MAP%" -log -stdout || exit /b
+echo "%UE4%/Engine/Binaries/Win64/UE4Editor.exe %WORKSPACE%/HaxeUnitTests.uproject -server %MAP% -stdout
+"%UE4%/Engine/Binaries/Win64/UE4Editor.exe" "%WORKSPACE%/HaxeUnitTests.uproject" -server "%MAP%" -stdout || exit /b
