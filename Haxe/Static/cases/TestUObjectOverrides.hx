@@ -1,4 +1,5 @@
 package cases;
+import unreal.*;
 using buddy.Should;
 import UBasicTypesSub;
 
@@ -55,6 +56,11 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 
   @:ufunction(BlueprintNativeEvent)
   public function uFunction4():Void {
+  }
+
+  @:ufunction
+  public function uFunction5():PStruct<unreal.FName> {
+    return fname;
   }
 }
 
