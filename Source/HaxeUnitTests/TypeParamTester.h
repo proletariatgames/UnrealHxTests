@@ -19,13 +19,13 @@ public:
     TEST_ROUNDTRIP(bool, false);
     TEST_ROUNDTRIP(int32, 42);
     TEST_ROUNDTRIP(uint32, 0xFFFFFFFF);
-    TEST_ROUNDTRIP(int8, (int8) 0xFF);
+    TEST_ROUNDTRIP(int8, (int8) -1);
     TEST_ROUNDTRIP(uint8, 0xFF);
-    TEST_ROUNDTRIP(int16, (int16) 0xFFFF);
+    TEST_ROUNDTRIP(int16, (int16) -1);
     TEST_ROUNDTRIP(uint16, 0xFFFF);
-    TEST_ROUNDTRIP(int32, (int32) 0xFFFFFFFF);
+    TEST_ROUNDTRIP(int32, (int32) -1);
     TEST_ROUNDTRIP(uint32, 0xFFFFFFFF);
-    TEST_ROUNDTRIP(int64, (int64) 0xFFFFFFFFFFFFFFFFLL);
+    TEST_ROUNDTRIP(int64, (int64) -1LL);
     TEST_ROUNDTRIP(uint64, 0xFFFFFFFFFFFFFFFFULL);
 
     return true;
