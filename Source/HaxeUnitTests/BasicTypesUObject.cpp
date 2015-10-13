@@ -1,6 +1,8 @@
 #include "HaxeUnitTests.h"
 #include "BasicTypesUObject.h"
 
+int UBasicTypesUObject::someStaticInt = 0;
+
 UBasicTypesUObject *UBasicTypesUObject::CreateFromCpp() {
   return NewObject<UBasicTypesUObject>();
 }
