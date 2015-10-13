@@ -1,6 +1,8 @@
 #include "HaxeUnitTests.h"
 #include "NonUObject.h"
 
+int FSimpleStruct::someStaticInt = 0;
+
 int32 FSimpleStruct::nDestructorCalled = 0;
 int32 FSimpleStruct::nConstructorCalled = 0;
 

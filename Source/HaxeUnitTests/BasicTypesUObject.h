@@ -11,7 +11,9 @@ class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
 {
   GENERATED_BODY()
     
-  public:
+public:
+  static int someStaticInt;
+
   bool boolNonProp;
   FString stringNonProp;
   FText textNonProp;

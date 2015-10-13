@@ -12,6 +12,7 @@ struct HAXEUNITTESTS_API FPODStruct {
 
 class HAXEUNITTESTS_API FSimpleStruct {
   public:
+    static int someStaticInt;
     static int32 nDestructorCalled;
     static int32 nConstructorCalled;
 

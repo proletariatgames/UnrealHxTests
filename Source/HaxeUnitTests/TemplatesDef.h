@@ -8,8 +8,11 @@ class HAXEUNITTESTS_API UTemplatesDef : public UObject
 {
   GENERATED_BODY()
 
+public:
+  static int someStaticInt;
+
   template<class T>
-  static int getSomeStaticInt(T *someInstance) {
+  static int getSomeStaticInt() {
     return T::someStaticInt;
   }
 };
