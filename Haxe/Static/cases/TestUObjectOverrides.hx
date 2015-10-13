@@ -51,8 +51,10 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
     return 442;
   }
 
-  @:ufunction(BlueprintImplementableEvent)
-  public function uFunction3():Void;
+  @:ufunction(BlueprintImplementableEvent, BlueprintAuthorityOnly)
+  public function uFunction3(delta:Float32):Void;
+  @:ufunction(BlueprintImplementableEvent, BlueprintAuthorityOnly)
+  public function uFunction3_1(delta:Float32):Void;
 
   @:ufunction(BlueprintNativeEvent)
   public function uFunction4():Void {
