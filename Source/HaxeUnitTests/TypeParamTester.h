@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Engine.h"
-#include <TypeParam.h>
+#include <TypeParamGlue.h>
 #include <cstdio>
 //
 
 #define TEST_ROUNDTRIP(type,obj) \
   printf("Testing " #type" (" #obj")\n"); \
-  if (TypeParam<type>::haxeToUe(TypeParam<type>::ueToHaxe(obj)) != obj) { \
+  if (TypeParamGlue<type>::haxeToUe(TypeParamGlue<type>::ueToHaxe(obj)) != obj) { \
     fprintf(stderr, "ERROR roundtrip on "#type" for "#obj"\n"); \
     return false; \
   }
