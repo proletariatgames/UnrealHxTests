@@ -10,3 +10,4 @@
 -cpp /var/dev/projs/HaxeUnitTests/Haxe/Generated/Externs
 --no-output
 --macro ue4hx.internal.ExternBaker.process(["/var/dev/projs/HaxeUnitTests/Plugins/UE4Haxe/Haxe/Externs","/var/dev/projs/HaxeUnitTests/Haxe/Externs"], true)
+-D BUILDTOOL_VERSION_LEVEL=1

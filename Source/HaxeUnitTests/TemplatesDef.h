@@ -15,4 +15,11 @@ public:
   static int getSomeStaticInt() {
     return T::someStaticInt;
   }
+
+  template<class T>
+  static T *copyNew(T withType) {
+    T *ret = new T();
+    *ret = withType;
+    return ret;
+  }
 };

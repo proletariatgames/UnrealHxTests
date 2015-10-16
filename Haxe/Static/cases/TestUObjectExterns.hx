@@ -183,7 +183,6 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
       });
 
-      it('should be able to call templated functions');
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
       it('should be able to be created by Haxe code');
