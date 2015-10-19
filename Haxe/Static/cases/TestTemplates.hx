@@ -54,7 +54,7 @@ class TestTemplates extends buddy.BuddySuite {
           checkValues(struct, 1, true);
 
           var struct2 = templ.copyNew(new TypeParam<PStruct<FSimpleStruct>>(), cast struct);
-          nObjects++; nDestructors += 2; // extra object for the PStruct
+          nObjects++;
           checkValues(struct2, 1, true);
           setSomeValues(struct, 2);
           checkValues(struct, 2, true);
@@ -65,8 +65,24 @@ class TestTemplates extends buddy.BuddySuite {
         cpp.vm.Gc.run(true);
 
         FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
-        FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
+      });
+
+      it('should be able to use templated classes', {
+        var templ = FTemplatedClass1.create(10);
+        templ.value.should.be(10);
+        templ.get().should.be(10);
+        templ.value = 42;
+        templ.value.should.be(42);
+        templ.get().should.be(42);
+        templ.set(52);
+        templ.value.should.be(52);
+        templ.get().should.be(52);
+        templ.value += 10;
+        templ.value.should.be(62);
+        templ.get().should.be(62);
       });
     });
   }
 }
+
+

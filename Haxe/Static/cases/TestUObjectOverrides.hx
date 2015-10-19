@@ -42,6 +42,11 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   }
 
   @:ufunction
+  public function returnsItself():UHaxeDerived1 {
+    return this;
+  }
+
+  @:ufunction
   public function uFunction1():Int {
     return 42;
   }
