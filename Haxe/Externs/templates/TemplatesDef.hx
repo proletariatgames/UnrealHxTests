@@ -18,8 +18,17 @@ import unreal.*;
 
 @:glueCppIncludes("TemplatesDef.h")
 @:uextern extern class FTemplatedClass2<A,B> {
-  public function createWithA(value:A):FTemplatedClass1<A>;
-  public function createWithB(value:B):FTemplatedClass1<B>;
+  public function createWithA(value:A):PStruct<FTemplatedClass1<A>>;
+  public function createWithB(value:B):PStruct<FTemplatedClass1<B>>;
+  public function createRec(value:A):PStruct<FTemplatedClass1< PStruct<FTemplatedClass1<A>> >>;
 
   @:uname('new') static function create<A,B>():PHaxeCreated<FTemplatedClass2<A,B>>;
+}
+
+@:glueCppIncludes("TemplatesDef.h")
+@:uname("FNonTemplatedClass1")
+@:uextern extern class FNonTemplatedClass {
+  public var obj:PStruct< FTemplatedClass1<PExternal<FNonTemplatedClass>> >;
+
+  @:uname('new') static function create():PHaxeCreated<FNonTemplatedClass>;
 }

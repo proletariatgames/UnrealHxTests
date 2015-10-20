@@ -80,9 +80,61 @@ class TestTemplates extends buddy.BuddySuite {
         templ.value += 10;
         templ.value.should.be(62);
         templ.get().should.be(62);
+
+        var templ = FTemplatedClass1.create(4.2);
+        templ.value.should.be(4.2);
+        templ.get().should.be(4.2);
+        templ.value = 42.2;
+        templ.value.should.be(42.2);
+        templ.get().should.be(42.2);
+        templ.set(52.2);
+        templ.value.should.be(52.2);
+        templ.get().should.be(52.2);
+        templ.value += 10;
+        templ.value.should.be(62.2);
+        templ.get().should.be(62.2);
+
+        var templ = FTemplatedClass2.create(new TypeParam<Float32>(), new TypeParam<Int16>());
+        templ.createWithA(11.1).value.should.beCloseTo(11.1);
+        templ.createWithB(10).value.should.be(10);
+        templ.createRec(22.2).value.value.should.beCloseTo(22.2);
+
+        var ntempl = FNonTemplatedClass.create();
+        ntempl.obj.value.should.be(null);
+        ntempl.obj.value = ntempl;
+        ntempl.obj.value.should.not.be(null);
+
+        var arr = TArray.create(new TypeParam<UTemplatesDef>());
+        var obj = UObject.NewObject(new TypeParam<PStruct<UTemplatesDef>>());
+        var obj2 = UObject.NewObject(new TypeParam<PStruct<UTemplatesDef>>());
+        arr.Push(obj);
+        arr.get_Item(0).should.not.be(null);
+        arr.set_Item(0, obj2);
+        arr.get_Item(0).should.not.be(null);
+        arr.Num().should.be(1);
+
+        var arr = TArray.create(new TypeParam<UTemplateMyClass>());
+        var obj = UObject.NewObject(new TypeParam<PStruct<UTemplateMyClass>>());
+        var obj2 = UObject.NewObject(new TypeParam<PStruct<UTemplateMyClass>>());
+        arr.Push(obj);
+        arr.get_Item(0).should.be(obj);
+        arr.set_Item(0, obj2);
+        arr.get_Item(0).should.not.be(obj);
+        arr.get_Item(0).should.be(obj2);
+        arr.Num().should.be(1);
       });
     });
   }
 }
 
+@:uclass
+class UTemplateMyClass extends UObject {
+  public var templ:PStruct<FTemplatedClass1<Int>>;
+  public var templ2:PStruct<TArray<Int>>;
+  public var templ3:PStruct<TArray<UTemplateMyClass>>;
+  @:uproperty
+  public var templ4:PStruct<TArray<UTemplateMyClass>>;
 
+  @:uproperty
+  public var templ5:PStruct<TArray<UBasicTypesUObject>>;
+}

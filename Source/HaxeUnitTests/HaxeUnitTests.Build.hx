@@ -8,7 +8,7 @@ class HaxeUnitTests extends HaxeModuleRules
 
     // UEBuildConfiguration.bEnableFastIteration = true;
     BuildConfiguration.bUseUnityBuild = false;
-    this.MinFilesUsingPrecompiledHeaderOverride = -1;
+    // this.MinFilesUsingPrecompiledHeaderOverride = -1;
     // Uncomment if you are using Slate UI
     // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
