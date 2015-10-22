@@ -11,6 +11,11 @@ class TestDelegates extends buddy.BuddySuite {
       it('should be able to unregister delegates from Haxe code');
       it('should be able to create new UCLASS types that use delegates');
       it('should be able to declare new delegate types');
+      // Delegate examples from SeekPlayerState.h
+      //
+      // DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLootEvent);
+      // DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDeathEvent, ASeekPlayerState*, PlayerState, ASeekPlayerState*, Killer, const FVector&, Location);
+      //
     });
   }
 }
