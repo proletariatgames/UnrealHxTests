@@ -23,6 +23,14 @@ class TestTArray extends buddy.BuddySuite {
         for (i in 0...10) {
           arr.get_Item(i).should.be(i+1 + (i + 1) / 10);
         }
+
+        var arr = TArray.create(new TypeParam<Float32>());
+        for (i in 0...10) {
+          arr.Push(i+1 + (i+1) / 10);
+        }
+        for (i in 0...10) {
+          arr.get_Item(i).should.beCloseTo(i+1 + (i + 1) / 10);
+        }
       });
       it('should be able to use TArray of uclass types');
       it('should be able to use TArray of structs');

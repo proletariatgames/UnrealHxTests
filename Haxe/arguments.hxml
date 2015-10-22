@@ -7,4 +7,3 @@
 -D UE4_POINTER_TESTING
 
 -D dump=pretty
--debug
