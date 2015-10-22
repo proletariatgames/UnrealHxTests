@@ -6,6 +6,7 @@ using StringTools;
 using haxe.macro.ExprTools;
 #else
 import buddy.*;
+import unreal.*;
 
 @:uclass
 class ATestEntryPoint extends unreal.AActor {
@@ -16,9 +17,11 @@ class ATestEntryPoint extends unreal.AActor {
 
     var runner = new buddy.SuitesRunner(ImportAll.getDefs(
       cases.TestUObjectExterns,
-      cases.TestUObjectOverrides,
       cases.TestStructs,
-      cases.TestTypeParam
+      cases.TestTypeParam,
+      cases.TestTemplates,
+      cases.TestTArray,
+      cases.TestUObjectOverrides
     ));
 
     runner.run().then(function(_) {

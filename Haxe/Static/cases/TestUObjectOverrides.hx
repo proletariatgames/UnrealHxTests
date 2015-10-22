@@ -33,6 +33,9 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   @:uproperty
   @:uname('someFName') public var fname:unreal.PStruct<unreal.FName>;
 
+  @:uproperty
+  public var intProp:unreal.Int32;
+
   override public function getSomeNumber():Int {
     return this.i32Prop;
   }
