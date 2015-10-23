@@ -1,12 +1,16 @@
 package cases;
 using buddy.Should;
 import NonUObject;
+import Delegates;
 import helpers.TestHelper;
 
 class TestDelegates extends buddy.BuddySuite {
   public function new() {
     describe('Haxe - Delegates', {
-      it('should be able to call delegates');
+      it('should be able to call delegates', {
+        var x = DelIntInt.create();
+        x.IsBound().should.be(false);
+      });
       it('should be able to register delegates from Haxe code');
       it('should be able to unregister delegates from Haxe code');
       it('should be able to create new UCLASS types that use delegates');
@@ -19,5 +23,4 @@ class TestDelegates extends buddy.BuddySuite {
     });
   }
 }
-
 
