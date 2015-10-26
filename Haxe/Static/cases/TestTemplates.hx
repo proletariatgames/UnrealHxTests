@@ -1,5 +1,6 @@
 package cases;
 import NonUObject;
+import UBasicTypesSub;
 import SomeEnum;
 import templates.TemplatesDef;
 import unreal.*;
@@ -122,6 +123,13 @@ class TestTemplates extends buddy.BuddySuite {
         arr.get_Item(0).should.not.be(obj);
         arr.get_Item(0).should.be(obj2);
         arr.Num().should.be(1);
+
+        var arr = TArray.create(new TypeParam<TSubclassOf<UBasicTypesSub2>>());
+        arr.Push( UBasicTypesSub2.StaticClass() );
+        arr.Push( UBasicTypesSub3.StaticClass() );
+        for (i in 0...arr.Num()) {
+          arr.get_Item(i).GetDesc().should.be('BasicTypesSub' + (i+2));
+        }
       });
     });
   }
