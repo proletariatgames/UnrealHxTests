@@ -2,6 +2,7 @@
 
 #include "GameFramework/GameMode.h"
 #include "BasicTypesUObject.h"
+#include "BasicType2.h"
 #include "BasicTypesSub.generated.h"
 
 /**
@@ -28,7 +29,7 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
 };
 
 UCLASS()
-class HAXEUNITTESTS_API UBasicTypesSub2 : public UBasicTypesUObject
+class HAXEUNITTESTS_API UBasicTypesSub2 : public UBasicTypesUObject, public IBasicType2
 {
   GENERATED_BODY()
 
@@ -41,6 +42,18 @@ class HAXEUNITTESTS_API UBasicTypesSub2 : public UBasicTypesUObject
 
   virtual int32 getSomeNumber() const override {
     return 44;
+  }
+
+  virtual IBasicType2 *doSomething() override {
+    return this;
+  }
+
+  virtual FString getSubName() override {
+    return TEXT("Sub2");
+  }
+
+  virtual int32 getSomeInt() override {
+    return 0xf00;
   }
 };
 
@@ -62,6 +75,14 @@ class HAXEUNITTESTS_API UBasicTypesSub3 : public UBasicTypesSub2
 
   virtual int32 getSomeNumber() const override {
     return 45;
+  }
+
+  virtual FString getSubName() override {
+    return TEXT("Sub3");
+  }
+
+  virtual int32 getSomeInt() override {
+    return 0xba5;
   }
 };
 

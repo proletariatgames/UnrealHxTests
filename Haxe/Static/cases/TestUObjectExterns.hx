@@ -111,9 +111,18 @@ class TestUObjectExterns extends buddy.BuddySuite {
           sub3.stringProp = 'Test sub3';
           sub3.stringProp.should.be('Test sub3');
 
+          Std.is(sub2, IBasicType2).should.be(true);
+          sub2.doSomething().getSubName().should.be("Sub2");
+          sub2.getSubName().should.be("Sub2");
+          sub2.getSomeInt().should.be(0xf00);
+
           sub2 = sub3;
           sub2.stringProp = 'Test sub3';
           sub2.stringProp.should.be('Test sub3');
+
+          sub2.doSomething().getSubName().should.be("Sub3");
+          sub2.getSubName().should.be("Sub3");
+          sub2.getSomeInt().should.be(0xba5);
         });
       });
 
