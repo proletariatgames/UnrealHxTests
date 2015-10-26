@@ -37,10 +37,10 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   public var intProp:unreal.Int32;
 
   @:uproperty
-  public var subclass:unreal.TSubclassOf<UHaxeDerived1>;
+  public var subclass:unreal.TSubclassOf<UHaxeDerived2>;
 
   @:uproperty
-  public var subclassArray:unreal.PStruct<unreal.TArray<unreal.TSubclassOf<UHaxeDerived1>>>;
+  public var subclassArray:unreal.PStruct<unreal.TArray<unreal.TSubclassOf<UHaxeDerived2>>>;
 
   override public function getSomeNumber():Int {
     return this.i32Prop;
