@@ -93,7 +93,7 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 }
 
 @:uclass
-class UHaxeDerived2 extends UHaxeDerived1 {
+class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
   public var myEnum:SomeEnum.EMyEnum;
   public var myCppEnum:SomeEnum.EMyCppEnum;
   public var myNamespacedEnum:SomeEnum.EMyNamespacedEnum;
@@ -105,6 +105,18 @@ class UHaxeDerived2 extends UHaxeDerived1 {
 
   override public function nonNative(i:Int):Int {
     return super.nonNative(i) + 100;
+  }
+
+  public function doSomething():IBasicType2 {
+    return this;
+  }
+
+  public function getSubName():unreal.FString {
+    return "HaxeDerived2";
+  }
+
+  public function getSomeInt():Int {
+    return 0xf00ba5;
   }
 }
 
@@ -129,10 +141,3 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     return "test()";
   }
 }
-
-// @:uclass
-// @:umodule('HaxeUnitTests')
-// class UImplementedAnotherModule extends unreal.UObject {
-//   // @:uproperty
-//   // public var other:UHaxeDerived1;
-// }
