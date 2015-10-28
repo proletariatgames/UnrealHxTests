@@ -130,6 +130,24 @@ class TestTemplates extends buddy.BuddySuite {
         for (i in 0...arr.Num()) {
           arr.get_Item(i).GetDesc().should.be('BasicTypesSub' + (i+2));
         }
+
+        var arr = TArray.create(new TypeParam<PStruct<FName>>());
+        for (i in 0...5)
+          arr.Push(i + "");
+        for (i in 0...5) {
+          arr.get_Item(i).toString().should.be(i + "");
+        }
+
+        // var arr = TArray.create(new TypeParam<PStruct<FString>>());
+        // for (i in 0...5) {
+        //   Sys.println(i);
+        //   arr.Push(i + "");
+        // }
+        // for (i in 0...5) {
+        //   Sys.println(i);
+        //   Sys.println(arr.get_Item(i));
+        //   arr.get_Item(i).should.be(i + "");
+        // }
       });
     });
   }

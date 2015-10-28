@@ -5,10 +5,87 @@ import UBasicTypesSub;
 
 class TestUObjectOverrides extends buddy.BuddySuite {
   public function new() {
+    inline function setSomeValues(obj:UBasicTypesSub1, multiplier:Int) {
+      obj.boolNonProp = true;
+      obj.boolProp = true;
+      obj.stringNonProp = 'Hello from Haxe!!' + multiplier;
+      obj.textNonProp = 'Text should also work' + multiplier;
+      obj.ui8NonProp = 1 * multiplier;
+      obj.i8NonProp = 2 * multiplier;
+      obj.ui16NonProp = 3 * multiplier;
+      obj.i16NonProp = 4 * multiplier;
+      obj.i32Prop = 5 * multiplier;
+      obj.ui32NonProp = 6 * multiplier;
+      obj.i64NonProp = 7 * multiplier;
+      obj.ui64NonProp = 8 * multiplier;
+      obj.floatProp = 9.1 * multiplier;
+      obj.doubleNonProp = 10.2 * multiplier;
+    }
+    inline function checkValues(obj:UBasicTypesSub1, multiplier:Int) {
+      obj.boolNonProp.should.be(true);
+      obj.boolProp.should.be(true);
+      obj.stringNonProp.should.be('Hello from Haxe!!' + multiplier);
+      obj.textNonProp.should.be('Text should also work' + multiplier);
+      obj.ui8NonProp.should.be(1 * multiplier);
+      obj.i8NonProp.should.be(2 * multiplier);
+      obj.ui16NonProp.should.be(3 * multiplier);
+      obj.i16NonProp.should.be(4 * multiplier);
+      obj.i32Prop.should.be(5 * multiplier);
+      obj.ui32NonProp.should.be(6 * multiplier);
+      Int64.eq(obj.i64NonProp, 7 * multiplier).should.be(true);
+      Int64.eq(obj.ui64NonProp, 8 * multiplier).should.be(true);
+      obj.floatProp.should.beCloseTo(9.1 * multiplier);
+      obj.doubleNonProp.should.be(10.2 * multiplier);
+    }
     describe('Haxe: uobjects overrides', {
-      it('should be able to access native properties (basic)');
-      it('should be able to call native code (basic)');
-      it('should be able to have their functions overridden'); // check if native side sees it as well
+      it('should be able to access native properties (basic)', {
+        var obj1 = UHaxeDerived1.create(),
+            obj2 = UHaxeDerived2.create(),
+            obj3 = UHaxeDerived3.create();
+        setSomeValues(obj1, 1);
+        setSomeValues(obj2, 2);
+        setSomeValues(obj3, 3);
+        checkValues(obj1, 1);
+        checkValues(obj2, 2);
+        checkValues(obj3, 3);
+
+        function testObj(obj1:UHaxeDerived1, kind:Int) {
+          obj1.intProp = 10;
+          obj1.intProp.should.be(10);
+          obj1.otherInt = 20;
+          obj1.otherInt.should.be(20);
+
+          obj1.i32Prop = 222;
+          obj1.getSomeNumber().should.be(2220);
+          obj1.returnsItself().getSomeNumber().should.be(2220);
+        }
+        obj1.nonNative(10).should.be(20);
+        obj2.nonNative(10).should.be(120);
+        obj3.nonNative(10).should.be(320);
+        obj2.getSubName().should.be("HaxeDerived2");
+        obj3.getSubName().should.be("HaxeDerived3");
+        testObj(obj1,1);
+        testObj(obj2,2);
+        testObj(obj3,3);
+      });
+      it('should be able to have their functions overridden', {
+        var obj1 = UHaxeDerived1.create(),
+            obj2 = UHaxeDerived2.create(),
+            obj3 = UHaxeDerived3.create();
+        Int64.eq(obj1.setText("MyText"), Int64.ofInt(0xD00D)).should.be(true);
+        obj1.textNonProp.should.be("MyText");
+        obj2.getSomeInt().should.be(0xf00ba5);
+        Int64.eq(obj3.setText("MyText"), Int64.make(0x0111,0xF0FA)).should.be(true);
+        obj3.boolProp.should.be(true);
+        obj3.stringProp.should.be("MyText");
+        obj3.ui8Prop.should.be(100);
+        obj3.i8Prop.should.be(101);
+
+        obj1.uFunction4();
+        obj1.otherInt.should.be(10);
+        obj2.uFunction4();
+        obj2.otherInt.should.be(25);
+      }); // check if native side sees it as well
       // test const this
       it('should be able to call super methods');
       it('should be able to define non-uclass classes');
@@ -30,6 +107,12 @@ class TestUObjectOverrides extends buddy.BuddySuite {
 
 @:uclass
 class UHaxeDerived1 extends UBasicTypesSub1 {
+  public static function create():UHaxeDerived1 {
+    var ret = UObject.NewObject(new TypeParam<PStruct<UHaxeDerived1>>());
+    return ret;
+  }
+
+  public var otherInt:Int32;
   @:uproperty
   @:uname('someFName') public var fname:unreal.PStruct<unreal.FName>;
 
@@ -43,7 +126,7 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   public var subclassArray:unreal.PStruct<unreal.TArray<unreal.TSubclassOf<UHaxeDerived2>>>;
 
   override public function getSomeNumber():Int {
-    return this.i32Prop;
+    return this.i32Prop * 10;
   }
 
   public function nonNative(i:Int):Int {
@@ -75,6 +158,7 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   public function uFunction4():Void;
 
   public function uFunction4_Implementation() {
+    this.otherInt = 10;
   }
 
   @:ufunction
@@ -94,6 +178,10 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 
 @:uclass
 class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
+  public static function create():UHaxeDerived2 {
+    var ret = UObject.NewObject(new TypeParam<PStruct<UHaxeDerived2>>());
+    return ret;
+  }
   public var myEnum:SomeEnum.EMyEnum;
   public var myCppEnum:SomeEnum.EMyCppEnum;
   public var myNamespacedEnum:SomeEnum.EMyNamespacedEnum;
@@ -118,10 +206,18 @@ class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
   public function getSomeInt():Int {
     return 0xf00ba5;
   }
+
+  override public function uFunction4_Implementation() {
+    this.otherInt = 25;
+  }
 }
 
 @:uclass
 class UHaxeDerived3 extends UHaxeDerived2 {
+  public static function create():UHaxeDerived3 {
+    var ret = UObject.NewObject(new TypeParam<PStruct<UHaxeDerived3>>());
+    return ret;
+  }
   override public function setText(txt:unreal.FText):unreal.Int64 {
     this.setBool_String_UI8_I8(true,txt,100,101);
     this.textProp = this.test();
@@ -134,7 +230,11 @@ class UHaxeDerived3 extends UHaxeDerived2 {
   }
 
   override public function nonNative(i:Int):Int {
-    return super.nonNative(i) + 100;
+    return super.nonNative(i) + 200;
+  }
+
+  override public function getSubName():FString {
+    return "HaxeDerived3";
   }
 
   private function test() {

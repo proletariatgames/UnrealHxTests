@@ -10,9 +10,14 @@ import unreal.*;
 
 @:uclass
 class ATestEntryPoint extends unreal.AActor {
-  override public function PostLoad() {
-    super.PostLoad();
+  private var didTick = false;
+  public function new(wrapped) {
+    super(wrapped);
+    this.PrimaryActorTick.bCanEverTick = true;
+  }
 
+  override public function Tick(deltaTime:Float32) {
+    if (!didTick) didTick = true; else return;
     var reporter = new buddy.reporting.TraceReporter();
 
     var runner = new buddy.SuitesRunner(ImportAll.getDefs(
