@@ -4,6 +4,11 @@ import NonUObject;
 import helpers.TestHelper;
 
 class TestStructs extends buddy.BuddySuite {
+
+  static function isNull(struct:FSimpleStruct) : Bool {
+    return struct == null;
+  }
+
   public function new() {
     var nDestructors = FSimpleStruct.nDestructorCalled,
         nConstructors = FSimpleStruct.nConstructorCalled;
@@ -26,6 +31,7 @@ class TestStructs extends buddy.BuddySuite {
       FSimpleStruct.isI32EqualByVal(struct, 33 * multiplier).should.be(true);
       FSimpleStruct.isI32EqualByVal(struct, -1).should.be(false);
       nDestructors += 2; // for the by val object
+      isNull(struct).should.be(false);
 
       struct.toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
     }

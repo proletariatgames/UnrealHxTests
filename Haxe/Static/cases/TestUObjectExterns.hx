@@ -4,6 +4,11 @@ import haxe.Int64;
 import UBasicTypesSub;
 
 class TestUObjectExterns extends buddy.BuddySuite {
+
+  static function isNull(obj:UBasicTypesUObject) : Bool {
+    return obj == null;
+  }
+
   public function new() {
     describe('Haxe - UObjects', {
       var basic = UBasicTypesUObject.CreateFromCpp();
@@ -42,6 +47,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(empty.ui64NonProp, 0).should.be(true);
           empty.floatProp.should.be(0);
           empty.doubleNonProp.should.be(0);
+          isNull(empty).should.be(false);
 
           basic.boolNonProp.should.be(true);
           basic.boolProp.should.be(true);
@@ -57,6 +63,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(basic.ui64NonProp, 8).should.be(true);
           basic.floatProp.should.beCloseTo(9.1);
           basic.doubleNonProp.should.be(10.2);
+          isNull(basic).should.be(false);
         });
 
         it('should be able to be accessed through reflection (basic)', {
