@@ -1,3 +1,5 @@
+import unreal.*;
+
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("BasicTypesUObject.h")
 @:uextern extern class UBasicTypesUObject extends unreal.UObject {
@@ -71,4 +73,7 @@
   function setText(txt:unreal.FText):unreal.Int64;
 
   @:thisConst function getSomeNumber():Int;
+
+  public static function isNull(obj:PExternal<UBasicTypesUObject>) : Bool;
+  public static function getNull() : PExternal<UBasicTypesUObject>;
 }

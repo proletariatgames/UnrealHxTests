@@ -37,6 +37,14 @@ class HAXEUNITTESTS_API FSimpleStruct {
       nConstructorCalled++;
     }
 
+    static bool isNull(FSimpleStruct *obj) {
+      return obj == nullptr;
+    }
+
+    static FSimpleStruct *getNull() {
+      return nullptr;
+    }
+
     static FSimpleStruct *getRef();
 
     // TODO

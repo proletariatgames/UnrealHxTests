@@ -5,10 +5,6 @@ import UBasicTypesSub;
 
 class TestUObjectOverrides extends buddy.BuddySuite {
 
-  static function isNull(obj:UObject) : Bool {
-    return obj == null;
-  }
-
   public function new() {
     inline function setSomeValues(obj:UBasicTypesSub1, multiplier:Int) {
       obj.boolNonProp = true;
@@ -41,7 +37,6 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       Int64.eq(obj.ui64NonProp, 8 * multiplier).should.be(true);
       obj.floatProp.should.beCloseTo(9.1 * multiplier);
       obj.doubleNonProp.should.be(10.2 * multiplier);
-      isNull(obj).should.be(false);
     }
     describe('Haxe: uobjects overrides', {
       it('should be able to access native properties (basic)', {
@@ -139,10 +134,6 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
     return i + 10;
   }
 
-  public static function isNull(obj:UHaxeDerived1) : Bool {
-    return obj == null;
-  }
-
   @:ufunction
   public function returnsItself():UHaxeDerived1 {
     return this;
@@ -205,10 +196,6 @@ class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
     return super.nonNative(i) + 100;
   }
 
-  public static function isNull(obj:UHaxeDerived2) : Bool {
-    return obj == null;
-  }
-
   public function doSomething():IBasicType2 {
     return this;
   }
@@ -245,10 +232,6 @@ class UHaxeDerived3 extends UHaxeDerived2 {
 
   override public function nonNative(i:Int):Int {
     return super.nonNative(i) + 200;
-  }
-
-  public static function isNull(obj:UHaxeDerived3) : Bool {
-    return obj == null;
   }
 
   override public function getSubName():FString {

@@ -4,13 +4,13 @@
 #include "BasicTypesUObject.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
 {
   GENERATED_BODY()
-    
+
 public:
   static int someStaticInt;
 
@@ -92,5 +92,15 @@ public:
   virtual int32 getSomeNumber() const {
     return 42;
   }
+
+  static bool isNull(UBasicTypesUObject *obj) {
+    return obj == nullptr;
+  }
+
+  static UBasicTypesUObject *getNull() {
+    return nullptr;
+  }
+
+
 };
 

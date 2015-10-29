@@ -6,6 +6,9 @@ import unreal.*;
   public static var nDestructorCalled:Int32;
   public static var nConstructorCalled:Int32;
 
+  public static function isNull(obj:PExternal<FSimpleStruct>) : Bool;
+  public static function getNull() : PExternal<FSimpleStruct>;
+
   public var f1:Float32;
   public var d1:Float64;
   public var i32:Int32;

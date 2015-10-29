@@ -5,10 +5,6 @@ import UBasicTypesSub;
 
 class TestUObjectExterns extends buddy.BuddySuite {
 
-  static function isNull(obj:UBasicTypesUObject) : Bool {
-    return obj == null;
-  }
-
   public function new() {
     describe('Haxe - UObjects', {
       var basic = UBasicTypesUObject.CreateFromCpp();
@@ -47,7 +43,6 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(empty.ui64NonProp, 0).should.be(true);
           empty.floatProp.should.be(0);
           empty.doubleNonProp.should.be(0);
-          isNull(empty).should.be(false);
 
           basic.boolNonProp.should.be(true);
           basic.boolProp.should.be(true);
@@ -63,7 +58,6 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(basic.ui64NonProp, 8).should.be(true);
           basic.floatProp.should.beCloseTo(9.1);
           basic.doubleNonProp.should.be(10.2);
-          isNull(basic).should.be(false);
         });
 
         it('should be able to be accessed through reflection (basic)', {
@@ -100,6 +94,10 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(Reflect.getProperty(basicDyn,"ui64NonProp"), Int64.make(0xC001, 0x0FF1C3)).should.be(true);
           (Reflect.getProperty(basicDyn,"floatNonProp") : Float).should.beCloseTo(99.1);
           (Reflect.getProperty(basicDyn,"doubleNonProp") : Float).should.be(100.2);
+        });
+        it('should be able to be created as null', {
+          UBasicTypesUObject.isNull(null).should.be(true);
+          UBasicTypesUObject.getNull().should.be(null);
         });
 
         it('should be able to be accessed from subclasses (basic)', {
@@ -196,7 +194,6 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(sub2.setText("testing subclass call3-1"), Int64.make(0,0xDEADF00D)).should.be(true);
           sub2.textProp.should.be("testing subclass call3-1");
         });
-
       });
 
       it('should be able to call global functions');
