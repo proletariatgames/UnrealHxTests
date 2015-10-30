@@ -196,6 +196,23 @@ class TestUObjectExterns extends buddy.BuddySuite {
         });
       });
 
+      it('derived classes should be able to access protected members', {
+        var derived4 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeDerived4>>());
+        var ret = derived4.callProtectedFunc1();
+        ret.should.not.be(null);
+        ret.stringProp.should.be("Hello from protected");
+        derived4.boolProp.should.be(true);
+        derived4.stringProp.should.be("Hello from protected");
+        derived4.ui8Prop.should.be(254);
+        derived4.i8Prop.should.be(-99);
+
+        derived4.callProtectedFunc2();
+        derived4.boolProp.should.be(false);
+        derived4.stringProp.should.be("Second hello from protected");
+        derived4.ui8Prop.should.be(253);
+        derived4.i8Prop.should.be(-88);
+      });
+
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
       it('should be able to be created by Haxe code');
@@ -209,4 +226,19 @@ class TestUObjectExterns extends buddy.BuddySuite {
     });
   }
 }
+
+// Derived class with calls to protected members of the base class
+
+@:uclass
+class UHaxeDerived4 extends UBasicTypesUObject {
+  public function callProtectedFunc1() : UBasicTypesUObject {
+    return setBool_String_UI8_I8_protected(true, "Hello from protected", 254, -99);
+  }
+  public function callProtectedFunc2() : Void  {
+    nonUFUNCTION_setBool_String_UI8_I8_protected(false, "Second hello from protected", 253, -88);
+  }
+  public function getProtectedI32() : unreal.Int32 { return m_i32; }
+  public function getProtectedFString() : unreal.FString { return m_FStringProp; }
+}
+
 
