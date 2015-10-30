@@ -86,3 +86,26 @@ int64 UBasicTypesUObject::setText(FText txt) {
 
   return 0xDEADBEEF8BADF00DLL;
 }
+
+UBasicTypesUObject * UBasicTypesUObject::setBool_String_UI8_I8_protected(bool b, FString str, uint8 ui8, int8 i8) {
+  this->boolProp = b;
+  this->stringProp = str;
+  this->ui8Prop = ui8;
+  this->i8Prop = i8;
+
+  this->m_i32 = static_cast<int32>(i8);
+  this->m_FStringProp = str;
+
+  return this;
+}
+
+void UBasicTypesUObject::nonUFUNCTION_setBool_String_UI8_I8_protected(bool b, FString str, uint8 ui8, int8 i8) {
+  this->boolProp = b;
+  this->stringProp = str;
+  this->ui8Prop = ui8;
+  this->i8Prop = i8;
+
+  this->m_i32 = static_cast<int32>(i8);
+  this->m_FStringProp = str;
+}
+

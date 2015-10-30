@@ -101,6 +101,16 @@ public:
     return nullptr;
   }
 
+  // protected member functions and data members for testing extern calls to them
+protected:
+  UFUNCTION()
+  UBasicTypesUObject *setBool_String_UI8_I8_protected(bool b, FString str, uint8 ui8, int8 i8);
 
+  void nonUFUNCTION_setBool_String_UI8_I8_protected(bool b, FString str, uint8 ui8, int8 i8);
+
+  int32 m_i32;
+
+  UPROPERTY()
+  FString m_FStringProp;
 };
 
