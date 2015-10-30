@@ -1,2 +1,3 @@
 build*.hxml
+bake-externs.hxml
 dump
