@@ -3,6 +3,8 @@ import unreal.*;
 using buddy.Should;
 import UBasicTypesSub;
 
+using unreal.CoreAPI;
+
 class TestUObjectOverrides extends buddy.BuddySuite {
 
   public function new() {
@@ -87,6 +89,11 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         obj2.uFunction4();
         obj2.otherInt.should.be(25);
       }); // check if native side sees it as well
+      it('should be able to check physical equality', {
+        var derived =  UHaxeDerived1.create();
+        derived.getSelf().equals(null).should.be(false);
+        derived.getSelf().equals(derived.getSelf()).should.be(true);
+      });
       // test const this
       it('should be able to call super methods');
       it('should be able to define non-uclass classes');

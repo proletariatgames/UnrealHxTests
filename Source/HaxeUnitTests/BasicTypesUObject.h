@@ -101,6 +101,10 @@ public:
     return nullptr;
   }
 
+  UBasicTypesUObject* getSelf() {
+    return this;
+  }
+
   // protected member functions and data members for testing extern calls to them
 protected:
   UFUNCTION()

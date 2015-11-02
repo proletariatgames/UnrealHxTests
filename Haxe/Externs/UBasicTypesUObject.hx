@@ -77,6 +77,8 @@ import unreal.*;
   public static function isNull(obj:PExternal<UBasicTypesUObject>) : Bool;
   public static function getNull() : PExternal<UBasicTypesUObject>;
 
+  public function getSelf() : UBasicTypesUObject;
+
   // Protected member externs
   private var m_i32:unreal.Int32;
 
@@ -88,4 +90,5 @@ import unreal.*;
   private function setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : UBasicTypesUObject;
 
   private function nonUFUNCTION_setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : Void;
+
 }

@@ -3,6 +3,8 @@ using buddy.Should;
 import haxe.Int64;
 import UBasicTypesSub;
 
+using unreal.CoreAPI;
+
 class TestUObjectExterns extends buddy.BuddySuite {
 
   public function new() {
@@ -99,7 +101,11 @@ class TestUObjectExterns extends buddy.BuddySuite {
           UBasicTypesUObject.isNull(null).should.be(true);
           UBasicTypesUObject.getNull().should.be(null);
         });
-
+        it('should be able to check physical equality', {
+          var basicType =  UBasicTypesUObject.CreateFromCpp();
+          basicType.getSelf().equals(null).should.be(false);
+          basicType.getSelf().equals(basicType.getSelf()).should.be(true);
+        });
         it('should be able to be accessed from subclasses (basic)', {
           var sub1 = UBasicTypesSub1.CreateFromCpp();
           var sub2 = UBasicTypesSub2.CreateFromCpp();

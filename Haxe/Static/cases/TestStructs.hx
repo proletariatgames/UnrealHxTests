@@ -3,6 +3,8 @@ using buddy.Should;
 import NonUObject;
 import helpers.TestHelper;
 
+using unreal.CoreAPI;
+
 class TestStructs extends buddy.BuddySuite {
 
   public function new() {
@@ -360,6 +362,10 @@ class TestStructs extends buddy.BuddySuite {
       it('should be able to be created as null', {
         FSimpleStruct.isNull(null).should.be(true);
         FSimpleStruct.getNull().should.be(null);
+      });
+      it('should be able to check physical equality', {
+        FSimpleStruct.getRef().equals(null).should.be(false);
+        FSimpleStruct.getRef().equals(FSimpleStruct.getRef()).should.be(true);
       });
       it('should be able to use types with superclasses', {
         var nObjects = 0;
