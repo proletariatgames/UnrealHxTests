@@ -118,6 +118,9 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   @:uname('someFName') public var fname:unreal.PStruct<unreal.FName>;
 
   @:uproperty
+  @:uname('protectedFName') private var protectedFName:unreal.PStruct<unreal.FName>;
+
+  @:uproperty
   public var intProp:unreal.Int32;
 
   @:uproperty
