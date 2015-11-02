@@ -197,21 +197,43 @@ class TestUObjectExterns extends buddy.BuddySuite {
       });
 
       it('derived classes should be able to access protected members', {
-        var derived4 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeDerived4>>());
-        var ret = derived4.callProtectedFunc1();
+        var protected1 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeProtected1>>());
+        var ret = protected1.callProtectedFunc1();
         ret.should.not.be(null);
         ret.stringProp.should.be("Hello from protected");
-        derived4.boolProp.should.be(true);
-        derived4.stringProp.should.be("Hello from protected");
-        derived4.ui8Prop.should.be(254);
-        derived4.i8Prop.should.be(-99);
+        protected1.boolProp.should.be(true);
+        protected1.stringProp.should.be("Hello from protected");
+        protected1.ui8Prop.should.be(254);
+        protected1.i8Prop.should.be(-99);
 
-        derived4.callProtectedFunc2();
-        derived4.boolProp.should.be(false);
-        derived4.stringProp.should.be("Second hello from protected");
-        derived4.ui8Prop.should.be(253);
-        derived4.i8Prop.should.be(-88);
+        protected1.callProtectedFunc2();
+        protected1.boolProp.should.be(false);
+        protected1.stringProp.should.be("Second hello from protected");
+        protected1.ui8Prop.should.be(253);
+        protected1.i8Prop.should.be(-88);
       });
+
+      it('derived classes should be able to override external protected functions', {
+        var protected2 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeProtected2>>());
+        var ret = protected2.callProtectedFunc1();
+        ret.should.not.be(null);
+        ret.stringProp.should.be("Overridden in HaxeProtected2!");
+        protected2.boolProp.should.be(true);
+        protected2.stringProp.should.be("Overridden in HaxeProtected2!");
+        protected2.ui8Prop.should.be(123);
+        protected2.i8Prop.should.be(-123);
+        protected2.getProtectedI32().should.be(1024*16);
+        protected2.getProtectedFString().should.be("FString overridden!");
+
+        protected2.callProtectedFunc2();
+        protected2.boolProp.should.be(false);
+        protected2.stringProp.should.be("ALSO overridden in HaxeProtected2!");
+        protected2.ui8Prop.should.be(0);
+        protected2.i8Prop.should.be(-1);
+        protected2.getProtectedI32().should.be(666);
+        protected2.getProtectedFString().should.be("FString ALSO overridden!");
+      });
+
 
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
@@ -230,7 +252,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
 // Derived class with calls to protected members of the base class
 
 @:uclass
-class UHaxeDerived4 extends UBasicTypesUObject {
+class UHaxeProtected1 extends UBasicTypesUObject {
   public function callProtectedFunc1() : UBasicTypesUObject {
     return setBool_String_UI8_I8_protected(true, "Hello from protected", 254, -99);
   }
@@ -239,6 +261,29 @@ class UHaxeDerived4 extends UBasicTypesUObject {
   }
   public function getProtectedI32() : unreal.Int32 { return m_i32; }
   public function getProtectedFString() : unreal.FString { return m_FStringProp; }
+}
+
+@:uclass
+class UHaxeProtected2 extends UHaxeProtected1 {
+
+  override private function setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : UBasicTypesUObject {
+    boolProp = true;
+    stringProp = "Overridden in HaxeProtected2!";
+    ui8Prop = 123;
+    i8Prop = -123;
+    m_i32 = 1024*16;
+    m_FStringProp = "FString overridden!";
+    return this;
+  }
+
+  override private function nonUFUNCTION_setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : Void {
+    boolProp = false;
+    stringProp = "ALSO overridden in HaxeProtected2!";
+    ui8Prop = 0;
+    i8Prop = -1;
+    m_i32 = 666;
+    m_FStringProp = "FString ALSO overridden!";
+  }
 }
 
 
