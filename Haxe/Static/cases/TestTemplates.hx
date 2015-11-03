@@ -31,7 +31,7 @@ class TestTemplates extends buddy.BuddySuite {
       FSimpleStruct.isI32EqualByVal(struct, -1).should.be(false);
       nDestructors += 2; // for the by val object
 
-      struct.toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
+      struct.ToString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
     }
 
     before({

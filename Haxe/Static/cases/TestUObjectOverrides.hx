@@ -176,6 +176,11 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   public function uFunction5():PStruct<unreal.FName> {
     return fname;
   }
+
+  @:ufunction
+  public function TestFName(i32:unreal.Int32, fname:unreal.PStruct<unreal.FName>) : Void {}
+  @:ufunction
+  public function TestFText(i32:unreal.Int32, someText:unreal.Const<unreal.PRef<unreal.FText>>) : Void {}
 }
 
 // just make sure this will compile
@@ -230,7 +235,7 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     return ret;
   }
   override public function setText(txt:unreal.FText):unreal.Int64 {
-    this.setBool_String_UI8_I8(true,txt,100,101);
+    this.setBool_String_UI8_I8(true,txt.toString(),100,101);
     this.textProp = this.test();
     return unreal.Int64.make(0x0111,0xF0FA);
   }
@@ -252,3 +257,20 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     return "test()";
   }
 }
+
+@:uclass
+class AHaxeTestActorReplication extends AActor {
+  @:uproperty @:ureplicate
+  public var replicatedPropA:unreal.Int32;
+
+  @:uproperty(Transient) @:ureplicate(OwnerOnly)
+  public var replicatedPropB:unreal.Int32;
+
+  @:uproperty @:ureplicate(customRepFunction)
+  public var replicatedPropC:unreal.Int32;
+
+  public function customRepFunction() : Bool {
+    return true;
+  }
+}
+
