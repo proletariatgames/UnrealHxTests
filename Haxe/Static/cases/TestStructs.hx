@@ -363,10 +363,6 @@ class TestStructs extends buddy.BuddySuite {
         FSimpleStruct.isNull(null).should.be(true);
         FSimpleStruct.getNull().should.be(null);
       });
-      it('should be able to check physical equality', {
-        FSimpleStruct.getRef().equals(null).should.be(false);
-        FSimpleStruct.getRef().equals(FSimpleStruct.getRef()).should.be(true);
-      });
       it('should be able to use types with superclasses', {
         var nObjects = 0;
         function run() {
@@ -406,6 +402,34 @@ class TestStructs extends buddy.BuddySuite {
       });
       it('should be able to use pointers/ref/shared pointers to basic types'); // FIXME
       it('should be able to use pointers/ref/shared pointers to other pointers/ref/shared pointer types');
+      it('should be able to check physical equality', {
+        FSimpleStruct.getRef().pointerEquals(null).should.be(false);
+        FSimpleStruct.getRef().pointerEquals(FSimpleStruct.getRef()).should.be(true);
+        var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        var simple2 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        simple1.pointerEquals(simple2).should.be(false);
+      });
+      it('should be able to check structural equality', {
+        var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        var simple2 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        var simple3 = FSimpleStruct.createWithArgs(100.1,200.2,5,9);
+        var noOp1 = FSimpleStructNoEqualsOperator.createWithArgs(100.1, 200.2, 5, 10);
+        var noOp2 = FSimpleStructNoEqualsOperator.createWithArgs(100.1, 200.2, 5, 10);
+        var noOp3 = FSimpleStructNoEqualsOperator.createWithArgs(100.1, 200.2, 5, 10);
+
+        simple1.equals(null).should.be(false);
+        simple1.equals(simple1).should.be(true);
+        simple1.equals(simple2).should.be(true);
+        simple1.equals(simple3).should.be(false);
+
+        noOp1.equals(null).should.be(false);
+        //This test should pass because we check for physical equal first!
+        noOp1.equals(noOp1).should.be(true);
+        //These tests should fail because there is no equals operator!!!
+        noOp1.equals(noOp2).should.be(false);
+        noOp1.equals(noOp3).should.be(false);
+
+      });
     });
   }
 

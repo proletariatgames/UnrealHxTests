@@ -98,6 +98,30 @@ class HAXEUNITTESTS_API FSimpleStruct {
     FString toString() {
       return FString::Printf(TEXT("Simple Struct (%d) { %d, %d, %d, %d }"), usedDefaultConstructor, (int)f1, (int)d1, i32, ui32);
     }
+
+    bool operator==(const FSimpleStruct other) {
+      return f1 == other.f1 &&
+             d1 == other.d1 &&
+             i32 == other.i32 &&
+             ui32 == other.ui32;
+    }
+};
+
+class HAXEUNITTESTS_API FSimpleStructNoEqualsOperator {
+  public:
+    float f1;
+    double d1;
+    int32 i32;
+    uint32 ui32;
+
+
+    FSimpleStructNoEqualsOperator(float iF1, double iD1, int32 iI32, uint32 iUi32) :
+      f1(iF1),
+      d1(iD1),
+      i32(iI32),
+      ui32(iUi32)
+    {
+    }
 };
 
 class HAXEUNITTESTS_API FHasStructMember1 {
