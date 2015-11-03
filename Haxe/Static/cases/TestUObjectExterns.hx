@@ -33,8 +33,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
           var empty = UBasicTypesUObject.CreateFromCpp();
           empty.boolNonProp.should.be(false);
           empty.boolProp.should.be(false);
-          empty.stringNonProp.should.be('');
-          empty.textNonProp.should.be('');
+          empty.stringNonProp.toString().should.be('');
+          empty.textNonProp.toString().should.be('');
           empty.ui8NonProp.should.be(0);
           empty.i8NonProp.should.be(0);
           empty.ui16NonProp.should.be(0);
@@ -48,8 +48,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
           basic.boolNonProp.should.be(true);
           basic.boolProp.should.be(true);
-          basic.stringNonProp.should.be('Hello from Haxe!!');
-          basic.textNonProp.should.be('Text should also work');
+          basic.stringNonProp.toString().should.be('Hello from Haxe!!');
+          basic.textNonProp.toString().should.be('Text should also work');
           basic.ui8NonProp.should.be(1);
           basic.i8NonProp.should.be(2);
           basic.ui16NonProp.should.be(3);
@@ -67,9 +67,9 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
           Reflect.setProperty(basicDyn,"boolNonProp", false);
           Reflect.setProperty(basicDyn,"boolProp", true);
-          Reflect.setProperty(basicDyn,"stringProp", 'Hello from Haxe reflection!');
-          Reflect.setProperty(basicDyn,"stringNonProp", 'Hello from Haxe reflection! (non-prop)');
-          Reflect.setProperty(basicDyn,"textProp", 'Hello from Haxe reflection! (non-prop text)');
+          Reflect.setProperty(basicDyn,"stringProp", new unreal.FString('Hello from Haxe reflection!'));
+          Reflect.setProperty(basicDyn,"stringNonProp", new unreal.FString('Hello from Haxe reflection! (non-prop)'));
+          Reflect.setProperty(basicDyn,"textProp", new unreal.FText('Hello from Haxe reflection! (non-prop text)'));
           Reflect.setProperty(basicDyn,"ui8NonProp", 10);
           Reflect.setProperty(basicDyn,"i8NonProp", 20);
           Reflect.setProperty(basicDyn,"ui16NonProp", 30);
@@ -83,9 +83,9 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
           Reflect.getProperty(basicDyn,"boolNonProp").should.be(false);
           Reflect.getProperty(basicDyn,"boolProp").should.be(true);
-          Reflect.getProperty(basicDyn,"stringProp").should.be('Hello from Haxe reflection!');
-          Reflect.getProperty(basicDyn,"stringNonProp").should.be('Hello from Haxe reflection! (non-prop)');
-          Reflect.getProperty(basicDyn,"textProp").should.be('Hello from Haxe reflection! (non-prop text)');
+          (Reflect.getProperty(basicDyn,"stringProp") : unreal.FString).toString().should.be('Hello from Haxe reflection!');
+          (Reflect.getProperty(basicDyn,"stringNonProp") : unreal.FString).toString().should.be('Hello from Haxe reflection! (non-prop)');
+          (Reflect.getProperty(basicDyn,"textProp") : unreal.FText).toString().should.be('Hello from Haxe reflection! (non-prop text)');
           Reflect.getProperty(basicDyn,"ui8NonProp").should.be(10);
           Reflect.getProperty(basicDyn,"i8NonProp").should.be(20);
           Reflect.getProperty(basicDyn,"ui16NonProp").should.be(30);
@@ -116,23 +116,23 @@ class TestUObjectExterns extends buddy.BuddySuite {
           sub3.isSub3.should.be(true);
 
           sub1.stringProp = 'Test sub1';
-          sub1.stringProp.should.be('Test sub1');
+          sub1.stringProp.toString().should.be('Test sub1');
           sub2.stringProp = 'Test sub2';
-          sub2.stringProp.should.be('Test sub2');
+          sub2.stringProp.toString().should.be('Test sub2');
           sub3.stringProp = 'Test sub3';
-          sub3.stringProp.should.be('Test sub3');
+          sub3.stringProp.toString().should.be('Test sub3');
 
           Std.is(sub2, IBasicType2).should.be(true);
-          sub2.doSomething().getSubName().should.be("Sub2");
-          sub2.getSubName().should.be("Sub2");
+          sub2.doSomething().getSubName().toString().should.be("Sub2");
+          sub2.getSubName().toString().should.be("Sub2");
           sub2.getSomeInt().should.be(0xf00);
 
           sub2 = sub3;
           sub2.stringProp = 'Test sub3';
-          sub2.stringProp.should.be('Test sub3');
+          sub2.stringProp.toString().should.be('Test sub3');
 
-          sub2.doSomething().getSubName().should.be("Sub3");
-          sub2.getSubName().should.be("Sub3");
+          sub2.doSomething().getSubName().toString().should.be("Sub3");
+          sub2.getSubName().toString().should.be("Sub3");
           sub2.getSomeInt().should.be(0xba5);
         });
       });
@@ -141,9 +141,9 @@ class TestUObjectExterns extends buddy.BuddySuite {
         it('should be able to be called (basic)', {
           var ret = basic.setBool_String_UI8_I8(false, "Hello from function", 255, 127);
           ret.should.not.be(null);
-          ret.stringProp.should.be("Hello from function");
+          ret.stringProp.toString().should.be("Hello from function");
           basic.boolProp.should.be(false);
-          basic.stringProp.should.be("Hello from function");
+          basic.stringProp.toString().should.be("Hello from function");
           basic.ui8Prop.should.be(255);
           basic.i8Prop.should.be(127);
 
@@ -160,7 +160,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           basic.doubleProp.should.be(22.2);
 
           Int64.eq(basic.setText("Hello, FText!"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
-          basic.textNonProp.should.be("Hello, FText!");
+          basic.textNonProp.toString().should.be("Hello, FText!");
 
           basic.getSomeNumber().should.be(42);
         });
@@ -177,9 +177,9 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(sub1.setText("testing subclass call"), Int64.ofInt(0xD00D)).should.be(true);
           Int64.eq(sub2.setText("testing subclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
           Int64.eq(sub3.setText("testing subclass call3"), Int64.make(0,0xDEADF00D)).should.be(true);
-          sub1.textNonProp.should.be("testing subclass call");
-          sub2.textNonProp.should.be("testing subclass call2");
-          sub3.textProp.should.be("testing subclass call3");
+          sub1.textNonProp.toString().should.be("testing subclass call");
+          sub2.textNonProp.toString().should.be("testing subclass call2");
+          sub3.textProp.toString().should.be("testing subclass call3");
 
           var base1:UBasicTypesUObject = sub1;
           var base2:UBasicTypesUObject = sub2;
@@ -192,13 +192,13 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Int64.eq(base1.setText("testing baseclass call"), Int64.ofInt(0xD00D)).should.be(true);
           Int64.eq(base2.setText("testing baseclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
           Int64.eq(base3.setText("testing baseclass call3"), Int64.make(0,0xDEADF00D)).should.be(true);
-          base1.textNonProp.should.be("testing baseclass call");
-          base2.textNonProp.should.be("testing baseclass call2");
-          base3.textProp.should.be("testing baseclass call3");
+          base1.textNonProp.toString().should.be("testing baseclass call");
+          base2.textNonProp.toString().should.be("testing baseclass call2");
+          base3.textProp.toString().should.be("testing baseclass call3");
 
           sub2 = sub3;
           Int64.eq(sub2.setText("testing subclass call3-1"), Int64.make(0,0xDEADF00D)).should.be(true);
-          sub2.textProp.should.be("testing subclass call3-1");
+          sub2.textProp.toString().should.be("testing subclass call3-1");
         });
       });
 
@@ -206,15 +206,15 @@ class TestUObjectExterns extends buddy.BuddySuite {
         var protected1 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeProtected1>>());
         var ret = protected1.callProtectedFunc1();
         ret.should.not.be(null);
-        ret.stringProp.should.be("Hello from protected");
+        ret.stringProp.toString().should.be("Hello from protected");
         protected1.boolProp.should.be(true);
-        protected1.stringProp.should.be("Hello from protected");
+        protected1.stringProp.toString().should.be("Hello from protected");
         protected1.ui8Prop.should.be(254);
         protected1.i8Prop.should.be(-99);
 
         protected1.callProtectedFunc2();
         protected1.boolProp.should.be(false);
-        protected1.stringProp.should.be("Second hello from protected");
+        protected1.stringProp.toString().should.be("Second hello from protected");
         protected1.ui8Prop.should.be(253);
         protected1.i8Prop.should.be(-88);
       });
@@ -223,21 +223,21 @@ class TestUObjectExterns extends buddy.BuddySuite {
         var protected2 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeProtected2>>());
         var ret = protected2.callProtectedFunc1();
         ret.should.not.be(null);
-        ret.stringProp.should.be("Overridden in HaxeProtected2!");
+        ret.stringProp.toString().should.be("Overridden in HaxeProtected2!");
         protected2.boolProp.should.be(true);
-        protected2.stringProp.should.be("Overridden in HaxeProtected2!");
+        protected2.stringProp.toString().should.be("Overridden in HaxeProtected2!");
         protected2.ui8Prop.should.be(123);
         protected2.i8Prop.should.be(-123);
         protected2.getProtectedI32().should.be(1024*16);
-        protected2.getProtectedFString().should.be("FString overridden!");
+        protected2.getProtectedFString().toString().should.be("FString overridden!");
 
         protected2.callProtectedFunc2();
         protected2.boolProp.should.be(false);
-        protected2.stringProp.should.be("ALSO overridden in HaxeProtected2!");
+        protected2.stringProp.toString().should.be("ALSO overridden in HaxeProtected2!");
         protected2.ui8Prop.should.be(0);
         protected2.i8Prop.should.be(-1);
         protected2.getProtectedI32().should.be(666);
-        protected2.getProtectedFString().should.be("FString ALSO overridden!");
+        protected2.getProtectedFString().toString().should.be("FString ALSO overridden!");
       });
 
 

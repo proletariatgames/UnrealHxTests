@@ -31,7 +31,7 @@ class TestTemplates extends buddy.BuddySuite {
       FSimpleStruct.isI32EqualByVal(struct, -1).should.be(false);
       nDestructors += 2; // for the by val object
 
-      struct.ToString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
+      struct.ToString().toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
     }
 
     before({
@@ -128,7 +128,7 @@ class TestTemplates extends buddy.BuddySuite {
         arr.Push( UBasicTypesSub2.StaticClass() );
         arr.Push( UBasicTypesSub3.StaticClass() );
         for (i in 0...arr.Num()) {
-          arr.get_Item(i).GetDesc().should.be('BasicTypesSub' + (i+2));
+          arr.get_Item(i).GetDesc().toString().should.be('BasicTypesSub' + (i+2));
         }
 
         var arr = TArray.create(new TypeParam<PStruct<FName>>());

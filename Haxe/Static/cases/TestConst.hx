@@ -13,12 +13,12 @@ class TestConst extends buddy.BuddySuite {
       });
       it('should be able to override public functions with const parameters', {
         var geoStr = geo.ToString();
-        var out = const1.testConstParam(geo);
+        var out = const1.testConstParam(geo).toString();
         out.should.be('OVERRIDE ' + geoStr);
       });
       it('should be able to override protected functions with const parameters', {
         var geoStr = geo.ToString();
-        var out = const1.doTestConstParam_protected(geo);
+        var out = const1.doTestConstParam_protected(geo).toString();
         out.should.be('OVERRIDE PROTECTED ' + geoStr);
       });
     });
