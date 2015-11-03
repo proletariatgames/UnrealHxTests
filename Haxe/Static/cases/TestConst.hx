@@ -30,8 +30,12 @@ class TestConst extends buddy.BuddySuite {
 @:uclass
 class UHaxeConst extends UBasicTypesUObject {
   @:ufunction(BlueprintImplementableEvent)
-  @:uname("OnBlueprintImplementedFText")
+  @:uname("OnBlueprintImplementedFGeometry")
   public function onBlueprintImplementedFGeometry(i32:unreal.Int32, someGeo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : Void;
+
+  @:ufunction(BlueprintImplementableEvent)
+  @:uname("OnBlueprintImplementedFText")
+  public function onBlueprintImplementedFText(i32:unreal.Int32, someText:unreal.Const<unreal.PRef<unreal.FText>>) : Void;
 
   override public function testConstParam(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString {
     return "OVERRIDE " + super.testConstParam(geo);
