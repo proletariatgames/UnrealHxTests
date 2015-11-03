@@ -27,8 +27,8 @@ class TestUObjectOverrides extends buddy.BuddySuite {
     inline function checkValues(obj:UBasicTypesSub1, multiplier:Int) {
       obj.boolNonProp.should.be(true);
       obj.boolProp.should.be(true);
-      obj.stringNonProp.should.be('Hello from Haxe!!' + multiplier);
-      obj.textNonProp.should.be('Text should also work' + multiplier);
+      obj.stringNonProp.toString().should.be('Hello from Haxe!!' + multiplier);
+      obj.textNonProp.toString().should.be('Text should also work' + multiplier);
       obj.ui8NonProp.should.be(1 * multiplier);
       obj.i8NonProp.should.be(2 * multiplier);
       obj.ui16NonProp.should.be(3 * multiplier);
@@ -65,8 +65,8 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         obj1.nonNative(10).should.be(20);
         obj2.nonNative(10).should.be(120);
         obj3.nonNative(10).should.be(320);
-        obj2.getSubName().should.be("HaxeDerived2");
-        obj3.getSubName().should.be("HaxeDerived3");
+        obj2.getSubName().toString().should.be("HaxeDerived2");
+        obj3.getSubName().toString().should.be("HaxeDerived3");
         testObj(obj1,1);
         testObj(obj2,2);
         testObj(obj3,3);
@@ -76,11 +76,11 @@ class TestUObjectOverrides extends buddy.BuddySuite {
             obj2 = UHaxeDerived2.create(),
             obj3 = UHaxeDerived3.create();
         Int64.eq(obj1.setText("MyText"), Int64.ofInt(0xD00D)).should.be(true);
-        obj1.textNonProp.should.be("MyText");
+        obj1.textNonProp.toString().should.be("MyText");
         obj2.getSomeInt().should.be(0xf00ba5);
         Int64.eq(obj3.setText("MyText"), Int64.make(0x0111,0xF0FA)).should.be(true);
         obj3.boolProp.should.be(true);
-        obj3.stringProp.should.be("MyText");
+        obj3.stringProp.toString().should.be("MyText");
         obj3.ui8Prop.should.be(100);
         obj3.i8Prop.should.be(101);
 
@@ -182,6 +182,11 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   public function uFunction5():PStruct<unreal.FName> {
     return fname;
   }
+
+  @:ufunction(BlueprintImplementableEvent)
+  public function TestFName(i32:unreal.Int32, fname:unreal.PStruct<unreal.FName>) : Void;
+  @:ufunction(BlueprintImplementableEvent)
+  public function TestFText(i32:unreal.Int32, someText:unreal.Const<unreal.PRef<unreal.FText>>) : Void;
 }
 
 // just make sure this will compile
@@ -236,7 +241,7 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     return ret;
   }
   override public function setText(txt:unreal.FText):unreal.Int64 {
-    this.setBool_String_UI8_I8(true,txt,100,101);
+    this.setBool_String_UI8_I8(true,txt.toString(),100,101);
     this.textProp = this.test();
     return unreal.Int64.make(0x0111,0xF0FA);
   }
@@ -258,3 +263,20 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     return "test()";
   }
 }
+
+@:uclass
+class AHaxeTestActorReplication extends AActor {
+  @:uproperty @:ureplicate
+  public var replicatedPropA:unreal.Int32;
+
+  @:uproperty(Transient) @:ureplicate(OwnerOnly)
+  public var replicatedPropB:unreal.Int32;
+
+  @:uproperty @:ureplicate(customRepFunction)
+  public var replicatedPropC:unreal.Int32;
+
+  public function customRepFunction() : Bool {
+    return true;
+  }
+}
+

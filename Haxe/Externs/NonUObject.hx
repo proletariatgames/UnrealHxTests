@@ -19,10 +19,10 @@ import unreal.*;
   @:uname('new') public static function create():PHaxeCreated<FSimpleStruct>;
   @:uname('new') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):PHaxeCreated<FSimpleStruct>;
 
-  @:final public function toString():FString;
+  @:final public function ToString():FString;
 
   static function isI32EqualByVal(self:PStruct<FSimpleStruct>, i:Int32):Bool;
-  static function isI32Equal(self:FSimpleStruct, i:Int32):Bool;
+  static function isI32Equal(self:PExternal<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualShared(self:TSharedPtr<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualSharedRef(self:TSharedRef<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualWeak(self:TWeakPtr<FSimpleStruct>, i:Int32):Bool;

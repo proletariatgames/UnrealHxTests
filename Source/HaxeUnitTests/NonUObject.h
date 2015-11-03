@@ -95,7 +95,7 @@ class HAXEUNITTESTS_API FSimpleStruct {
       nDestructorCalled++;
     }
 
-    FString toString() {
+    FString ToString() {
       return FString::Printf(TEXT("Simple Struct (%d) { %d, %d, %d, %d }"), usedDefaultConstructor, (int)f1, (int)d1, i32, ui32);
     }
 
