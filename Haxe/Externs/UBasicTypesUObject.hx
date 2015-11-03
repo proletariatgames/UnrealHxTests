@@ -79,16 +79,23 @@ import unreal.*;
 
   public function getSelf() : UBasicTypesUObject;
 
+  @:ufunction()
+  @:thisConst
+  public function testConstParam(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString;
+
   // Protected member externs
   private var m_i32:unreal.Int32;
 
   @:uproperty()
   private var m_FStringProp:unreal.FString;
 
-
   @:ufunction()
   private function setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : UBasicTypesUObject;
 
   private function nonUFUNCTION_setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : Void;
+
+  @:ufunction()
+  @:thisConst
+  private function testConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString;
 
 }

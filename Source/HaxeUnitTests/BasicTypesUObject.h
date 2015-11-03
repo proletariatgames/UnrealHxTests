@@ -105,12 +105,16 @@ public:
     return this;
   }
 
+  virtual FString testConstParam(const FGeometry & geo) const;
+
   // protected member functions and data members for testing extern calls to them
 protected:
   UFUNCTION()
   virtual UBasicTypesUObject *setBool_String_UI8_I8_protected(bool b, FString str, uint8 ui8, int8 i8);
 
   virtual void nonUFUNCTION_setBool_String_UI8_I8_protected(bool b, FString str, uint8 ui8, int8 i8);
+
+  virtual FString testConstParam_protected(const FGeometry & geo) const;
 
   int32 m_i32;
 

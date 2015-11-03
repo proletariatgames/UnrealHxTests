@@ -267,6 +267,11 @@ class UHaxeProtected1 extends UBasicTypesUObject {
   }
   public function getProtectedI32() : unreal.Int32 { return m_i32; }
   public function getProtectedFString() : unreal.FString { return m_FStringProp; }
+
+  //TODO Blocked on const reference
+  // @:ufunction(BlueprintImplementableEvent)
+  // @:uname("OnBlueprintImplementedFName")
+  // public function onBlueprintImplementedFName(i32:unreal.Int32, fname:unreal.PStruct<unreal.FName>) : Void;
 }
 
 @:uclass

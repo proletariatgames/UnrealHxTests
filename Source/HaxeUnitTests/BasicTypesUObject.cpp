@@ -109,3 +109,11 @@ void UBasicTypesUObject::nonUFUNCTION_setBool_String_UI8_I8_protected(bool b, FS
   this->m_FStringProp = str;
 }
 
+FString UBasicTypesUObject::testConstParam(const FGeometry & geo) const {
+  return geo.ToString();
+}
+
+FString UBasicTypesUObject::testConstParam_protected(const FGeometry & geo) const {
+  return geo.ToString();
+}
+
