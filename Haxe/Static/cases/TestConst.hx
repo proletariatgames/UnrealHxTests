@@ -17,11 +17,9 @@ class TestConst extends buddy.BuddySuite {
         out.should.be('OVERRIDE ' + geoStr);
       });
       it('should be able to override protected functions with const parameters', {
-        // TODO pending protected const extension
-        //
-        // var geoStr = geo.ToString();
-        // var out = const1.doTestConstParam_protected(geo);
-        // out.should.be('OVERRIDE PROTECTED ' + geoStr);
+        var geoStr = geo.ToString();
+        var out = const1.doTestConstParam_protected(geo);
+        out.should.be('OVERRIDE PROTECTED ' + geoStr);
       });
     });
   }
@@ -39,14 +37,12 @@ class UHaxeConst extends UBasicTypesUObject {
     return "OVERRIDE " + super.testConstParam(geo);
   }
 
-  // TODO pending protected const extension
-  //
+  override private function testConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString {
+    return "OVERRIDE PROTECTED " + super.testConstParam(geo);
+    // TODO glue won't compile if we try to call the protected superclass function, i.e. super.testConstParam_protected(geo)
+  }
 
-  // override public function testConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString {
-  //   return "OVERRIDE PROTECTED " + super.testConstParam(geo);
-  // }
-
-  // public function doTestConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString {
-  //   return this.testConstParam_protected(geo);
-  //}
+  public function doTestConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString {
+    return this.testConstParam_protected(geo);
+  }
 }
