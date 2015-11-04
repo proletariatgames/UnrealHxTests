@@ -8,7 +8,7 @@ class TestTArray extends buddy.BuddySuite {
   public function new() {
     describe('Haxe - TArray', {
       it('should be able to use TArray of basic types',{
-        var arr = TArray.create(new TypeParam<Int32>());
+        var arr = TArrayImpl.create(new TypeParam<Int32>());
         for (i in 0...10) {
           arr.Push(i+1);
         }
@@ -16,7 +16,7 @@ class TestTArray extends buddy.BuddySuite {
           arr.get_Item(i).should.be(i+1);
         }
 
-        var arr = TArray.create(new TypeParam<Float64>());
+        var arr = TArrayImpl.create(new TypeParam<Float64>());
         for (i in 0...10) {
           arr.Push(i+1 + (i+1) / 10);
         }
@@ -24,7 +24,7 @@ class TestTArray extends buddy.BuddySuite {
           arr.get_Item(i).should.be(i+1 + (i + 1) / 10);
         }
 
-        var arr = TArray.create(new TypeParam<Float32>());
+        var arr = TArrayImpl.create(new TypeParam<Float32>());
         for (i in 0...10) {
           arr.Push(i+1 + (i+1) / 10);
         }

@@ -105,7 +105,7 @@ class TestTemplates extends buddy.BuddySuite {
         ntempl.obj.value = ntempl;
         ntempl.obj.value.should.not.be(null);
 
-        var arr = TArray.create(new TypeParam<UTemplatesDef>());
+        var arr = TArrayImpl.create(new TypeParam<UTemplatesDef>());
         var obj = UObject.NewObject(new TypeParam<PStruct<UTemplatesDef>>());
         var obj2 = UObject.NewObject(new TypeParam<PStruct<UTemplatesDef>>());
         arr.Push(obj);
@@ -114,7 +114,7 @@ class TestTemplates extends buddy.BuddySuite {
         arr.get_Item(0).should.not.be(null);
         arr.Num().should.be(1);
 
-        var arr = TArray.create(new TypeParam<UTemplateMyClass>());
+        var arr = TArrayImpl.create(new TypeParam<UTemplateMyClass>());
         var obj = UObject.NewObject(new TypeParam<PStruct<UTemplateMyClass>>());
         var obj2 = UObject.NewObject(new TypeParam<PStruct<UTemplateMyClass>>());
         arr.Push(obj);
@@ -124,14 +124,14 @@ class TestTemplates extends buddy.BuddySuite {
         arr.get_Item(0).should.be(obj2);
         arr.Num().should.be(1);
 
-        var arr = TArray.create(new TypeParam<TSubclassOf<UBasicTypesSub2>>());
+        var arr = TArrayImpl.create(new TypeParam<TSubclassOf<UBasicTypesSub2>>());
         arr.Push( UBasicTypesSub2.StaticClass() );
         arr.Push( UBasicTypesSub3.StaticClass() );
         for (i in 0...arr.Num()) {
           arr.get_Item(i).GetDesc().toString().should.be('BasicTypesSub' + (i+2));
         }
 
-        var arr = TArray.create(new TypeParam<PStruct<FName>>());
+        var arr = TArrayImpl.create(new TypeParam<PStruct<FName>>());
         for (i in 0...5)
           arr.Push(i + "");
         for (i in 0...5) {
