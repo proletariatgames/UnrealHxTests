@@ -1,6 +1,6 @@
 
 @:glueCppIncludes("DelegatesTest.h")
-@:uextern extern class DelIntInt implements unreal.Delegate<Int->Int> {}
+@:uextern extern class DelIntInt extends unreal.Delegate<Int->Int> {}
 
 @:glueCppIncludes("DelegatesTest.h")
-@:uextern extern class DelIntObj implements unreal.Delegate<Int->unreal.UObject> {}
+@:uextern extern class DelIntObj extends unreal.Delegate<Int->unreal.UObject> {}
