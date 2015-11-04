@@ -14,7 +14,7 @@ class FDelHaxe4 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Void
 class FDelHaxe5 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Int->Void> {}
 class FDelHaxe6 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Int->Int->Void> {}
 class FDelHaxe7 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Int->Int->Int->Void> {}
-class FDelHaxe8 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Int->Int->Int->Int->Void> {}
+class FDelHaxe8 extends unreal.DynamicMulticastDelegate<Int->UUsesDelegate->Int->Int->Int->Int->Int->Int->Void> {}
 
 class FDelHaxe0_RV extends unreal.Delegate<Void->Int> {}
 class FDelHaxe1_RV extends unreal.DynamicDelegate<Int->Int> {}
