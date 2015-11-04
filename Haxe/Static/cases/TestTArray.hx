@@ -8,28 +8,37 @@ class TestTArray extends buddy.BuddySuite {
   public function new() {
     describe('Haxe - TArray', {
       it('should be able to use TArray of basic types',{
-        var arr = TArrayImpl.create(new TypeParam<Int32>());
+        var arr:TArray<Int32> = TArrayImpl.create();
         for (i in 0...10) {
-          arr.Push(i+1);
+          arr.push(i+1);
         }
         for (i in 0...10) {
-          arr.get_Item(i).should.be(i+1);
+          arr[i].should.be(i+1);
+        }
+        var count = 0;
+
+        for (i in arr) {
+          i.should.be(++count);
         }
 
-        var arr = TArrayImpl.create(new TypeParam<Float64>());
+        arr[0] = 77;
+        arr[0].should.be(77);
+        arr.length.should.be(10);
+
+        var arr:TArray<Float64> = TArrayImpl.create();
         for (i in 0...10) {
-          arr.Push(i+1 + (i+1) / 10);
+          arr.push(i+1 + (i+1) / 10);
         }
         for (i in 0...10) {
-          arr.get_Item(i).should.be(i+1 + (i + 1) / 10);
+          arr[i].should.be(i+1 + (i + 1) / 10);
         }
 
-        var arr = TArrayImpl.create(new TypeParam<Float32>());
+        var arr:TArray<Float32> = TArrayImpl.create();
         for (i in 0...10) {
-          arr.Push(i+1 + (i+1) / 10);
+          arr.push(i+1 + (i+1) / 10);
         }
         for (i in 0...10) {
-          arr.get_Item(i).should.beCloseTo(i+1 + (i + 1) / 10);
+          arr[i].should.beCloseTo(i+1 + (i + 1) / 10);
         }
       });
       it('should be able to use TArray of uclass types');
