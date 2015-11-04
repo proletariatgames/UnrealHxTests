@@ -35,9 +35,19 @@ class TestTArray extends buddy.BuddySuite {
       it('should be able to use TArray of uclass types');
       it('should be able to use TArray of structs');
       it('should be able to use TArray as member of extern uclass types');
-      it('should be able to use TArray as member of declared uclass types (UPROPERTY)');
+      it('should be able to use TArray as member of declared uclass types (UPROPERTY)', {
+        var obj = UObject.NewObject(new TypeParam<PStruct<UTestTArray>>());
+        obj.array.Push("Hello from Haxe!");
+        obj.array.length.should.be(1);
+        obj.array[0].toString().should.be("Hello from Haxe!");
+      });
       it('should be able to use TArray on structs');
     });
   }
 }
 
+@:uclass
+class UTestTArray extends UObject {
+  @:uproperty
+  public var array:TArray<FString>;
+}
