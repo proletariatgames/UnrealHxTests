@@ -415,7 +415,7 @@ class TestStructs extends buddy.BuddySuite {
         var simple3 = FSimpleStruct.createWithArgs(100.1,200.2,5,9);
         var noOp1 = FSimpleStructNoEqualsOperator.createWithArgs(100.1, 200.2, 5, 10);
         var noOp2 = FSimpleStructNoEqualsOperator.createWithArgs(100.1, 200.2, 5, 10);
-        var noOp3 = FSimpleStructNoEqualsOperator.createWithArgs(100.1, 200.2, 5, 10);
+        var noOp3 = FSimpleStructNoEqualsOperator.createWithArgs(100.1, 200.2, 5, 9);
 
         simple1.equals(null).should.be(false);
         simple1.equals(simple1).should.be(true);
