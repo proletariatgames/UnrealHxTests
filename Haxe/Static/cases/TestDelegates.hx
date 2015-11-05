@@ -54,14 +54,14 @@ class TestDelegates extends buddy.BuddySuite {
       });
       it('should be able to declare delegates', {
         var x = FDelHaxe3.create();
-        x.IsBound().should.be(false);
+        // x.IsBound().should.be(false);
         x.Broadcast(1, 2, 3);
       });
       it('should be able to register delegates from Haxe code');
       it('should be able to unregister delegates from Haxe code');
       it('should be able to create new UCLASS types that use delegates', {
         var obj = UObject.NewObject(new TypeParam<PStruct<UUsesDelegate>>());
-        obj.test0.IsBound().should.be(false);
+        obj.test0.Broadcast();
       });
       it('should be able to declare new delegate types');
       // Delegate examples from SeekPlayerState.h
