@@ -100,6 +100,12 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         derived.getSelf().equals(null).should.be(false);
         derived.getSelf().equals(derived.getSelf()).should.be(true);
       });
+      it('should be able to return itself even if typed as a subclass', {
+        var derived =  UHaxeDerived1.create();
+        Std.is(derived, UHaxeDerived1).should.be(true);
+        Std.is(derived.getSelf(), UHaxeDerived1).should.be(true);
+        (derived.getSelf() == derived).should.be(true);
+      });
       // test const this
       it('should be able to call super methods');
       it('should be able to define non-uclass classes');
