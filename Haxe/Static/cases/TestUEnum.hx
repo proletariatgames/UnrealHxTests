@@ -1,7 +1,29 @@
 package cases;
 import NonUObject;
 import SomeEnum;
+import unreal.*;
 using buddy.Should;
+
+@:uenum(BlueprintType) @:class(uint8) enum ETestHxEnumClass {
+  @:umeta(DisplayName="FirstOne") E_1st;
+  @:umeta(DisplayName="SecondOne") E_2nd;
+  @:umeta(DisplayName="ThirdOne") E_3rd;
+}
+
+@:uclass class UTestUseEnum extends unreal.UObject {
+  @:uproperty(BlueprintReadWrite)
+  public var test1:ETestHxEnumClass;
+
+  @:ufunction
+  public function setTest(val:ETestHxEnumClass) {
+    test1 = val;
+  }
+
+  @:ufunction
+  public function getTest() : ETestHxEnumClass {
+    return test1;
+  }
+}
 
 class TestUEnum extends buddy.BuddySuite {
   public function new() {
@@ -29,7 +51,28 @@ class TestUEnum extends buddy.BuddySuite {
         s.myCppEnum.should.be(CppEnum3);
         s.myNamespacedEnum.should.be(NSEnum3);
       });
-      it('should be able to define new UEnums');
+      it('should be able to define new UEnums', {
+        var val = E_1st;
+        val.should.be(E_1st);
+      });
+      it('should be able to use uenums has uproperties', {
+        var obj = UObject.NewObject(new TypeParam<PStruct<UTestUseEnum>>());
+        obj.test1 = E_1st;
+        obj.test1.should.be(E_1st);
+        obj.test1 = E_2nd;
+        obj.test1.should.be(E_2nd);
+        obj.test1 = E_3rd;
+        obj.test1.should.be(E_3rd);
+      });
+      it('should be able to pass enums back and forth to C++', {
+        var obj = UObject.NewObject(new TypeParam<PStruct<UTestUseEnum>>());
+        obj.setTest(E_1st);
+        obj.getTest().should.be(E_1st);
+        obj.setTest(E_2nd);
+        obj.getTest().should.be(E_2nd);
+        obj.setTest(E_3rd);
+        obj.getTest().should.be(E_3rd);
+      });
     });
   }
 }
