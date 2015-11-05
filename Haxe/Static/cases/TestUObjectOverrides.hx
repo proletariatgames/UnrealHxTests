@@ -284,5 +284,13 @@ class AHaxeTestActorReplication extends AActor {
   public function customRepFunction() : Bool {
     return true;
   }
+
+  @:ufunction
+  function onRep_replicatedPropA() : Void {
+  }
+
+  @:ufunction
+  function onRep_replicatedPropB(i:unreal.Int32) : Void {
+  }
 }
 
