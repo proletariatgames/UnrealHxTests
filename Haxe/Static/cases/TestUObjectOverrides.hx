@@ -293,4 +293,3 @@ class AHaxeTestActorReplication extends AActor {
   function onRep_replicatedPropB(i:unreal.Int32) : Void {
   }
 }
-

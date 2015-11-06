@@ -122,6 +122,9 @@ class HAXEUNITTESTS_API FSimpleStructNoEqualsOperator {
       ui32(iUi32)
     {
     }
+  private:
+    FSimpleStructNoEqualsOperator(FSimpleStruct& copied) {
+    }
 };
 
 class HAXEUNITTESTS_API FHasStructMember1 {
