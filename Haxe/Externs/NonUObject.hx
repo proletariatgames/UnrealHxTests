@@ -32,6 +32,15 @@ import unreal.*;
 
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("NonUObject.h")
+@:uextern @:ustruct extern class FPODStruct {
+  public var f:Float32;
+  public var d:Float64;
+  public var i32:Int32;
+  public var ui32:FakeUInt32;
+}
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
 @:noCopy
 @:uextern extern class FSimpleStructNoEqualsOperator {
   @:uname('new') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):PHaxeCreated<FSimpleStructNoEqualsOperator>;

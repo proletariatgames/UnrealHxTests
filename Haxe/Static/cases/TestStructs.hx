@@ -2,8 +2,34 @@ package cases;
 using buddy.Should;
 import NonUObject;
 import helpers.TestHelper;
+import unreal.*;
 
 using unreal.CoreAPI;
+
+class FHaxeStruct extends unreal.UnrealStruct
+{
+  @:uproperty
+  public var name:FString;
+  @:uproperty
+  public var fname:FName;
+}
+
+class FHaxeStruct2 extends unreal.UnrealStruct
+{
+  @:uproperty
+  public var embedded:FHaxeStruct;
+}
+
+class FDerivedStruct extends FPODStruct
+{
+  @:uproperty
+  public var addedProperty:FHaxeStruct;
+}
+
+@:uclass class UStructTest extends UObject {
+  @:uproperty
+  public var s:FHaxeStruct2;
+}
 
 class TestStructs extends buddy.BuddySuite {
 
@@ -429,6 +455,18 @@ class TestStructs extends buddy.BuddySuite {
         noOp1.equals(noOp2).should.be(false);
         noOp1.equals(noOp3).should.be(false);
 
+      });
+      it('should be able to construct haxe-defined structs', {
+        var s = FHaxeStruct.create();
+        s.name = "val";
+        s.name.toString().should.be("val");
+
+        var s = FHaxeStruct2.create();
+        s.embedded.fname = "foo";
+        s.embedded.fname.toString().should.be("foo");
+
+        var s2 = s.embedded;
+        s2.fname.toString().should.be("foo");
       });
     });
   }

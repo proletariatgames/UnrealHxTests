@@ -2,11 +2,19 @@
 
 #include <Engine.h>
 #include "SomeEnum.h"
+#include "NonUObject.generated.h"
 
+USTRUCT()
 struct HAXEUNITTESTS_API FPODStruct {
+  GENERATED_USTRUCT_BODY()
+
+  UPROPERTY()
   float f;
+  UPROPERTY()
   double d;
+  UPROPERTY()
   int32 i32;
+  UPROPERTY()
   uint32 ui32;
 };
 
