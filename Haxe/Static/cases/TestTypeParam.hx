@@ -21,6 +21,10 @@ class TestTypeParam extends buddy.BuddySuite {
         var x:unreal.TypeParamGlue<FakeUInt64> = null;
         var x:unreal.TypeParamGlue<Float32> = null;
         var x:unreal.TypeParamGlue<Float64> = null;
+        var x:unreal.TypeParamGlue<EMyEnum> = null;
+        var x:unreal.TypeParamGlue<EMyCppEnum> = null;
+        var x:unreal.TypeParamGlue<EMyNamespacedEnum> = null;
+        var x:unreal.TypeParamGlue<cases.TestUEnum.ETestHxEnumClass> = null;
 
         TypeParamTester.testRoundtrip().should.be(true);
       });
