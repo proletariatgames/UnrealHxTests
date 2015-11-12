@@ -6,7 +6,8 @@ import helpers.TestHelper;
 import unreal.*;
 
 class FDelHaxe0 extends unreal.DynamicMulticastDelegate<Void->Void> {}
-class FDelHaxe1 extends unreal.DynamicMulticastDelegate<Int->Void> {}
+class FDelHaxe1 extends unreal.MulticastDelegate<PRef<Int>->Void> {}
+class FDelHaxe1_2 extends unreal.MulticastDelegate<PRef<FString>->Void> {}
 class FDelHaxe2 extends unreal.DynamicMulticastDelegate<Int->Int->Void> {}
 @:ueParamName("FirstArg") @:ueParamName("SecondArg") @:ueParamName("ThirdArg")
 class FDelHaxe3 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Void> {}
@@ -57,7 +58,19 @@ class TestDelegates extends buddy.BuddySuite {
         // x.IsBound().should.be(false);
         x.Broadcast(1, 2, 3);
       });
-      it('should be able to register delegates from Haxe code');
+      it('should be able to register delegates from Haxe code', {
+        var del1 = FDelHaxe1.create();
+        var value = 0;
+        del1.AddLambda(function(i) value = i);
+        del1.Broadcast(255);
+        value.should.be(255);
+
+        var del1_2 = FDelHaxe1_2.create();
+        var value = null;
+        del1_2.AddLambda(function(i) value = i);
+        del1_2.Broadcast("Hello, World!");
+        value.toString().should.be("Hello, World!");
+      });
       it('should be able to unregister delegates from Haxe code');
       it('should be able to create new UCLASS types that use delegates', {
         var obj = UObject.NewObject(new TypeParam<PStruct<UUsesDelegate>>());
