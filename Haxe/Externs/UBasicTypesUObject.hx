@@ -81,7 +81,7 @@ import unreal.*;
 
   @:ufunction()
   @:thisConst
-  public function testConstParam(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString;
+  public function testConstParam(geo:unreal.Const<unreal.PRef<unreal.slatecore.FGeometry>>) : unreal.FString;
 
   // Protected member externs
   private var m_i32:unreal.Int32;
@@ -96,6 +96,6 @@ import unreal.*;
 
   @:ufunction()
   @:thisConst
-  private function testConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.FGeometry>>) : unreal.FString;
+  private function testConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.slatecore.FGeometry>>) : unreal.FString;
 
 }
