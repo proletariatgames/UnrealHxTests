@@ -247,6 +247,9 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     return ret;
   }
 
+  @:uexpose
+  public static var someObj:TWeakObjectPtr<UHaxeDerived3>;
+
   @:ufunction
   public static function testStatic() : Void {
   }
