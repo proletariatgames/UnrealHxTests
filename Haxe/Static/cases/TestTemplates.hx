@@ -43,10 +43,10 @@ class TestTemplates extends buddy.BuddySuite {
       it('should be able to call templated functions', {
         var nObjects = 0;
         function run() {
-          UTemplatesDef.getSomeStaticInt(new TypeParam<PStruct<FSimpleStruct>>()).should.be(442);
-          UTemplatesDef.getSomeStaticInt(new TypeParam<PStruct<UTemplatesDef>>()).should.be(42);
+          UTemplatesDef.getSomeStaticInt(new TypeParam<FSimpleStruct>()).should.be(442);
+          UTemplatesDef.getSomeStaticInt(new TypeParam<UTemplatesDef>()).should.be(42);
 
-          var templ = UObject.NewObject(new TypeParam<PStruct<UTemplatesDef>>());
+          var templ = UObject.NewObject(new TypeParam<UTemplatesDef>());
           templ.should.not.be(null);
 
           var struct = FSimpleStruct.create();
@@ -54,7 +54,7 @@ class TestTemplates extends buddy.BuddySuite {
           setSomeValues(struct, 1);
           checkValues(struct, 1, true);
 
-          var struct2 = templ.copyNew(new TypeParam<PStruct<FSimpleStruct>>(), cast struct);
+          var struct2 = templ.copyNew(new TypeParam<FSimpleStruct>(), cast struct);
           nObjects++;
           checkValues(struct2, 1, true);
           setSomeValues(struct, 2);
@@ -106,8 +106,8 @@ class TestTemplates extends buddy.BuddySuite {
         ntempl.obj.value.should.not.be(null);
 
         var arr = TArrayImpl.create(new TypeParam<UTemplatesDef>());
-        var obj = UObject.NewObject(new TypeParam<PStruct<UTemplatesDef>>());
-        var obj2 = UObject.NewObject(new TypeParam<PStruct<UTemplatesDef>>());
+        var obj = UObject.NewObject(new TypeParam<UTemplatesDef>());
+        var obj2 = UObject.NewObject(new TypeParam<UTemplatesDef>());
         arr.Push(obj);
         arr.get_Item(0).should.not.be(null);
         arr.set_Item(0, obj2);
@@ -115,8 +115,8 @@ class TestTemplates extends buddy.BuddySuite {
         arr.Num().should.be(1);
 
         var arr = TArrayImpl.create(new TypeParam<UTemplateMyClass>());
-        var obj = UObject.NewObject(new TypeParam<PStruct<UTemplateMyClass>>());
-        var obj2 = UObject.NewObject(new TypeParam<PStruct<UTemplateMyClass>>());
+        var obj = UObject.NewObject(new TypeParam<UTemplateMyClass>());
+        var obj2 = UObject.NewObject(new TypeParam<UTemplateMyClass>());
         arr.Push(obj);
         arr.get_Item(0).should.be(obj);
         arr.set_Item(0, obj2);
@@ -131,14 +131,14 @@ class TestTemplates extends buddy.BuddySuite {
           arr.get_Item(i).GetDesc().toString().should.be('BasicTypesSub' + (i+2));
         }
 
-        var arr = TArrayImpl.create(new TypeParam<PStruct<FName>>());
+        var arr = TArrayImpl.create(new TypeParam<FName>());
         for (i in 0...5)
           arr.Push(i + "");
         for (i in 0...5) {
           arr.get_Item(i).toString().should.be(i + "");
         }
 
-        // var arr = TArray.create(new TypeParam<PStruct<FString>>());
+        // var arr = TArray.create(new TypeParam<FString>());
         // for (i in 0...5) {
         //   Sys.println(i);
         //   arr.Push(i + "");
@@ -155,12 +155,12 @@ class TestTemplates extends buddy.BuddySuite {
 
 @:uclass
 class UTemplateMyClass extends UObject {
-  public var templ:PStruct<FTemplatedClass1<Int>>;
-  public var templ2:PStruct<TArray<Int>>;
-  public var templ3:PStruct<TArray<UTemplateMyClass>>;
+  public var templ:FTemplatedClass1<Int>;
+  public var templ2:TArray<Int>;
+  public var templ3:TArray<UTemplateMyClass>;
   @:uproperty
-  public var templ4:PStruct<TArray<UTemplateMyClass>>;
+  public var templ4:TArray<UTemplateMyClass>;
 
   @:uproperty
-  public var templ5:PStruct<TArray<UBasicTypesUObject>>;
+  public var templ5:TArray<UBasicTypesUObject>;
 }

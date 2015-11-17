@@ -3,7 +3,7 @@ import unreal.*;
 
 @:glueCppIncludes("TemplatesDef.h")
 @:uextern extern class UTemplatesDef extends unreal.UObject {
-  static function getSomeStaticInt<T>():Int;
+  @:typeName static function getSomeStaticInt<T>():Int;
   function copyNew<T>(withType:PStruct<T>):PHaxeCreated<T>;
 }
 

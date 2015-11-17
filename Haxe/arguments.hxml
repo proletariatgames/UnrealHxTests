@@ -6,5 +6,5 @@
 -D UE4_CHECK_POINTER
 -D UE4_POINTER_TESTING
 
--D dump=pretty
+-D dump
 # --macro include("unreal")
