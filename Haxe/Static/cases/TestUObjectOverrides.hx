@@ -246,6 +246,11 @@ class UHaxeDerived3 extends UHaxeDerived2 {
     var ret = UObject.NewObject(new TypeParam<PStruct<UHaxeDerived3>>());
     return ret;
   }
+
+  @:ufunction
+  public static function testStatic() : Void {
+  }
+
   override public function setText(txt:unreal.FText):unreal.Int64 {
     this.setBool_String_UI8_I8(true,txt.toString(),100,101);
     this.textProp = this.test();
