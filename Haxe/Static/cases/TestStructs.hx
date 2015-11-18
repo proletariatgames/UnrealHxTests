@@ -367,6 +367,24 @@ class TestStructs extends buddy.BuddySuite {
           setSomeValues(copy, 13);
           checkValues(copy, 13, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
+          copy = CoreAPI.copy(FSimpleStruct.getRef());
+          nObjects++;
+          checkValues(copy, 12, true);
+          checkValues(FSimpleStruct.getRef(), 12, true);
+          copy.i32 = 0xF1F0;
+          FSimpleStruct.isI32EqualShared(copy.toSharedPtr(), 0xF1F0).should.be(true);
+          setSomeValues(copy, 13);
+          checkValues(copy, 13, true);
+          checkValues(FSimpleStruct.getRef(), 12, true);
+          var copy2 = CoreAPI.copyStruct(FSimpleStruct.getRef());
+          nObjects++;
+          nDestructors++;
+          checkValues(copy2, 12, true);
+          checkValues(FSimpleStruct.getRef(), 12, true);
+          copy2.i32 = 0xF1F0;
+          setSomeValues(copy2, 13);
+          checkValues(copy2, 13, true);
+          checkValues(FSimpleStruct.getRef(), 12, true);
 
           var copy2 = unreal.Wrapper.copyStruct(FSimpleStruct.getRef());
           nObjects++;
