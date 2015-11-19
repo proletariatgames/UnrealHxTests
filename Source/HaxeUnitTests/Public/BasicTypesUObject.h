@@ -14,6 +14,8 @@ class HAXEUNITTESTS_API UBasicTypesUObject : public UObject
 public:
   static int someStaticInt;
 
+  UBasicTypesUObject() { }
+
   bool boolNonProp;
   FString stringNonProp;
   FText textNonProp;
