@@ -450,6 +450,12 @@ class TestStructs extends buddy.BuddySuite {
       it('should be able to use pointers/ref/shared pointers to basic types'); // FIXME
       it('should be able to use pointers/ref/shared pointers to other pointers/ref/shared pointer types');
       it('should be able to check physical equality', {
+        (FSimpleStruct.getRef() == FSimpleStruct.getRef()).should.be(true);
+        (FSimpleStruct.getRef() != FSimpleStruct.getRef()).should.be(false);
+        var ref1:Dynamic = FSimpleStruct.getRef();
+        var ref2:Dynamic = FSimpleStruct.getRef();
+        (ref1 == ref2).should.be(true);
+        (ref1 != ref2).should.be(false);
         FSimpleStruct.getRef().pointerEquals(null).should.be(false);
         FSimpleStruct.getRef().pointerEquals(FSimpleStruct.getRef()).should.be(true);
         var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);

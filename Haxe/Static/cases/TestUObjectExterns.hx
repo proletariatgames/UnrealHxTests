@@ -2,6 +2,7 @@ package cases;
 using buddy.Should;
 import haxe.Int64;
 import UBasicTypesSub;
+import unreal.*;
 
 using unreal.CoreAPI;
 
@@ -105,6 +106,15 @@ class TestUObjectExterns extends buddy.BuddySuite {
           var basicType =  UBasicTypesUObject.CreateFromCpp();
           basicType.getSelf().pointerEquals(null).should.be(false);
           basicType.getSelf().pointerEquals(basicType.getSelf()).should.be(true);
+          (basicType.getSelf() == basicType).should.be(true);
+          (basicType.getSelf() != basicType).should.be(false);
+          var dyn:Dynamic = basicType;
+          (dyn.getSelf() == dyn).should.be(true);
+          (dyn.getSelf() != dyn).should.be(false);
+          var iface1:IInterface = basicType;
+          var iface2:IInterface = basicType.getSelf();
+          (iface1 == iface2).should.be(true);
+          (iface1 != iface2).should.be(false);
         });
         it('should be able to check structural equality', {
           //This just checks pointers for uobjects
