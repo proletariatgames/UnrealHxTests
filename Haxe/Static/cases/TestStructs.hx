@@ -225,6 +225,9 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(weak.toSharedPtr(), 7, true);
           checkValues(simple, 7, true);
 
+          var shared2 = simple.toSharedPtr();
+          checkValues(shared2, 7, true);
+
           var shared = FSimpleStruct.mkShared();
           shared.i32 = 100;
           nObjects++;
