@@ -104,8 +104,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
         });
         it('should be able to check physical equality', {
           var basicType =  UBasicTypesUObject.CreateFromCpp();
-          basicType.getSelf().pointerEquals(null).should.be(false);
-          basicType.getSelf().pointerEquals(basicType.getSelf()).should.be(true);
+          (basicType.getSelf() == null).should.be(false);
+          (basicType.getSelf() == basicType.getSelf()).should.be(true);
           (basicType.getSelf() == basicType).should.be(true);
           (basicType.getSelf() != basicType).should.be(false);
           var dyn:Dynamic = basicType;

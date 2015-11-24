@@ -91,8 +91,8 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       }); // check if native side sees it as well
       it('should be able to check physical equality', {
         var derived =  UHaxeDerived1.create();
-        derived.getSelf().pointerEquals(null).should.be(false);
-        derived.getSelf().pointerEquals(derived.getSelf()).should.be(true);
+        (derived.getSelf() == null).should.be(false);
+        (derived.getSelf() == derived.getSelf()).should.be(true);
       });
       it('should be able to check structural equality', {
         //This just checks pointers for uobjects
