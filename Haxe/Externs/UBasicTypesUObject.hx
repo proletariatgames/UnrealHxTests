@@ -4,18 +4,18 @@ import unreal.*;
 @:glueCppIncludes("BasicTypesUObject.h")
 @:uextern extern class UBasicTypesUObject extends unreal.UObject {
   var boolNonProp:Bool;
-  var stringNonProp:unreal.FString;
-  var textNonProp:unreal.FText;
-  var ui8NonProp:unreal.UInt8;
-  var i8NonProp:unreal.Int8;
-  var ui16NonProp:unreal.UInt16;
-  var i16NonProp:unreal.Int16;
-  var ui32NonProp:unreal.FakeUInt32;
-  var i32NonProp:unreal.Int32;
-  var ui64NonProp:unreal.FakeUInt64;
-  var i64NonProp:unreal.Int64;
-  var floatNonProp:unreal.Float32;
-  var doubleNonProp:unreal.Float64;
+  @:keep var stringNonProp:unreal.FString;
+  @:keep var textNonProp:unreal.FText;
+  @:keep var ui8NonProp:unreal.UInt8;
+  @:keep var i8NonProp:unreal.Int8;
+  @:keep var ui16NonProp:unreal.UInt16;
+  @:keep var i16NonProp:unreal.Int16;
+  @:keep var ui32NonProp:unreal.FakeUInt32;
+  @:keep var i32NonProp:unreal.Int32;
+  @:keep var ui64NonProp:unreal.FakeUInt64;
+  @:keep var i64NonProp:unreal.Int64;
+  @:keep var floatNonProp:unreal.Float32;
+  @:keep var doubleNonProp:unreal.Float64;
 
   @:uproperty
   var boolProp:Bool;
