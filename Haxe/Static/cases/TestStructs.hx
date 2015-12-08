@@ -6,6 +6,7 @@ import unreal.*;
 
 using unreal.CoreAPI;
 
+@:ustruct(BlueprintType)
 class FHaxeStruct extends unreal.UnrealStruct
 {
   @:uproperty
