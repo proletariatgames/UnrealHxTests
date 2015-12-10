@@ -52,7 +52,7 @@ import unreal.*;
   public static var nDestructorCalled:Int32;
   public static var nConstructorCalled:Int32;
 
-  public var simple:PStruct<FSimpleStruct>;
+  public var simple:FSimpleStruct;
   public var fname:PStruct<FName>;
   public var myEnum:SomeEnum.EMyEnum;
   public var myCppEnum:SomeEnum.EMyCppEnum;
@@ -81,7 +81,7 @@ import unreal.*;
   public static var nDestructorCalled:Int32;
   public static var nConstructorCalled:Int32;
 
-  public var simple:PStruct<FSimpleStruct>;
+  public var simple:FSimpleStruct;
   public var ref:PRef<FSimpleStruct>;
   public var usedDefaultConstructor:Bool;
   @:uname('new') public static function create():PHaxeCreated<FHasStructMember3>;

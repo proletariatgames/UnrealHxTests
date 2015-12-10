@@ -37,6 +37,8 @@ public:
   UPROPERTY()
   FText textProp;
   UPROPERTY()
+  FName nameProp;
+  UPROPERTY()
   uint8 ui8Prop;
   UPROPERTY()
   int8 i8Prop;

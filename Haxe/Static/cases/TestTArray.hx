@@ -1,9 +1,10 @@
 package cases;
 import unreal.*;
-using buddy.Should;
 import NonUObject;
 import helpers.TestHelper;
 import UBasicTypesSub;
+
+using buddy.Should;
 
 class TestTArray extends buddy.BuddySuite {
   public function new() {

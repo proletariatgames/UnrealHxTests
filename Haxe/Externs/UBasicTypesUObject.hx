@@ -24,6 +24,8 @@ import unreal.*;
   @:uproperty
   var textProp:unreal.FText;
   @:uproperty
+  var nameProp:unreal.FName;
+  @:uproperty
   var ui8Prop:unreal.UInt8;
   @:uproperty
   var i8Prop:unreal.Int8;

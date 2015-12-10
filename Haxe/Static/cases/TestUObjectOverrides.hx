@@ -145,6 +145,11 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   @:uproperty
   public var subclassArray:unreal.TArray<unreal.TSubclassOf<UHaxeDerived2>>;
 
+  // non-exposed Haxe types - tested by TestReflect
+  public var haxeType:{ i32:Int, d64:Float, arr:Array<Int>, arr2:Array<{ x:Int, y:Float }> };
+  public var someString:String;
+  public var someArray:Array<{ x:Int, y:Float }>;
+
   override public function getSomeNumber():Int {
     return this.i32Prop * 10;
   }
