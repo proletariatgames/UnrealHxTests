@@ -30,6 +30,8 @@ class ATestEntryPoint extends unreal.AActor {
     ));
 
     runner.run().then(function(_) {
+      cpp.vm.Gc.run(true);
+      cpp.vm.Gc.run(true);
       trace('Ending stub implementation');
       if (Sys.getEnv("CI_RUNNING") == "1") {
         var success = !runner.failed();
@@ -38,6 +40,13 @@ class ATestEntryPoint extends unreal.AActor {
     });
     // do some tests
   }
+
+  // override function BeginDestroy() {
+  //   super.BeginDestroy();
+  //   // test hot reload when begin destroy is overridden
+  //
+  //   trace('Begin destroy!');
+  // }
 }
 #end
 

@@ -80,39 +80,44 @@ class TestTArray extends buddy.BuddySuite {
 
       });
       it('should be able to use TArray of structs', {
-        var arr = TArray.create(new TypeParam<FSimpleStruct>()).underlying();
-        for (i in 0...4) {
-          var val = FSimpleStruct.create();
-          val.i32 = 3 - i;
-          arr.push(val);
-        }
-        for (i in 0...4) {
-          var val = arr[i];
-          val.i32.should.be(3-i);
-        }
+        function run() {
+          var arr = TArray.create(new TypeParam<FSimpleStruct>()).underlying();
+          for (i in 0...4) {
+            var val = FSimpleStruct.create();
+            val.i32 = 3 - i;
+            arr.push(val);
+          }
+          for (i in 0...4) {
+            var val = arr[i];
+            val.i32.should.be(3-i);
+          }
 
-        arr.sort(function(s1, s2) return s1.i32 - s2.i32);
-        for (i in 0...4) {
-          arr[i].i32.should.be(i);
-        }
+          arr.sort(function(s1, s2) return s1.i32 - s2.i32);
+          for (i in 0...4) {
+            arr[i].i32.should.be(i);
+          }
 
-        var arr = TArray.fromIterable([for (i in 0...5) FSimpleStruct.create()]).underlying();
-        for (i in 0...4) {
-          arr[i].i32 = 3 - i;
-        }
-        for (i in 0...4) {
-          var val = arr[i];
-          val.i32.should.be(3-i);
-        }
+          var arr = TArray.fromIterable([for (i in 0...5) FSimpleStruct.create().underlying()]).underlying();
+          for (i in 0...4) {
+            arr[i].i32 = 3 - i;
+          }
+          for (i in 0...4) {
+            var val = arr[i];
+            val.i32.should.be(3-i);
+          }
 
-        var arr = TArray.fromIterable(new TypeParam<FSimpleStruct>(), [for (i in 0...5) FSimpleStruct.create()]).underlying();
-        for (i in 0...4) {
-          arr[i].i32 = 3 - i;
+          var arr = TArray.fromIterable(new TypeParam<FSimpleStruct>(), [for (i in 0...5) FSimpleStruct.create().underlying()]).underlying();
+          for (i in 0...4) {
+            arr[i].i32 = 3 - i;
+          }
+          for (i in 0...4) {
+            var val = arr[i];
+            val.i32.should.be(3-i);
+          }
         }
-        for (i in 0...4) {
-          var val = arr[i];
-          val.i32.should.be(3-i);
-        }
+        run();
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
       });
       it('should be able to use TArray as member of extern uclass types');
       it('should be able to use TArray as member of declared uclass types (UPROPERTY)', {

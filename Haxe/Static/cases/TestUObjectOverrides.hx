@@ -121,6 +121,25 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       it('should be able to use structs');
       it('should be able to use pointers to structs');
       it('should be able to be referenced by weak pointer');
+      it('should be able to be serialized and unserialized back', {
+        var derived =  UHaxeDerived1.create();
+        derived.i32Prop = 0xF00;
+        derived.intProp = 0xBA5;
+        derived.subclassArray.Push(UHaxeDerived2.StaticClass());
+        derived.fname = 'Serialization works!';
+        var d2:UHaxeDerived1 = cast UObject.StaticDuplicateObject(derived, UObject.GetTransientPackage(), 'None');
+        d2.should.not.be(derived);
+        d2.i32Prop.should.be(0xF00);
+        d2.intProp.should.be(0xBA5);
+        d2.subclassArray.length.should.be(1);
+        d2.subclassArray[0].should.be(UHaxeDerived2.StaticClass());
+        d2.fname.toString().should.be('Serialization works!');
+        d2.getSomeNumber().should.be(0xF00 * 10);
+        d2.nonNative(25).should.be(35);
+        d2.intProp = 10;
+        d2.uFunction1().should.be(42);
+        derived.intProp.should.be(0xBA5);
+      });
     });
   }
 }
