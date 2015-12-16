@@ -27,6 +27,13 @@ echo "building unit tests"
 echo "Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development \"-project=%WORKSPACE%/HaxeUnitTests.uproject\" -editorrecompile -noubtmakefiles"
 Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development "-project=%WORKSPACE%/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket || exit /b
 
+REM build the commandlet to create/update asset
+echo "running the update asset commandlet"
+For /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%c-%%a-%%b)
+For /f "tokens=1-2 delims=/:" %%a in ('time /t') do (set mytime=%%a%%b)
+SET CUSTOM_STAMP=%mydate%_%mytime%
+"%UE4%/Engine/Binaries/Win64/UE4Editor.exe" "%WORKSPACE%/HaxeUnitTests.uproject" -run=HaxeUnitTests.UpdateAsset "%CUSTOM_STAMP%"
+
 echo "running unit tests"
 set MAP=/Game/Maps/HaxeTestEntryPoint
 echo "%UE4%/Engine/Binaries/Win64/UE4Editor.exe %WORKSPACE%/HaxeUnitTests.uproject -server %MAP% -stdout

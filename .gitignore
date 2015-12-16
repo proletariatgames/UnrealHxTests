@@ -10,3 +10,4 @@
 # UE4Haxe specific files
 /Source/**/*.Build.cs
 Generated
+Content/SomeAsset.uasset

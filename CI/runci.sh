@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # run setup and setup some env vars
 source "$(dirname "$0")"/setup.sh
@@ -37,6 +38,11 @@ cd "$UE4"
 echo "building unit tests"
 echo "$BUILD_PATH HaxeUnitTests $PLATFORM Development \"-project=$WORKSPACE/HaxeUnitTests.uproject\" -editorrecompile -noubtmakefiles"
 $BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket || exit $?
+
+# build the commandlet to create/update asset
+echo "running the update asset commandlet"
+export CUSTOM_STAMP="`date`"
+"$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -run=HaxeUnitTests.UpdateAsset "$CUSTOM_STAMP"
 
 echo "running unit tests"
 MAP=/Game/Maps/HaxeTestEntryPoint
