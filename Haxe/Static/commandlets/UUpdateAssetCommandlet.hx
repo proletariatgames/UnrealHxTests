@@ -17,7 +17,8 @@ class UUpdateAssetCommandlet extends UCommandlet {
       var pack = UObject.CreatePackage(null, '/Game/SomeAsset');
       ret = UObject.NewObjectWithFlags(new TypeParam<UHaxeAsset>(), pack, UHaxeAsset.StaticClass(), 'SomeAsset', EObjectFlags.RF_Public | EObjectFlags.RF_Standalone);
     } else {
-      FLinker.ResetLoadersForSave(ret, contentPath);
+      FLinker.ResetLoaders(ret);
+      FLinker.ResetLoaders(ret.GetOutermost());
     }
     var data = { stamp: args[1], someInt: 42 };
     ret.data = data;
