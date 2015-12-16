@@ -11,11 +11,13 @@ class UUpdateAssetCommandlet extends UCommandlet {
     var args = parseArgs(params.toString());
     Sys.println(params);
     Sys.println(args);
-    var contentPath = FPaths.ConvertRelativePathToFull(FPaths.GameContentDir());
+    var contentPath = FPaths.ConvertRelativePathToFull(FPaths.GameContentDir()).toString();
     var ret = UObject.LoadObject(new TypeParam<UHaxeAsset>(), UHaxeAsset.StaticClass(), '/Game/SomeAsset', '/Game/SomeAsset', 0, null);
     if (ret == null) {
       var pack = UObject.CreatePackage(null, '/Game/SomeAsset');
       ret = UObject.NewObjectWithFlags(new TypeParam<UHaxeAsset>(), pack, UHaxeAsset.StaticClass(), 'SomeAsset', EObjectFlags.RF_Public | EObjectFlags.RF_Standalone);
+    } else {
+      FLinker.ResetLoadersForSave(ret, contentPath);
     }
     var data = { stamp: args[1], someInt: 42 };
     ret.data = data;
