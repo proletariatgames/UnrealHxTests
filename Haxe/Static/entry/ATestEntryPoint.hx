@@ -5,6 +5,7 @@ import haxe.macro.Context;
 using StringTools;
 using haxe.macro.ExprTools;
 #else
+import unreal.editor.UFactory;
 import buddy.*;
 import unreal.*;
 
@@ -14,6 +15,7 @@ class ATestEntryPoint extends unreal.AActor {
   public function new(wrapped) {
     super(wrapped);
     this.PrimaryActorTick.bCanEverTick = true;
+    var f:UFactory = null;
   }
 
   override public function Tick(deltaTime:Float32) {
