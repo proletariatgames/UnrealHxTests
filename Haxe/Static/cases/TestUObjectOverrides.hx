@@ -216,15 +216,6 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   public function TestFText(i32:unreal.Int32, someText:unreal.Const<unreal.PRef<unreal.FText>>) : Void;
 }
 
-// just make sure this will compile
-@:keep class NonUClass extends UHaxeDerived1 {
-  public var other:UHaxeDerived1;
-
-  override public function getSomeNumber():Int {
-    return super.getSomeNumber() + 10;
-  }
-}
-
 @:uclass
 class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
   public static function create():UHaxeDerived2 {
