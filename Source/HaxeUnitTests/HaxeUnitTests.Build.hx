@@ -1,12 +1,26 @@
 import unrealbuildtool.*;
+import cs.system.io.Path;
 
-class HaxeUnitTests extends HaxeModuleRules
+using Helpers;
+
+class HaxeUnitTests extends ModuleRules
 {
   public function new(target)
   {
-    super(target);
+    super();
 
     // UEBuildConfiguration.bEnableFastIteration = true;
+    this.PublicDependencyModuleNames.addRange(['Core','CoreUObject','Engine','InputCore','SlateCore']);
+    this.PublicDependencyModuleNames.Add("HaxeGlue");
+    var modulePath = RulesCompiler.GetModuleFilename('HaxeUnitTests');
+    var base = Path.GetFullPath('$modulePath/..');
+    if (UEBuildConfiguration.bBuildEditor)
+      this.PublicDependencyModuleNames.addRange(['UnrealEd']);
+    this.PrivateIncludePaths.Add(base + '/Generated/Private');
+    this.PublicIncludePaths.Add(base + '/Public');
+    this.PublicIncludePaths.Add(base + '/Generated');
+    this.PublicIncludePaths.Add(base + '/Generated/Public');
+
     if (Sys.getEnv("DO_UNITY_BUILD") == null)
       BuildConfiguration.bUseUnityBuild = false;
     // this.MinFilesUsingPrecompiledHeaderOverride = -1;

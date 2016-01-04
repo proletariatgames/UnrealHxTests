@@ -30,6 +30,9 @@ else
   echo "Platform not supported! ($(uname))"
   exit 1
 fi
+if [ -z "$TIMECMD" ]; then
+  TIMECMD=
+fi
 
 # build
 cd "$UE4"
@@ -37,13 +40,13 @@ cd "$UE4"
 # build the unit tests
 echo "building unit tests"
 echo "$BUILD_PATH HaxeUnitTests $PLATFORM Development \"-project=$WORKSPACE/HaxeUnitTests.uproject\" -editorrecompile -noubtmakefiles"
-$BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket || exit $?
+$TIMECMD $BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket || exit $?
 
 # build the commandlet to create/update asset
 echo "running the update asset commandlet"
 export CUSTOM_STAMP="`date`"
-"$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -run=HaxeUnitTests.UpdateAsset "$CUSTOM_STAMP"
+$TIMECMD "$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -run=HaxeUnitTests.UpdateAsset "$CUSTOM_STAMP"
 
 echo "running unit tests"
 MAP=/Game/Maps/HaxeTestEntryPoint
-"$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -server "$MAP" -log -stdout || exit $?
+$TIMECMD "$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -server "$MAP" -log -stdout || exit $?

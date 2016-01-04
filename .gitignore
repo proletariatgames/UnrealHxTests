@@ -11,3 +11,4 @@
 /Source/**/*.Build.cs
 Generated
 Content/SomeAsset.uasset
+gen-*.hxml

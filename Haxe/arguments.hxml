@@ -7,7 +7,3 @@
 -D UE4_POINTER_TESTING
 
 -D dump
-
---times
--D macro_times
-# --macro include("unreal")

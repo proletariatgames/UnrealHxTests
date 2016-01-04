@@ -23,6 +23,7 @@
   static function CreateFromCpp():UBasicTypesSub3;
 }
 
+@:umodule("HaxeUnitTests")
 @:glueCppIncludes("BasicType2.h")
 @:uextern extern interface IBasicType2 {
   function doSomething():IBasicType2;

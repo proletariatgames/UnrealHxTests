@@ -210,6 +210,12 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
     return fname;
   }
 
+  @:uproperty
+  private var ttest:Bool;
+
+  @:uproperty
+  var ttest2:Bool;
+
   @:ufunction(BlueprintImplementableEvent)
   public function TestFName(i32:unreal.Int32, fname:unreal.PStruct<unreal.FName>) : Void;
   @:ufunction(BlueprintImplementableEvent)
