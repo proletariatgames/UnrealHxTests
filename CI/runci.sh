@@ -15,6 +15,7 @@ if [ "$(uname)" == "Darwin" ]; then
   BUILD_PATH="mono Engine/Binaries/DotNET/UnrealBuildTool.exe"
   PLATFORM=Mac
   BINPATH=Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor
+  EXTRAARGS=-rocket
 
   cd "$UE4"
   source Engine/Build/BatchFiles/Mac/SetupMono.sh Engine/Build/BatchFiles/Mac
@@ -26,6 +27,7 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
   BUILD_PATH="Engine/Build/BatchFiles/Build.bat"
   PLATFORM=Win64
   BINPATH=Engine/Binaries/Win64/UE4Editor.exe
+  EXTRAARGS=-rocket
 else
   echo "Platform not supported! ($(uname))"
   exit 1
@@ -40,7 +42,7 @@ cd "$UE4"
 # build the unit tests
 echo "building unit tests"
 echo "$BUILD_PATH HaxeUnitTests $PLATFORM Development \"-project=$WORKSPACE/HaxeUnitTests.uproject\" -editorrecompile -noubtmakefiles"
-$TIMECMD $BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket || exit $?
+$TIMECMD $BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles $EXTRAARGS || exit $?
 
 # build the commandlet to create/update asset
 echo "running the update asset commandlet"
