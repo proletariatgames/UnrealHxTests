@@ -13,6 +13,8 @@ public:
   }
 };
 
+IMPLEMENT_MODULE( FHaxeGlue, HaxeGlue )
+
 void FHaxeGlue::StartupModule()
 {
   check_hx_init();

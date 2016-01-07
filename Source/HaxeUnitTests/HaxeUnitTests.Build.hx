@@ -3,23 +3,11 @@ import cs.system.io.Path;
 
 using Helpers;
 
-class HaxeUnitTests extends ModuleRules
+class HaxeUnitTests extends HaxeModuleRules
 {
   public function new(target)
   {
-    super();
-
-    // UEBuildConfiguration.bEnableFastIteration = true;
-    this.PublicDependencyModuleNames.addRange(['Core','CoreUObject','Engine','InputCore','SlateCore']);
-    this.PublicDependencyModuleNames.Add("HaxeGlue");
-    var modulePath = RulesCompiler.GetModuleFilename('HaxeUnitTests');
-    var base = Path.GetFullPath('$modulePath/..');
-    if (UEBuildConfiguration.bBuildEditor)
-      this.PublicDependencyModuleNames.addRange(['UnrealEd']);
-    this.PrivateIncludePaths.Add(base + '/Generated/Private');
-    this.PublicIncludePaths.Add(base + '/Public');
-    this.PublicIncludePaths.Add(base + '/Generated');
-    this.PublicIncludePaths.Add(base + '/Generated/Public');
+    super(target);
 
     if (Sys.getEnv("DO_UNITY_BUILD") == null)
       BuildConfiguration.bUseUnityBuild = false;
@@ -36,5 +24,11 @@ class HaxeUnitTests extends ModuleRules
     //			DynamicallyLoadedModuleNames.Add("OnlineSubsystemSteam");
     //		}
     // }
+  }
+
+  override private function getConfig():HaxeModuleConfig {
+    var ret = super.getConfig();
+    ret.glueTargetModule = 'HaxeGlue';
+    return ret;
   }
 }
