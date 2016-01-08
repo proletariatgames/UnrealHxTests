@@ -22,6 +22,7 @@ class ATestEntryPoint extends unreal.AActor {
     if (!didTick) didTick = true; else return;
     var reporter = new buddy.reporting.TraceReporter();
 
+
     var runner = new buddy.SuitesRunner(ImportAll.getDefs(
       cases.TestUObjectExterns,
       cases.TestStructs,

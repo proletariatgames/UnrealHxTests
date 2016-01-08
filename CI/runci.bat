@@ -20,7 +20,7 @@ haxe init-plugin.hxml || exit /b
 cd %WORKSPACE%
 
 REM build
-cd "%UE4%"
+cd /D "%UE4%"
 
 REM build the unit tests
 echo "building unit tests"
