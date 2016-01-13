@@ -55,7 +55,7 @@ class TestUEnum extends buddy.BuddySuite {
         var val = E_1st;
         val.should.be(E_1st);
       });
-      it('should be able to use uenums has uproperties', {
+      it('should be able to use uenums as uproperties', {
         var obj = UObject.NewObject(new TypeParam<PStruct<UTestUseEnum>>());
         obj.test1 = E_1st;
         obj.test1.should.be(E_1st);

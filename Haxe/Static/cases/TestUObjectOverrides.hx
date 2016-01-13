@@ -8,6 +8,7 @@ using unreal.CoreAPI;
 class TestUObjectOverrides extends buddy.BuddySuite {
 
   public function new() {
+    var __status:buddy.SpecAssertion = null;
     inline function setSomeValues(obj:UBasicTypesSub1, multiplier:Int) {
       obj.boolNonProp = true;
       obj.boolProp = true;
@@ -24,7 +25,7 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       obj.floatProp = 9.1 * multiplier;
       obj.doubleNonProp = 10.2 * multiplier;
     }
-    inline function checkValues(obj:UBasicTypesSub1, multiplier:Int) {
+    inline function checkValues(obj:UBasicTypesSub1, multiplier:Int, __status) {
       obj.boolNonProp.should.be(true);
       obj.boolProp.should.be(true);
       obj.stringNonProp.toString().should.be('Hello from Haxe!!' + multiplier);
@@ -48,9 +49,9 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         setSomeValues(obj1, 1);
         setSomeValues(obj2, 2);
         setSomeValues(obj3, 3);
-        checkValues(obj1, 1);
-        checkValues(obj2, 2);
-        checkValues(obj3, 3);
+        checkValues(obj1, 1, __status);
+        checkValues(obj2, 2, __status);
+        checkValues(obj3, 3, __status);
 
         function testObj(obj1:UHaxeDerived1, kind:Int) {
           obj1.intProp = 10;

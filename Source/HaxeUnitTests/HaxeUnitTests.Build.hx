@@ -29,6 +29,7 @@ class HaxeUnitTests extends HaxeModuleRules
   override private function getConfig():HaxeModuleConfig {
     var ret = super.getConfig();
     ret.glueTargetModule = 'HaxeGlue';
+    // ret.noStatic = true;
     return ret;
   }
 }

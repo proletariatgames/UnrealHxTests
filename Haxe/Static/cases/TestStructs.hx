@@ -45,7 +45,7 @@ class TestStructs extends buddy.BuddySuite {
     }
 
     // seems like not using inline here fails. Need to check if that's a buddy, hxcpp or ue4haxe issue
-    inline function checkValues(struct:FSimpleStruct, multiplier:Int, usedDefaultConstructor:Bool) {
+    inline function checkValues(struct:FSimpleStruct, multiplier:Int, usedDefaultConstructor:Bool, __status) {
       struct.f1.should.beCloseTo(10.2 * multiplier);
       struct.d1.should.beCloseTo(20.2 * multiplier);
       struct.i32.should.be(33 * multiplier);
@@ -101,7 +101,7 @@ class TestStructs extends buddy.BuddySuite {
           TestHelper.getType(simple).should.be( TestHelper.getType( (null : unreal.PHaxeCreated<FSimpleStruct>) ));
           nObjects++;
           setSomeValues(simple, 2);
-          checkValues(simple, 2, true);
+          checkValues(simple, 2, true, __status);
 
           function useAsClosure() {
             simple.i32 = 0xDEADF00D;
@@ -117,7 +117,7 @@ class TestStructs extends buddy.BuddySuite {
           simple2.ui32.should.be(10);
           simple2.usedDefaultConstructor.should.be(false);
           setSomeValues(simple2,10);
-          checkValues(simple2,10,false);
+          checkValues(simple2,10,false, __status);
         }
         run();
         // run twice to make sure that the finalizers run
@@ -142,7 +142,7 @@ class TestStructs extends buddy.BuddySuite {
           // note that this would print an error message on the log regardless;
           // what we do is compile with -D UE4_POINTER_TESTING so no rogue error message shows up
           function fail() {
-            return checkValues(simple,1,false);
+            checkValues(simple,1,false, __status);
           }
           fail.should.throwType(String);
 #end
@@ -165,7 +165,7 @@ class TestStructs extends buddy.BuddySuite {
           nDestructors++; // one destructor call for the temporary object
           nObjects++;
           setSomeValues(simple, 6);
-          checkValues(simple, 6, true);
+          checkValues(simple, 6, true, __status);
           simple.dispose();
           simple.disposed.should.be(true);
 
@@ -179,7 +179,7 @@ class TestStructs extends buddy.BuddySuite {
           simple.i32.should.be(0xDEADBEE5);
           simple.ui32.should.be(0xFFFFFFFF);
           setSomeValues(simple, 4);
-          checkValues(simple, 4, false);
+          checkValues(simple, 4, false, __status);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -204,30 +204,30 @@ class TestStructs extends buddy.BuddySuite {
           FSimpleStruct.isI32EqualShared(shared, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
           setSomeValues(shared, 5);
-          checkValues(shared, 5, true);
-          checkValues(shared.toSharedRef(), 5, true);
-          checkValues(simple, 5, true);
+          checkValues(shared, 5, true, __status);
+          checkValues(shared.toSharedRef(), 5, true, __status);
+          checkValues(simple, 5, true, __status);
 
           var ref = shared.toSharedRef();
           ref.i32 = 0x7FFFFFFF;
           FSimpleStruct.isI32EqualSharedRef(ref, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualSharedRef(ref, -1).should.be(false);
           setSomeValues(ref, 6);
-          checkValues(ref, 6, true);
-          checkValues(ref.toSharedPtr(), 6, true);
-          checkValues(simple, 6, true);
+          checkValues(ref, 6, true, __status);
+          checkValues(ref.toSharedPtr(), 6, true, __status);
+          checkValues(simple, 6, true, __status);
 
           ref.i32 = 0x7FFFFFFF;
           var weak = shared.toWeakPtr();
           FSimpleStruct.isI32EqualWeak(weak, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualWeak(weak, 0).should.be(false);
           setSomeValues(weak.Pin(), 7);
-          checkValues(weak.Pin(), 7, true);
-          checkValues(weak.toSharedPtr(), 7, true);
-          checkValues(simple, 7, true);
+          checkValues(weak.Pin(), 7, true, __status);
+          checkValues(weak.toSharedPtr(), 7, true, __status);
+          checkValues(simple, 7, true, __status);
 
           var shared2 = simple.toSharedPtr();
-          checkValues(shared2, 7, true);
+          checkValues(shared2, 7, true, __status);
 
           var shared = FSimpleStruct.mkShared();
           shared.i32 = 100;
@@ -238,8 +238,8 @@ class TestStructs extends buddy.BuddySuite {
           FSimpleStruct.isI32EqualShared(shared, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
           setSomeValues(shared, 5);
-          checkValues(shared, 5, true);
-          checkValues(shared.toSharedRef(), 5, true);
+          checkValues(shared, 5, true, __status);
+          checkValues(shared.toSharedRef(), 5, true, __status);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -273,26 +273,26 @@ class TestStructs extends buddy.BuddySuite {
           hasStruct1.simple.i32.should.be(10);
           hasStruct1.isI32Equal(10).should.be(true);
           setSomeValues(hasStruct1.simple, 8);
-          checkValues(hasStruct1.simple, 8, true);
-          checkValues(simple, 8, true);
+          checkValues(hasStruct1.simple, 8, true, __status);
+          checkValues(simple, 8, true, __status);
           hasStruct1.simple = simple2;
-          checkValues(hasStruct1.simple, 1, true);
-          checkValues(simple, 1, true);
+          checkValues(hasStruct1.simple, 1, true, __status);
+          checkValues(simple, 1, true, __status);
 
           var hasStruct2 = FHasStructMember2.create();
           nObjects++;
           nStruct2++;
           (hasStruct2.shared == null).should.be(true);
           hasStruct2.shared = simple2.toSharedPtr();
-          checkValues(hasStruct2.shared, 1, true);
-          checkValues(simple2, 1, true);
+          checkValues(hasStruct2.shared, 1, true, __status);
+          checkValues(simple2, 1, true, __status);
           var shared = hasStruct2.shared;
           shared.i32 = 10;
           hasStruct2.shared.i32.should.be(10);
           hasStruct2.isI32Equal(10).should.be(true);
           setSomeValues(hasStruct2.shared, 8);
-          checkValues(hasStruct2.shared, 8, true);
-          checkValues(shared, 8, true);
+          checkValues(hasStruct2.shared, 8, true, __status);
+          checkValues(shared, 8, true, __status);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -320,8 +320,8 @@ class TestStructs extends buddy.BuddySuite {
           @:privateAccess hasStruct3.simple.parent.should.be(hasStruct3);
           hasStruct3.isI32Equal(0xF0E).should.be(true);
           setSomeValues(hasStruct3.simple, 9);
-          checkValues(hasStruct3.simple, 9, true);
-          checkValues(hasStruct3.ref, 9, true);
+          checkValues(hasStruct3.simple, 9, true, __status);
+          checkValues(hasStruct3.ref, 9, true, __status);
 
           var simple = FSimpleStruct.createWithArgs(1.1,2.2,3,4);
           nObjects++;
@@ -338,14 +338,14 @@ class TestStructs extends buddy.BuddySuite {
           hasStruct3_1.usedDefaultConstructor.should.be(false);
           setSomeValues(simple, 10);
           setSomeValues(hasStruct3_1.simple, 11);
-          checkValues(simple, 10, false);
-          checkValues(hasStruct3_1.ref, 10, false);
-          checkValues(hasStruct3_1.simple, 11, true);
+          checkValues(simple, 10, false, __status);
+          checkValues(hasStruct3_1.ref, 10, false, __status);
+          checkValues(hasStruct3_1.simple, 11, true, __status);
 
           FHasStructMember3.setRef(simple, hasStruct3_1.simple);
           nDestructors++; //we're using a pass-by-value struct
-          checkValues(simple, 11, true);
-          checkValues(hasStruct3_1.ref, 11, true);
+          checkValues(simple, 11, true, __status);
+          checkValues(hasStruct3_1.ref, 11, true, __status);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -364,39 +364,39 @@ class TestStructs extends buddy.BuddySuite {
           setSomeValues(FSimpleStruct.getRef(), 12);
           var copy = unreal.Wrapper.copy(FSimpleStruct.getRef());
           nObjects++;
-          checkValues(copy, 12, true);
-          checkValues(FSimpleStruct.getRef(), 12, true);
+          checkValues(copy, 12, true, __status);
+          checkValues(FSimpleStruct.getRef(), 12, true, __status);
           copy.i32 = 0xF1F0;
           FSimpleStruct.isI32EqualShared(copy.toSharedPtr(), 0xF1F0).should.be(true);
           setSomeValues(copy, 13);
-          checkValues(copy, 13, true);
-          checkValues(FSimpleStruct.getRef(), 12, true);
+          checkValues(copy, 13, true, __status);
+          checkValues(FSimpleStruct.getRef(), 12, true, __status);
           copy = CoreAPI.copy(FSimpleStruct.getRef());
           nObjects++;
-          checkValues(copy, 12, true);
-          checkValues(FSimpleStruct.getRef(), 12, true);
+          checkValues(copy, 12, true, __status);
+          checkValues(FSimpleStruct.getRef(), 12, true, __status);
           copy.i32 = 0xF1F0;
           FSimpleStruct.isI32EqualShared(copy.toSharedPtr(), 0xF1F0).should.be(true);
           setSomeValues(copy, 13);
-          checkValues(copy, 13, true);
-          checkValues(FSimpleStruct.getRef(), 12, true);
+          checkValues(copy, 13, true, __status);
+          checkValues(FSimpleStruct.getRef(), 12, true, __status);
           var copy2 = CoreAPI.copyStruct(FSimpleStruct.getRef());
           nObjects++;
           nDestructors++;
-          checkValues(copy2, 12, true);
-          checkValues(FSimpleStruct.getRef(), 12, true);
+          checkValues(copy2, 12, true, __status);
+          checkValues(FSimpleStruct.getRef(), 12, true, __status);
           copy2.i32 = 0xF1F0;
           setSomeValues(copy2, 13);
-          checkValues(copy2, 13, true);
-          checkValues(FSimpleStruct.getRef(), 12, true);
+          checkValues(copy2, 13, true, __status);
+          checkValues(FSimpleStruct.getRef(), 12, true, __status);
 
           var copy2 = unreal.Wrapper.copyStruct(FSimpleStruct.getRef());
           nObjects++;
           nDestructors++;
           setSomeValues(copy2, 14);
-          checkValues(copy2, 14, true);
-          checkValues(copy, 13, true);
-          checkValues(FSimpleStruct.getRef(), 12, true);
+          checkValues(copy2, 14, true, __status);
+          checkValues(copy, 13, true, __status);
+          checkValues(FSimpleStruct.getRef(), 12, true, __status);
         }
         run();
         // run twice to make sure that the finalizers run
@@ -417,7 +417,7 @@ class TestStructs extends buddy.BuddySuite {
           var base:FBase = FBase.create();
           nObjects++;
           setSomeValues(base, 13);
-          checkValues(base, 13, true);
+          checkValues(base, 13, true, __status);
           base.getSomeInt().should.be(0xDEADF00);
           base.otherValue = 22.2;
           base.otherValue.should.beCloseTo(22.2);
@@ -432,12 +432,12 @@ class TestStructs extends buddy.BuddySuite {
           child.otherValue = 33.3;
           child.otherValue.should.beCloseTo(33.3);
           setSomeValues(child, 14);
-          checkValues(child, 14, true);
+          checkValues(child, 14, true, __status);
 
           base = FBase.getOverride();
           base.getSomeInt().should.be(0xBA5);
           setSomeValues(base, 15);
-          checkValues(base, 15, true);
+          checkValues(base, 15, true, __status);
         }
         run();
         // run twice to make sure that the finalizers run
