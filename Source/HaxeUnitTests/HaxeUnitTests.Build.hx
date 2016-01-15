@@ -10,7 +10,7 @@ class HaxeUnitTests extends HaxeModuleRules
     super(target);
 
     if (Sys.getEnv("DO_UNITY_BUILD") == null)
-      BuildConfiguration.bUseUnityBuild = false;
+      this.bFasterWithoutUnity = true;
     // this.MinFilesUsingPrecompiledHeaderOverride = -1;
     // Uncomment if you are using Slate UI
     // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
@@ -28,8 +28,12 @@ class HaxeUnitTests extends HaxeModuleRules
 
   override private function getConfig():HaxeModuleConfig {
     var ret = super.getConfig();
-    ret.glueTargetModule = 'HaxeGlue';
-    // ret.noStatic = true;
+    if (sys.FileSystem.exists('$gameDir/Source/HaxeGlue')) {
+      ret.glueTargetModule = 'HaxeGlue';
+    }
+    if (Sys.getEnv("NO_STATIC_BUILD") != null) {
+      ret.noStatic = true;
+    }
     return ret;
   }
 }

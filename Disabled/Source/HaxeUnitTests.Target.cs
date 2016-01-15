@@ -3,11 +3,11 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class HaxeUnitTestsEditorTarget : TargetRules
+public class HaxeUnitTestsTarget : TargetRules
 {
-	public HaxeUnitTestsEditorTarget(TargetInfo Target)
+	public HaxeUnitTestsTarget(TargetInfo Target)
 	{
-		Type = TargetType.Editor;
+		Type = TargetType.Game;
 	}
 
 	//
@@ -21,5 +21,6 @@ public class HaxeUnitTestsEditorTarget : TargetRules
 		)
 	{
 		OutExtraModuleNames.AddRange( new string[] { "HaxeUnitTests" } );
+		OutExtraModuleNames.AddRange( new string[] { "HaxeGlue" } );
 	}
 }

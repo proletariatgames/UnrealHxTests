@@ -21,6 +21,5 @@ public class HaxeUnitTestsTarget : TargetRules
 		)
 	{
 		OutExtraModuleNames.AddRange( new string[] { "HaxeUnitTests" } );
-		OutExtraModuleNames.AddRange( new string[] { "HaxeGlue" } );
 	}
 }

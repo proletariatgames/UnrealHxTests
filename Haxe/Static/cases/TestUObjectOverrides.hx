@@ -107,6 +107,14 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         Std.is(derived.getSelf(), UHaxeDerived1).should.be(true);
         (derived.getSelf() == derived).should.be(true);
       });
+      it('should be able to call StaticClass', {
+        UHaxeDerived1.StaticClass().should.not.be(null);
+        UHaxeDerived1.StaticClass().GetDesc().toString().should.be('HaxeDerived1');
+        UHaxeDerived2.StaticClass().should.not.be(null);
+        UHaxeDerived2.StaticClass().GetDesc().toString().should.be('HaxeDerived2');
+        UHaxeDerived3.StaticClass().should.not.be(null);
+        UHaxeDerived3.StaticClass().GetDesc().toString().should.be('HaxeDerived3');
+      });
       // test const this
       it('should be able to call super methods');
       it('should be able to define non-uclass classes');
