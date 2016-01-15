@@ -294,13 +294,14 @@ class UHaxeProtected1 extends UBasicTypesUObject {
 class UHaxeProtected2 extends UHaxeProtected1 {
 
   override private function setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : UBasicTypesUObject {
+    var ret = super.setBool_String_UI8_I8_protected(b, str, ui8, i8);
     boolProp = true;
     stringProp = "Overridden in HaxeProtected2!";
     ui8Prop = 123;
     i8Prop = -123;
     m_i32 = 1024*16;
     m_FStringProp = "FString overridden!";
-    return this;
+    return ret;
   }
 
   override private function nonUFUNCTION_setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : Void {
