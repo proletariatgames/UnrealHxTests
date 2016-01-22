@@ -123,6 +123,42 @@ class TestReflect extends buddy.BuddySuite {
         }
         run();
       });
+      it('should be able to set data on blueprint-only types', {
+        var cls = ReflectAPI.getBlueprintClass('/Game/Blueprints/BPObjectReflect');
+        cls.should.not.be(null);
+        var obj:UObject = UObject.NewObjectByClass(new TypeParam<UObject>(), UObject.GetTransientPackage(), cls);
+        obj.should.not.be(null);
+
+        var val = {
+          name:'TheName',
+          str:'TheStr',
+          struct1:{
+            bool: true,
+            byte: 122,
+            int: 0xF0F0F0,
+            float: 1.1,
+            string: 'AStr',
+            text: 'AText',
+            vector: { X: 1, Y:2, Z:100 },
+          },
+          bool: false,
+          byte: 166,
+          int: -55,
+          float: 2.2,
+          vector: { X:10, Y:30, Z:200 }
+        };
+
+        for (field in Reflect.fields(val)) {
+          ReflectAPI.extSetField(obj, field, Reflect.field(val, field));
+        }
+
+        ReflectAPI.bpGetField(obj, 'int').should.be(-55);
+        (ReflectAPI.bpGetField(obj, 'float') : Float).should.beCloseTo(2.2);
+        ReflectAPI.bpGetField(obj, 'byte').should.be(166);
+        ReflectAPI.bpGetField(obj, 'bool').should.be(false);
+        Std.string(ReflectAPI.bpGetField(obj, 'name')).should.be('TheName');
+        Std.string(ReflectAPI.bpGetField(obj, 'str')).should.be('TheStr');
+      });
     });
   }
 }

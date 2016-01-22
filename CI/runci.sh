@@ -23,6 +23,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   BUILD_PATH="Engine/Build/BatchFiles/Linux/Build.sh"
   PLATFORM=Linux
   BINPATH=Engine/Binaries/Linux/UE4Editor
+  EXTRAARGS=-rocket
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
   BUILD_PATH="Engine/Build/BatchFiles/Build.bat"
   PLATFORM=Win64
