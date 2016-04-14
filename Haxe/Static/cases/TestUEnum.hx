@@ -14,6 +14,15 @@ using buddy.Should;
   @:uproperty(BlueprintReadWrite)
   public var test1:ETestHxEnumClass;
 
+  @:uproperty
+  public var test2:EMyEnum;
+
+  @:uproperty
+  public var test3:EMyCppEnum;
+
+  @:uproperty
+  public var test4:EMyNamespacedEnum;
+
   @:ufunction
   public function setTest(val:ETestHxEnumClass) {
     test1 = val;
