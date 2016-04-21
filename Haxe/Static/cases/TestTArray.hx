@@ -10,7 +10,7 @@ class TestTArray extends buddy.BuddySuite {
   public function new() {
     describe('Haxe - TArray', {
       it('should be able to use TArray of basic types',{
-        var arr:TArray<Int32> = TArrayImpl.create();
+        var arr:TArray<Int32> = TArrayImpl.createStruct();
         for (i in 0...10) {
           arr.push(i+1);
         }

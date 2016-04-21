@@ -23,6 +23,11 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
     return 43;
   }
 
+  virtual bool writeToByteArray(uint8 *arr, int loc, uint8 what) {
+    arr[loc] = what;
+    return true;
+  }
+
   static UBasicTypesSub1 *CreateFromCpp() {
     return NewObject<UBasicTypesSub1>();
   }

@@ -1,8 +1,11 @@
+import unreal.*;
+
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("BasicTypesSub.h")
 @:uextern extern class UBasicTypesSub1 extends UBasicTypesUObject {
   public var isSub1:Bool;
   static function CreateFromCpp():UBasicTypesSub1;
+  function writeToByteArray(arr:ByteArray, loc:Int, what:UInt8):Bool;
 }
 
 @:umodule("HaxeUnitTests")

@@ -9,6 +9,7 @@ using unreal.CoreAPI;
 class TestUObjectExterns extends buddy.BuddySuite {
 
   public function new() {
+    var x = unreal.FPlatformFileManager.Get();
     describe('Haxe - UObjects', {
       var basic = UBasicTypesUObject.CreateFromCpp();
       before({
@@ -255,7 +256,23 @@ class TestUObjectExterns extends buddy.BuddySuite {
         protected2.getProtectedI32().should.be(666);
         protected2.getProtectedFString().toString().should.be("FString ALSO overridden!");
       });
+      it('should be able to use pointers to uint8', {
+        var bsub = UObject.NewObject(new TypeParam<UBasicTypesSub1>());
+        var arr = ByteArray.alloc(20);
+        arr.set(0,0);
+        bsub.writeToByteArray(arr, 0, 15).should.be(true);
+        arr.get(0).should.be(15);
+        bsub.writeToByteArray(arr, 2, 42);
+        arr.get(2).should.be(42);
+      });
 
+      it('should be able to tell whether it is valid', {
+        var sub2 = UBasicTypesSub2.CreateFromCpp();
+        // (GIsEditor ? RF_Native|RF_AsyncLoading|RF_Standalone|RF_Async : RF_Native|RF_AsyncLoading|RF_Async)
+        var flags = EObjectFlags.RF_Native|EObjectFlags.RF_AsyncLoading|EObjectFlags.RF_Async;
+        UObject.CollectGarbage(flags, true);
+        sub2.isValid().should.be(false);
+      });
 
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
