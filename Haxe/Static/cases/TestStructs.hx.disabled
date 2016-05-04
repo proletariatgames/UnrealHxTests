@@ -7,25 +7,22 @@ import unreal.*;
 using unreal.CoreAPI;
 
 @:ustruct(BlueprintType)
-class FHaxeStruct extends unreal.UnrealStruct
-{
+typedef FHaxeStruct = UnrealStruct<FHaxeStruct, [{
   @:uproperty
-  public var name:FString;
+  var name:FString;
   @:uproperty
-  public var fname:FName;
-}
+  var fname:FName;
+}]>
 
-class FHaxeStruct2 extends unreal.UnrealStruct
-{
+typedef FHaxeStruct2 = UnrealStruct<FHaxeStruct2, [{
   @:uproperty
-  public var embedded:FHaxeStruct;
-}
+  var embedded:FHaxeStruct;
+}]>;
 
-class FDerivedStruct extends FPODStruct
-{
+typedef FDerivedStruct = UnrealStruct<FDerivedStruct, FPODStruct, [{
   @:uproperty
-  public var addedProperty:FHaxeStruct;
-}
+  var addedProperty:FHaxeStruct;
+}]>
 
 @:uclass class UStructTest extends UObject {
   @:uproperty

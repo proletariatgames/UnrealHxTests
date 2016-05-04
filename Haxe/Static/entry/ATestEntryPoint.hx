@@ -25,8 +25,6 @@ class ATestEntryPoint extends unreal.AActor {
 
     var runner = new buddy.SuitesRunner(ImportAll.getDefs(
       cases.TestUObjectExterns,
-      cases.TestStructs,
-      cases.TestTypeParam,
       cases.TestTemplates,
       cases.TestTArray,
       cases.TestUObjectOverrides

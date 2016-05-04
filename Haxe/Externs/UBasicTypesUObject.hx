@@ -76,8 +76,8 @@ import unreal.*;
 
   @:thisConst function getSomeNumber():Int;
 
-  public static function isNull(obj:PExternal<UBasicTypesUObject>) : Bool;
-  public static function getNull() : PExternal<UBasicTypesUObject>;
+  public static function isNull(obj:PPtr<UBasicTypesUObject>) : Bool;
+  public static function getNull() : PPtr<UBasicTypesUObject>;
 
   public function getSelf() : UBasicTypesUObject;
 

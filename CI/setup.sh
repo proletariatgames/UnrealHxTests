@@ -8,12 +8,12 @@ echo "WORKSPACE: $WORKSPACE"
 
 # setup haxelib
 mkdir -p haxelib || exit 1
-export HAXELIB_PATH="$PWD"/haxelib
+# export HAXELIB_PATH="$PWD"/haxelib
 export CI=1
 export CI_RUNNING=1
 
 # install all needed libraries
-haxelib install hxcpp || exit $?
+# haxelib install hxcpp || exit $?
 haxelib install hxcs || exit $?
 haxelib install buddy || exit $?
 

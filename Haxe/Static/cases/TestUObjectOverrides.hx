@@ -156,16 +156,16 @@ class TestUObjectOverrides extends buddy.BuddySuite {
 @:uclass
 class UHaxeDerived1 extends UBasicTypesSub1 {
   public static function create():UHaxeDerived1 {
-    var ret = UObject.NewObject(new TypeParam<PStruct<UHaxeDerived1>>());
+    var ret = UObject.NewObject(new TypeParam<UHaxeDerived1>());
     return ret;
   }
 
   public var otherInt:Int32;
   @:uproperty
-  @:uname('someFName') public var fname:unreal.PStruct<unreal.FName>;
+  @:uname('someFName') public var fname:unreal.FName;
 
   @:uproperty
-  @:uname('protectedFName') private var protectedFName:unreal.PStruct<unreal.FName>;
+  @:uname('protectedFName') private var protectedFName:unreal.FName;
 
   @:uproperty
   public var intProp:unreal.Int32;
@@ -215,7 +215,7 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   }
 
   @:ufunction
-  public function uFunction5():PStruct<unreal.FName> {
+  public function uFunction5():unreal.FName {
     return fname;
   }
 
@@ -226,7 +226,7 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
   var ttest2:Bool;
 
   @:ufunction(BlueprintImplementableEvent)
-  public function TestFName(i32:unreal.Int32, fname:unreal.PStruct<unreal.FName>) : Void;
+  public function TestFName(i32:unreal.Int32, fname:unreal.FName) : Void;
   @:ufunction(BlueprintImplementableEvent)
   public function TestFText(i32:unreal.Int32, someText:unreal.Const<unreal.PRef<unreal.FText>>) : Void;
 }
@@ -234,7 +234,7 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 @:uclass
 class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
   public static function create():UHaxeDerived2 {
-    var ret = UObject.NewObject(new TypeParam<PStruct<UHaxeDerived2>>());
+    var ret = UObject.NewObject(new TypeParam<UHaxeDerived2>());
     return ret;
   }
   public var myEnum:SomeEnum.EMyEnum;
@@ -270,7 +270,7 @@ class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
 @:uclass
 class UHaxeDerived3 extends UHaxeDerived2 {
   public static function create():UHaxeDerived3 {
-    var ret = UObject.NewObject(new TypeParam<PStruct<UHaxeDerived3>>());
+    var ret = UObject.NewObject(new TypeParam<UHaxeDerived3>());
     return ret;
   }
 

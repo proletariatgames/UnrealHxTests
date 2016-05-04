@@ -5,23 +5,23 @@ import Delegates;
 import helpers.TestHelper;
 import unreal.*;
 
-class FDelHaxe0 extends unreal.DynamicMulticastDelegate<Void->Void> {}
-class FDelHaxe1 extends unreal.MulticastDelegate<PRef<Int>->Void> {}
-class FDelHaxe1_2 extends unreal.MulticastDelegate<PRef<FString>->Void> {}
-class FDelHaxe2 extends unreal.DynamicMulticastDelegate<Int->Int->Void> {}
+typedef FDelHaxe0 = unreal.DynamicMulticastDelegate<FDelHaxe0, Void->Void>;
+typedef FDelHaxe1 = unreal.MulticastDelegate<FDelHaxe1, PRef<Int>->Void>;
+typedef FDelHaxe1_2 = unreal.MulticastDelegate<FDelHaxe1_2, PRef<FString>->Void>;
+typedef FDelHaxe2 = unreal.DynamicMulticastDelegate<FDelHaxe2, Int->Int->Void>;
 @:ueParamName("FirstArg") @:ueParamName("SecondArg") @:ueParamName("ThirdArg")
-class FDelHaxe3 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Void> {}
-class FDelHaxe4 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Void> {}
-class FDelHaxe5 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Int->Void> {}
-class FDelHaxe6 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Int->Int->Void> {}
-class FDelHaxe7 extends unreal.DynamicMulticastDelegate<Int->Int->Int->Int->Int->Int->Int->Void> {}
-class FDelHaxe8 extends unreal.DynamicMulticastDelegate<Int->UUsesDelegate->Int->Int->Int->Int->Int->Int->Void> {}
+typedef FDelHaxe3 = unreal.DynamicMulticastDelegate<FDelHaxe3, Int->Int->Int->Void>;
+typedef FDelHaxe4 = unreal.DynamicMulticastDelegate<FDelHaxe4, Int->Int->Int->Int->Void>;
+typedef FDelHaxe5 = unreal.DynamicMulticastDelegate<FDelHaxe5, Int->Int->Int->Int->Int->Void>;
+typedef FDelHaxe6 = unreal.DynamicMulticastDelegate<FDelHaxe6, Int->Int->Int->Int->Int->Int->Void>;
+typedef FDelHaxe7 = unreal.DynamicMulticastDelegate<FDelHaxe7, Int->Int->Int->Int->Int->Int->Int->Void>;
+typedef FDelHaxe8 = unreal.DynamicMulticastDelegate<FDelHaxe8, Int->UUsesDelegate->Int->Int->Int->Int->Int->Int->Void>;
 
-class FDelHaxe0_RV extends unreal.Delegate<Void->Int> {}
-class FDelHaxe1_RV extends unreal.DynamicDelegate<Int->Int> {}
-class FDelHaxeStrInt extends unreal.Delegate<FString->Int> {}
-class FDelHaxeStr_Multi extends unreal.MulticastDelegate<FString->Void> {}
-class FDelHaxe_Multi extends unreal.MulticastDelegate<Void->Void> {}
+typedef FDelHaxe0_RV = unreal.Delegate<FDelHaxe0_RV, Void->Int>;
+typedef FDelHaxe1_RV = unreal.DynamicDelegate<FDelHaxe1_RV, Int->Int>;
+typedef FDelHaxeStrInt = unreal.Delegate<FDelHaxeStrInt, FString->Int>;
+typedef FDelHaxeStr_Multi = unreal.MulticastDelegate<FDelHaxeStr_Multi, FString->Void>;
+typedef FDelHaxe_Multi = unreal.MulticastDelegate<FDelHaxe_Multi, Void->Void>;
 
 @:uclass class UUsesDelegate extends unreal.UObject {
   @:uproperty(BlueprintAssignable, Category=Game)
@@ -81,7 +81,7 @@ class TestDelegates extends buddy.BuddySuite {
       });
       it('should be able to bind to uobject functions', {
         var del = FDelHaxe_Multi.create();
-        var obj = UObject.NewObject(new TypeParam<PStruct<UUsesDelegate>>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
         obj.numCallbacks.should.be(0);
         del.AddUObject(obj, MethodPointer.fromMethod(obj.ufun));
         del.Broadcast();
@@ -102,7 +102,7 @@ class TestDelegates extends buddy.BuddySuite {
         called.should.be(1);
       });
       it('should be able to create new UCLASS types that use delegates', {
-        var obj = UObject.NewObject(new TypeParam<PStruct<UUsesDelegate>>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
         obj.test0.Broadcast();
       });
       it('should be able to declare new delegate types', {

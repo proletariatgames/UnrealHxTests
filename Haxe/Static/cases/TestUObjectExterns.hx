@@ -220,7 +220,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
       });
 
       it('derived classes should be able to access protected members', {
-        var protected1 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeProtected1>>());
+        var protected1 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeProtected1>());
         var ret = protected1.callProtectedFunc1();
         ret.should.not.be(null);
         ret.stringProp.toString().should.be("Hello from protected");
@@ -237,7 +237,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
       });
 
       it('derived classes should be able to override external protected functions', {
-        var protected2 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeProtected2>>());
+        var protected2 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeProtected2>());
         var ret = protected2.callProtectedFunc1();
         ret.should.not.be(null);
         ret.stringProp.toString().should.be("Overridden in HaxeProtected2!");

@@ -5,7 +5,7 @@ import UBasicTypesUObject;
 class TestConst extends buddy.BuddySuite {
 
   public function new() {
-    var const1 = unreal.UObject.NewObject(new unreal.TypeParam<unreal.PStruct<UHaxeConst>>());
+    var const1 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeConst>());
     var geo = unreal.slatecore.FGeometry.create();
     describe('Haxe - Const params', {
       it('should be able to generate code that uses const types', {

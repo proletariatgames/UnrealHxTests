@@ -6,8 +6,8 @@ import unreal.*;
   public static var nDestructorCalled:Int32;
   public static var nConstructorCalled:Int32;
 
-  public static function isNull(obj:PExternal<FSimpleStruct>) : Bool;
-  public static function getNull() : PExternal<FSimpleStruct>;
+  public static function isNull(obj:PPtr<FSimpleStruct>) : Bool;
+  public static function getNull() : PPtr<FSimpleStruct>;
 
   public var f1:Float32;
   public var d1:Float64;
@@ -15,14 +15,16 @@ import unreal.*;
   public var ui32:FakeUInt32;
   public var usedDefaultConstructor:Bool;
 
-  public static function getRef():PExternal<FSimpleStruct>;
-  @:uname('new') public static function create():PHaxeCreated<FSimpleStruct>;
-  @:uname('new') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):PHaxeCreated<FSimpleStruct>;
+  public static function getRef():PPtr<FSimpleStruct>;
+  @:uname('.ctor') public static function create():FSimpleStruct;
+  @:uname('new') public static function createNew():POwnedPtr<FSimpleStruct>;
+  @:uname('.ctor') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):FSimpleStruct;
+  @:uname('new') public static function createNewWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):POwnedPtr<FSimpleStruct>;
 
   @:final public function ToString():FString;
 
-  static function isI32EqualByVal(self:PStruct<FSimpleStruct>, i:Int32):Bool;
-  static function isI32Equal(self:PExternal<FSimpleStruct>, i:Int32):Bool;
+  static function isI32EqualByVal(self:FSimpleStruct, i:Int32):Bool;
+  static function isI32Equal(self:PPtr<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualShared(self:TSharedPtr<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualSharedRef(self:TSharedRef<FSimpleStruct>, i:Int32):Bool;
   static function isI32EqualWeak(self:TWeakPtr<FSimpleStruct>, i:Int32):Bool;
@@ -43,7 +45,8 @@ import unreal.*;
 @:glueCppIncludes("NonUObject.h")
 @:noCopy
 @:uextern extern class FSimpleStructNoEqualsOperator {
-  @:uname('new') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):PHaxeCreated<FSimpleStructNoEqualsOperator>;
+  @:uname('.ctor') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):FSimpleStructNoEqualsOperator;
+  @:uname('new') public static function createNewWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):POwnedPtr<FSimpleStructNoEqualsOperator>;
 }
 
 @:umodule("HaxeUnitTests")
@@ -53,12 +56,13 @@ import unreal.*;
   public static var nConstructorCalled:Int32;
 
   public var simple:FSimpleStruct;
-  public var fname:PStruct<FName>;
+  public var fname:FName;
   public var myEnum:SomeEnum.EMyEnum;
   public var myCppEnum:SomeEnum.EMyCppEnum;
   public var myNamespacedEnum:SomeEnum.EMyNamespacedEnum;
 
-  @:uname('new') public static function create():PHaxeCreated<FHasStructMember1>;
+  @:uname('.ctor') public static function create():FHasStructMember1;
+  @:uname('new') public static function createNew():POwnedPtr<FHasStructMember1>;
 
   public function isI32Equal(i:Int32):Bool;
 }
@@ -70,7 +74,8 @@ import unreal.*;
   public static var nConstructorCalled:Int32;
 
   public var shared:TSharedPtr<FSimpleStruct>;
-  @:uname('new') public static function create():PHaxeCreated<FHasStructMember2>;
+  @:uname('.ctor') public static function create():FHasStructMember2;
+  @:uname('new') public static function createNew():POwnedPtr<FHasStructMember2>;
 
   public function isI32Equal(i:Int32):Bool;
 }
@@ -84,10 +89,12 @@ import unreal.*;
   public var simple:FSimpleStruct;
   public var ref:PRef<FSimpleStruct>;
   public var usedDefaultConstructor:Bool;
-  @:uname('new') public static function create():PHaxeCreated<FHasStructMember3>;
-  @:uname('new') public static function createWithRef(ref:PRef<FSimpleStruct>):PHaxeCreated<FHasStructMember3>;
+  @:uname('.ctor') public static function create():FHasStructMember3;
+  @:uname('new') public static function createNew():POwnedPtr<FHasStructMember3>;
+  @:uname('.ctor') public static function createWithRef(ref:PRef<FSimpleStruct>):FHasStructMember3;
+  @:uname('new') public static function createNewWithRef(ref:PRef<FSimpleStruct>):POwnedPtr<FHasStructMember3>;
 
-  public static function setRef(ref:PRef<FSimpleStruct>, to:PStruct<FSimpleStruct>):Void;
+  public static function setRef(ref:PRef<FSimpleStruct>, to:FSimpleStruct):Void;
 
   public function isI32Equal(i:Int32):Bool;
 }
@@ -109,10 +116,11 @@ import unreal.*;
 @:uextern extern class FBase extends FSimpleStruct {
   var otherValue:Float32;
 
-  @:uname('new') public static function create():PHaxeCreated<FBase>;
+  @:uname('.ctor') public static function create():FBase;
+  @:uname('new') public static function createNew():POwnedPtr<FBase>;
 
   public function getSomeInt():Int;
-  public static function getOverride():PExternal<FBase>;
+  public static function getOverride():PPtr<FBase>;
 }
 
 @:umodule("HaxeUnitTests")
@@ -120,5 +128,6 @@ import unreal.*;
 @:uextern extern class FOverride extends FBase {
   var yetAnotherValue:Float;
 
-  @:uname('new') public static function create():PHaxeCreated<FOverride>;
+  @:uname('.ctor') public static function create():FOverride;
+  @:uname('new') public static function createNew():POwnedPtr<FOverride>;
 }

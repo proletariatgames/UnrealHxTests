@@ -5,7 +5,7 @@ import unreal.*;
 @:umodule("HaxeUnitTests")
 @:uextern extern class UTemplatesDef extends unreal.UObject {
   @:typeName static function getSomeStaticInt<T>():Int;
-  function copyNew<T>(withType:PStruct<T>):PHaxeCreated<T>;
+  @:typeName function copyNew<T>(withType:T):POwnedPtr<T>;
 }
 
 @:glueCppIncludes("TemplatesDef.h")
@@ -15,24 +15,27 @@ import unreal.*;
   public function get():A;
   public function set(v:A):Void;
 
-  @:uname('new') static function create<A>(val:A):PHaxeCreated<FTemplatedClass1<A>>;
+  @:uname('.ctor') static function create<A>(val:A):FTemplatedClass1<A>;
+  @:uname('new') static function createNew<A>(val:A):POwnedPtr<FTemplatedClass1<A>>;
 }
 
 @:glueCppIncludes("TemplatesDef.h")
 @:umodule("HaxeUnitTests")
 @:uextern extern class FTemplatedClass2<A,B> {
-  public function createWithA(value:A):PStruct<FTemplatedClass1<A>>;
-  public function createWithB(value:B):PStruct<FTemplatedClass1<B>>;
-  public function createRec(value:A):PStruct<FTemplatedClass1< PStruct<FTemplatedClass1<A>> >>;
+  public function createWithA(value:A):FTemplatedClass1<A>;
+  public function createWithB(value:B):FTemplatedClass1<B>;
+  public function createRec(value:A):FTemplatedClass1< FTemplatedClass1<A> >;
 
-  @:uname('new') static function create<A,B>():PHaxeCreated<FTemplatedClass2<A,B>>;
+  @:uname('.ctor') static function create<A,B>():FTemplatedClass2<A,B>;
+  @:uname('new') static function createNew<A,B>():POwnedPtr<FTemplatedClass2<A,B>>;
 }
 
 @:glueCppIncludes("TemplatesDef.h")
 @:uname("FNonTemplatedClass1")
 @:umodule("HaxeUnitTests")
 @:uextern extern class FNonTemplatedClass {
-  public var obj:PStruct< FTemplatedClass1<PExternal<FNonTemplatedClass>> >;
+  public var obj:FTemplatedClass1<PPtr<FNonTemplatedClass>>;
 
-  @:uname('new') static function create():PHaxeCreated<FNonTemplatedClass>;
+  @:uname('.ctor') static function create():FNonTemplatedClass;
+  @:uname('new') static function createNew():POwnedPtr<FNonTemplatedClass>;
 }

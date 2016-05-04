@@ -10,7 +10,7 @@ class TestTArray extends buddy.BuddySuite {
   public function new() {
     describe('Haxe - TArray', {
       it('should be able to use TArray of basic types',{
-        var arr:TArray<Int32> = TArrayImpl.createStruct();
+        var arr:TArray<Int32> = TArrayImpl.create();
         for (i in 0...10) {
           arr.push(i+1);
         }
@@ -32,7 +32,7 @@ class TestTArray extends buddy.BuddySuite {
         arr[0].should.be(77);
         arr.length.should.be(10);
 
-        var arr = TArray.fromIterable([6,3,4,4,7,8,1,1,5,4]).underlying();
+        var arr = TArray.fromIterable([6,3,4,4,7,8,1,1,5,4]);
         arr.sort(Reflect.compare);
         var shouldBe = [1,1,3,4,4,4,5,6,7,8];
         for (i in 0...shouldBe.length) {
@@ -57,7 +57,7 @@ class TestTArray extends buddy.BuddySuite {
         }
       });
       it('should be able to use TArray of uclass types', {
-        var arr = TArray.fromIterable([ for (i in 0...10) UBasicTypesUObject.CreateFromCpp() ]).underlying();
+        var arr = TArray.fromIterable([ for (i in 0...10) UBasicTypesUObject.CreateFromCpp() ]);
         for (i in 0...10) {
           arr[i].i32Prop = 9 - i;
         }
@@ -81,7 +81,7 @@ class TestTArray extends buddy.BuddySuite {
       });
       it('should be able to use TArray of structs', {
         function run() {
-          var arr = TArray.create(new TypeParam<FSimpleStruct>()).underlying();
+          var arr = TArray.create(new TypeParam<FSimpleStruct>());
           for (i in 0...4) {
             var val = FSimpleStruct.create();
             val.i32 = 3 - i;
@@ -97,7 +97,7 @@ class TestTArray extends buddy.BuddySuite {
             arr[i].i32.should.be(i);
           }
 
-          var arr = TArray.fromIterable([for (i in 0...5) FSimpleStruct.create().underlying()]).underlying();
+          var arr = TArray.fromIterable([for (i in 0...5) FSimpleStruct.create()]);
           for (i in 0...4) {
             arr[i].i32 = 3 - i;
           }
@@ -106,7 +106,7 @@ class TestTArray extends buddy.BuddySuite {
             val.i32.should.be(3-i);
           }
 
-          var arr = TArray.fromIterable(new TypeParam<FSimpleStruct>(), [for (i in 0...5) FSimpleStruct.create().underlying()]).underlying();
+          var arr = TArray.fromIterable(new TypeParam<FSimpleStruct>(), [for (i in 0...5) FSimpleStruct.create()]);
           for (i in 0...4) {
             arr[i].i32 = 3 - i;
           }
@@ -121,7 +121,7 @@ class TestTArray extends buddy.BuddySuite {
       });
       it('should be able to use TArray as member of extern uclass types');
       it('should be able to use TArray as member of declared uclass types (UPROPERTY)', {
-        var obj = UObject.NewObject(new TypeParam<PStruct<UTestTArray>>());
+        var obj = UObject.NewObject(new TypeParam<UTestTArray>());
         obj.array.Push("Hello from Haxe!");
         obj.array.length.should.be(1);
         obj.array[0].toString().should.be("Hello from Haxe!");

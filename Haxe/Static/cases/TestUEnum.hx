@@ -65,7 +65,7 @@ class TestUEnum extends buddy.BuddySuite {
         val.should.be(E_1st);
       });
       it('should be able to use uenums as uproperties', {
-        var obj = UObject.NewObject(new TypeParam<PStruct<UTestUseEnum>>());
+        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
         obj.test1 = E_1st;
         obj.test1.should.be(E_1st);
         obj.test1 = E_2nd;
@@ -74,7 +74,7 @@ class TestUEnum extends buddy.BuddySuite {
         obj.test1.should.be(E_3rd);
       });
       it('should be able to pass enums back and forth to C++', {
-        var obj = UObject.NewObject(new TypeParam<PStruct<UTestUseEnum>>());
+        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
         obj.setTest(E_1st);
         obj.getTest().should.be(E_1st);
         obj.setTest(E_2nd);

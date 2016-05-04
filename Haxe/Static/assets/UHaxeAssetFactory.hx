@@ -30,7 +30,7 @@ class UHaxeAssetFactory extends UFactory {
     return 'Haxe serialized data';
   }
 
-  override function FactoryCreateNew(inClass:UClass, inParent:UObject, name:FName, flags:EObjectFlags, context:UObject, warn:PExternal<FFeedbackContext>):UObject
+  override function FactoryCreateNew(inClass:UClass, inParent:UObject, name:FName, flags:EObjectFlags, context:UObject, warn:PPtr<FFeedbackContext>):UObject
   {
     var cur = UFactory.GetCurrentFilename().toString();
     if (cur.length > 0 && FileSystem.exists(cur)) {
