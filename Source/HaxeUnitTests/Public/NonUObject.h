@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdio>
 #include <Engine.h>
 #include "SomeEnum.h"
 #include "NonUObject.generated.h"
@@ -107,7 +108,7 @@ class HAXEUNITTESTS_API FSimpleStruct {
       return FString::Printf(TEXT("Simple Struct (%d) { %d, %d, %d, %d }"), usedDefaultConstructor, (int)f1, (int)d1, i32, ui32);
     }
 
-    bool operator==(const FSimpleStruct other) {
+    bool operator==(const FSimpleStruct& other) const {
       return f1 == other.f1 &&
              d1 == other.d1 &&
              i32 == other.i32 &&
@@ -195,6 +196,11 @@ class HAXEUNITTESTS_API FHasStructMember3 {
     FHasStructMember3() : ref(simple), usedDefaultConstructor(true) {
       nConstructorCalled++;
     }
+
+    FHasStructMember3(const FHasStructMember3& inRHS) : 
+      ref( inRHS.usedDefaultConstructor ? simple : inRHS.ref ),
+      simple( inRHS.simple ),
+      usedDefaultConstructor( inRHS.usedDefaultConstructor ) {}
 
     bool isI32Equal(int32 i) {
       return this->ref.i32 == i;

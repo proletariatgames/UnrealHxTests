@@ -9,7 +9,6 @@ using buddy.Should;
 
 class TestTemplates extends buddy.BuddySuite {
   public function new() {
-    var __status:buddy.SpecAssertion = null;
     var nDestructors = FSimpleStruct.nDestructorCalled,
         nConstructors = FSimpleStruct.nConstructorCalled;
     inline function setSomeValues(struct:FSimpleStruct, multiplier:Int) {
@@ -20,7 +19,7 @@ class TestTemplates extends buddy.BuddySuite {
     }
 
     // seems like not using inline here fails. Need to check if that's a buddy, hxcpp or ue4haxe issue
-    inline function checkValues(struct:FSimpleStruct, multiplier:Int, usedDefaultConstructor:Bool, __status) {
+    inline function checkValues(struct:FSimpleStruct, multiplier:Int, usedDefaultConstructor:Bool) {
       struct.f1.should.beCloseTo(10.2 * multiplier);
       struct.d1.should.beCloseTo(20.2 * multiplier);
       struct.i32.should.be(33 * multiplier);
@@ -53,14 +52,14 @@ class TestTemplates extends buddy.BuddySuite {
           var struct = FSimpleStruct.create();
           nObjects++;
           setSomeValues(struct, 1);
-          checkValues(struct, 1, true, __status);
+          checkValues(struct, 1, true);
 
           var struct2 = templ.copyNew(new TypeParam<FSimpleStruct>(), cast struct);
           nObjects++;
-          checkValues(struct2, 1, true, __status);
+          checkValues(struct2, 1, true);
           setSomeValues(struct, 2);
-          checkValues(struct, 2, true, __status);
-          checkValues(struct2, 1, true, __status);
+          checkValues(struct, 2, true);
+          checkValues(struct2, 1, true);
         }
         run();
         cpp.vm.Gc.run(true);
@@ -68,6 +67,7 @@ class TestTemplates extends buddy.BuddySuite {
 
         FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
       });
+
 
       it('should be able to use templated classes', {
         var templ = FTemplatedClass1.create(10);
@@ -102,6 +102,7 @@ class TestTemplates extends buddy.BuddySuite {
         templ.createRec(22.2).value.value.should.beCloseTo(22.2);
 
         var ntempl = FNonTemplatedClass.create();
+        var obj = ntempl.obj;
         ntempl.obj.value.should.be(null);
         ntempl.obj.value = ntempl;
         ntempl.obj.value.should.not.be(null);

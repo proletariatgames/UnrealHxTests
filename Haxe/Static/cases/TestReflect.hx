@@ -35,18 +35,18 @@ class TestReflect extends buddy.BuddySuite {
       it('should be able to convert anonymous fields into structs', {
         function run() {
           var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>());
-          ReflectAPI.extSetField(obj1, 'basic', {
+          ReflectAPI.extSetField(obj1, 'struct1', {
             f1: 1.1,
             d1: 2.2,
             i32: 33,
             ui32: 44
           });
-          obj1.basic.f1.should.beCloseTo(1.1);
-          obj1.basic.d1.should.beCloseTo(2.2);
-          obj1.basic.i32.should.be(33);
-          obj1.basic.ui32.should.be(44);
+          obj1.struct1.f1.should.beCloseTo(1.1);
+          obj1.struct1.d1.should.beCloseTo(2.2);
+          obj1.struct1.i32.should.be(33);
+          obj1.struct1.ui32.should.be(44);
 
-          ReflectAPI.extSetField(obj1, 'hasStruct', {
+          ReflectAPI.extSetField(obj1, 'struct2', {
             simple: {
               f1: 1.11,
               d1: 2,
@@ -54,25 +54,14 @@ class TestReflect extends buddy.BuddySuite {
               ui32: 444
             },
             myEnum: SomeEnum.EMyEnum.SomeEnum2,
-            myCppEnum: SomeEnum.EMyCppEnum.CppEnum3
+            myCppEnum: SomeEnum.EMyCppEnum.CppEnum2
           });
-          obj1.hasStruct.simple.f1.should.beCloseTo(1.11);
-          obj1.hasStruct.simple.d1.should.be(2);
-          obj1.hasStruct.simple.i32.should.be(333);
-          obj1.hasStruct.simple.ui32.should.be(444);
-          obj1.hasStruct.myEnum.should.be(SomeEnum.EMyEnum.SomeEnum2);
-          obj1.hasStruct.myCppEnum.should.be(SomeEnum.EMyCppEnum.CppEnum3);
-
-          ReflectAPI.extSetField(obj1.hasStruct, 'simple', {
-            f1: 1.1,
-            d1: 2.2,
-            i32: 33,
-            ui32: 44
-          });
-          obj1.hasStruct.simple.f1.should.beCloseTo(1.1);
-          obj1.hasStruct.simple.d1.should.beCloseTo(2.2);
-          obj1.hasStruct.simple.i32.should.be(33);
-          obj1.hasStruct.simple.ui32.should.be(44);
+          obj1.struct2.simple.f1.should.beCloseTo(1.11);
+          obj1.struct2.simple.d1.should.be(2);
+          obj1.struct2.simple.i32.should.be(333);
+          obj1.struct2.simple.ui32.should.be(444);
+          obj1.struct2.myEnum.should.be(SomeEnum.EMyEnum.SomeEnum2);
+          obj1.struct2.myCppEnum.should.be(SomeEnum.EMyCppEnum.CppEnum2);
         }
         run();
       });
@@ -156,8 +145,8 @@ class TestReflect extends buddy.BuddySuite {
         (ReflectAPI.bpGetField(obj, 'float') : Float).should.beCloseTo(2.2);
         ReflectAPI.bpGetField(obj, 'byte').should.be(166);
         ReflectAPI.bpGetField(obj, 'bool').should.be(false);
-        Std.string(ReflectAPI.bpGetField(obj, 'name')).should.be('TheName');
-        Std.string(ReflectAPI.bpGetField(obj, 'str')).should.be('TheStr');
+        (ReflectAPI.bpGetField(obj, 'name') : FName).toString().should.be('TheName');
+        (ReflectAPI.bpGetField(obj, 'str') : FString ).toString().should.be('TheStr');
       });
     });
   }
@@ -166,12 +155,6 @@ class TestReflect extends buddy.BuddySuite {
 
 @:uclass
 class UObjectReflect extends UObject {
-  @:uexpose
-  public var basic:FSimpleStruct;
-
-  @:uexpose
-  public var hasStruct:FHasStructMember1;
-
   @:uproperty
   public var name:FName;
 
@@ -183,6 +166,9 @@ class UObjectReflect extends UObject {
 
   @:uproperty
   public var struct1:FHaxeReflectStruct1;
+
+  @:uproperty
+  public var struct2:FHaxeReflectStruct2;
 
   @:uproperty
   public var struct1Arr:TArray<FHaxeReflectStruct1>;
@@ -204,4 +190,22 @@ typedef FHaxeReflectStruct1 = UnrealStruct<FHaxeReflectStruct1, [{
   var vec2d:FVector2D;
   @:uproperty
   var arr:TArray<FVector>;
+  @:uproperty
+  var f1:Float32;
+  @:uproperty
+  var d1:Float;
+  @:uproperty
+  var i32:Int;
+  @:uproperty
+  var ui32:FakeUInt32;
+}]>;
+
+@:ustruct()
+typedef FHaxeReflectStruct2 = UnrealStruct<FHaxeReflectStruct2, [{
+  @:uproperty
+  var simple:FHaxeReflectStruct1;
+  @:uproperty
+  var myEnum:SomeEnum.EMyEnum;
+  @:uproperty
+  var myCppEnum:SomeEnum.EMyCppEnum;
 }]>;

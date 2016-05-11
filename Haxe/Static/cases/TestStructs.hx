@@ -57,6 +57,8 @@ class TestStructs extends buddy.BuddySuite {
       struct.ToString().toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
     }
 
+    cpp.vm.Gc.run(true);
+    cpp.vm.Gc.run(true);
     before({
       nConstructors = FSimpleStruct.nConstructorCalled;
       nDestructors = FSimpleStruct.nDestructorCalled;
@@ -95,7 +97,12 @@ class TestStructs extends buddy.BuddySuite {
         var nObjects = 0;
         function run() {
           var simple = FSimpleStruct.create();
-          TestHelper.getType(simple).should.be( TestHelper.getType( (null : unreal.PHaxeCreated<FSimpleStruct>) ));
+          TestHelper.getType(simple).should.be( TestHelper.getType( (null : FSimpleStruct) ));
+          nObjects++;
+
+          var simpleNew = FSimpleStruct.createNew();
+          TestHelper.getType(simpleNew).should.be( TestHelper.getType( (null : unreal.POwnedPtr<FSimpleStruct>) ));
+          simpleNew.toSharedPtr().dispose(); // make sure the reference is collected
           nObjects++;
           setSomeValues(simple, 2);
           checkValues(simple, 2, true);
@@ -115,12 +122,15 @@ class TestStructs extends buddy.BuddySuite {
           simple2.usedDefaultConstructor.should.be(false);
           setSomeValues(simple2,10);
           checkValues(simple2,10,false);
+
+          simple2 = null;
+          simple = null;
+          simpleNew = null;
         }
         run();
         // run twice to make sure that the finalizers run
         cpp.vm.Gc.run(true);
         cpp.vm.Gc.run(true);
-
         // make sure all objects were deleted
         FSimpleStruct.nConstructorCalled.should.be(nConstructors + nObjects);
         FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
@@ -132,17 +142,7 @@ class TestStructs extends buddy.BuddySuite {
           var simple = FSimpleStruct.create();
           nObjects++;
           simple.dispose();
-          simple.disposed.should.be(true);
-#if UE4_CHECK_POINTER
-          // when UE4_CHECK_POINTER is on, it will throw if the object is disposed
-          // otherwise, it will just crash.
-          // note that this would print an error message on the log regardless;
-          // what we do is compile with -D UE4_POINTER_TESTING so no rogue error message shows up
-          function fail() {
-            checkValues(simple,1,false);
-          }
-          fail.should.throwType(String);
-#end
+          simple.isDisposed().should.be(true);
           FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
         }
         run();
@@ -158,18 +158,16 @@ class TestStructs extends buddy.BuddySuite {
       it('should be able to be referenced by value', {
         var nObjects = 0;
         function run() {
-          var simple = FSimpleStruct.createStruct();
-          nDestructors++; // one destructor call for the temporary object
+          var simple = FSimpleStruct.create();
           nObjects++;
           setSomeValues(simple, 6);
           checkValues(simple, 6, true);
           simple.dispose();
-          simple.disposed.should.be(true);
+          simple.isDisposed().should.be(true);
 
           FSimpleStruct.nDestructorCalled.should.be(nDestructors + nObjects);
 
-          simple = FSimpleStruct.createWithArgsStruct(1.5,2.5,0xDEADBEE5,0xFFFFFFFF);
-          nDestructors++; // one destructor call for the temporary object
+          simple = FSimpleStruct.createWithArgs(1.5,2.5,0xDEADBEE5,0xFFFFFFFF);
           nObjects++;
           simple.f1.should.beCloseTo(1.5);
           simple.d1.should.be(2.5);
@@ -191,52 +189,50 @@ class TestStructs extends buddy.BuddySuite {
       it('should be able to use smart pointers', {
         var nObjects = 0;
         function run() {
-          var simple = FSimpleStruct.create();
+          var simple = FSimpleStruct.createNew(),
+              shared = simple.toSharedPtr(),
+              raw = shared.Get();
           nObjects++;
-          simple.i32 = 10;
-          var shared = simple.toSharedPtr();
+          raw.i32 = 10;
           FSimpleStruct.isI32EqualShared(shared, 10).should.be(true);
           FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
-          shared.i32 = 0x7FFFFFFF;
+          shared.Get().i32 = 0x7FFFFFFF;
           FSimpleStruct.isI32EqualShared(shared, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
-          setSomeValues(shared, 5);
-          checkValues(shared, 5, true);
-          checkValues(shared.toSharedRef(), 5, true);
-          checkValues(simple, 5, true);
+          setSomeValues(shared.Get(), 5);
+          checkValues(shared.Get(), 5, true);
+          checkValues(shared.ToSharedRef().Get(), 5, true);
+          checkValues(raw, 5, true);
 
-          var ref = shared.toSharedRef();
-          ref.i32 = 0x7FFFFFFF;
+          var ref = shared.ToSharedRef();
+          ref.Get().i32 = 0x7FFFFFFF;
           FSimpleStruct.isI32EqualSharedRef(ref, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualSharedRef(ref, -1).should.be(false);
-          setSomeValues(ref, 6);
-          checkValues(ref, 6, true);
-          checkValues(ref.toSharedPtr(), 6, true);
-          checkValues(simple, 6, true);
+          setSomeValues(ref.Get(), 6);
+          checkValues(ref.Get(), 6, true);
+          checkValues(TSharedPtr.fromSharedRef(ref).Get(), 6, true);
+          checkValues(raw, 6, true);
 
-          ref.i32 = 0x7FFFFFFF;
-          var weak = shared.toWeakPtr();
+          ref.Get().i32 = 0x7FFFFFFF;
+          var weak = TWeakPtr.fromSharedPtr( shared );
           FSimpleStruct.isI32EqualWeak(weak, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualWeak(weak, 0).should.be(false);
-          setSomeValues(weak.Pin(), 7);
-          checkValues(weak.Pin(), 7, true);
-          checkValues(weak.toSharedPtr(), 7, true);
-          checkValues(simple, 7, true);
-
-          var shared2 = simple.toSharedPtr();
-          checkValues(shared2, 7, true);
+          setSomeValues(weak.Pin().Get(), 7);
+          checkValues(weak.Pin().Get(), 7, true);
+          checkValues(ref.Get(), 7, true);
+          checkValues(raw, 7, true);
 
           var shared = FSimpleStruct.mkShared();
-          shared.i32 = 100;
+          shared.Get().i32 = 100;
           nObjects++;
           FSimpleStruct.isI32EqualShared(shared, 100).should.be(true);
           FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
-          shared.i32 = 0x7FFFFFFF;
+          shared.Get().i32 = 0x7FFFFFFF;
           FSimpleStruct.isI32EqualShared(shared, 0x7FFFFFFF).should.be(true);
           FSimpleStruct.isI32EqualShared(shared, -1).should.be(false);
-          setSomeValues(shared, 5);
-          checkValues(shared, 5, true);
-          checkValues(shared.toSharedRef(), 5, true);
+          setSomeValues(shared.Get(), 5);
+          checkValues(shared.Get(), 5, true);
+          checkValues(shared.ToSharedRef().Get(), 5, true);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -259,11 +255,12 @@ class TestStructs extends buddy.BuddySuite {
           var hasStruct1 = FHasStructMember1.create();
           nObjects++;
           nStruct1++;
-          hasStruct1.fname = "Hello, World!";
+          hasStruct1.fname = FName.fromString("Hello, World!"); // haxe issue #5226
           hasStruct1.fname.toString().should.be("Hello, World!");
 
-          var simple2 = FSimpleStruct.create();
-          setSomeValues(simple2, 1);
+          var simple2 = FSimpleStruct.createNew(),
+              simple2Raw = simple2.getRaw();
+          setSomeValues(simple2Raw, 1);
 
           var simple = hasStruct1.simple;
           simple.i32 = 10;
@@ -272,24 +269,24 @@ class TestStructs extends buddy.BuddySuite {
           setSomeValues(hasStruct1.simple, 8);
           checkValues(hasStruct1.simple, 8, true);
           checkValues(simple, 8, true);
-          hasStruct1.simple = simple2;
+          hasStruct1.simple = simple2Raw;
           checkValues(hasStruct1.simple, 1, true);
           checkValues(simple, 1, true);
 
           var hasStruct2 = FHasStructMember2.create();
           nObjects++;
           nStruct2++;
-          (hasStruct2.shared == null).should.be(true);
+          (hasStruct2.shared.IsValid()).should.be(false);
           hasStruct2.shared = simple2.toSharedPtr();
-          checkValues(hasStruct2.shared, 1, true);
-          checkValues(simple2, 1, true);
+          checkValues(hasStruct2.shared.Get(), 1, true);
+          checkValues(simple2Raw, 1, true);
           var shared = hasStruct2.shared;
-          shared.i32 = 10;
-          hasStruct2.shared.i32.should.be(10);
+          shared.Get().i32 = 10;
+          hasStruct2.shared.Get().i32.should.be(10);
           hasStruct2.isI32Equal(10).should.be(true);
-          setSomeValues(hasStruct2.shared, 8);
-          checkValues(hasStruct2.shared, 8, true);
-          checkValues(shared, 8, true);
+          setSomeValues(hasStruct2.shared.Get(), 8);
+          checkValues(hasStruct2.shared.Get(), 8, true);
+          checkValues(shared.Get(), 8, true);
         }
         run();
         // run twice to make sure that the finalizers have run
@@ -314,7 +311,6 @@ class TestStructs extends buddy.BuddySuite {
           nObjects++; nStruct3++;
           hasStruct3.usedDefaultConstructor.should.be(true);
           hasStruct3.simple.i32 = 0xF0E;
-          @:privateAccess hasStruct3.simple.parent.should.be(hasStruct3);
           hasStruct3.isI32Equal(0xF0E).should.be(true);
           setSomeValues(hasStruct3.simple, 9);
           checkValues(hasStruct3.simple, 9, true);
@@ -359,25 +355,27 @@ class TestStructs extends buddy.BuddySuite {
         var nObjects = 0;
         function run() {
           setSomeValues(FSimpleStruct.getRef(), 12);
-          var copy = unreal.Wrapper.copy(FSimpleStruct.getRef());
+          var copy = FSimpleStruct.getRef().copyNew(),
+              rawCopy = copy.getRaw();
           nObjects++;
-          checkValues(copy, 12, true);
+          checkValues(rawCopy, 12, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
-          copy.i32 = 0xF1F0;
+          rawCopy.i32 = 0xF1F0;
           FSimpleStruct.isI32EqualShared(copy.toSharedPtr(), 0xF1F0).should.be(true);
-          setSomeValues(copy, 13);
-          checkValues(copy, 13, true);
+          setSomeValues(rawCopy, 13);
+          checkValues(rawCopy, 13, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
-          copy = CoreAPI.copy(FSimpleStruct.getRef());
+          copy = FSimpleStruct.getRef().copyNew();
+          rawCopy = copy.getRaw();
           nObjects++;
-          checkValues(copy, 12, true);
+          checkValues(rawCopy, 12, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
-          copy.i32 = 0xF1F0;
+          rawCopy.i32 = 0xF1F0;
           FSimpleStruct.isI32EqualShared(copy.toSharedPtr(), 0xF1F0).should.be(true);
-          setSomeValues(copy, 13);
-          checkValues(copy, 13, true);
+          setSomeValues(rawCopy, 13);
+          checkValues(rawCopy, 13, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
-          var copy2 = CoreAPI.copyStruct(FSimpleStruct.getRef());
+          var copy2 = FSimpleStruct.getRef().copy();
           nObjects++;
           nDestructors++;
           checkValues(copy2, 12, true);
@@ -387,12 +385,12 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(copy2, 13, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
 
-          var copy2 = unreal.Wrapper.copyStruct(FSimpleStruct.getRef());
+          var copy2 = FSimpleStruct.getRef().copy();
           nObjects++;
           nDestructors++;
           setSomeValues(copy2, 14);
           checkValues(copy2, 14, true);
-          checkValues(copy, 13, true);
+          checkValues(rawCopy, 13, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
         }
         run();
@@ -479,15 +477,14 @@ class TestStructs extends buddy.BuddySuite {
         //These tests should fail because there is no equals operator!!!
         noOp1.equals(noOp2).should.be(false);
         noOp1.equals(noOp3).should.be(false);
-
       });
       it('should be able to construct haxe-defined structs', {
         var s = FHaxeStruct.create();
-        s.name = "val";
+        s.name = FString.fromString("val"); // haxe issue #5226
         s.name.toString().should.be("val");
 
         var s = FHaxeStruct2.create();
-        s.embedded.fname = "foo";
+        s.embedded.fname = FName.fromString("foo"); // haxe issue #5226
         s.embedded.fname.toString().should.be("foo");
 
         var s2 = s.embedded;

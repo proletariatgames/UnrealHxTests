@@ -36,8 +36,8 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       obj.i16NonProp.should.be(4 * multiplier);
       obj.i32Prop.should.be(5 * multiplier);
       obj.ui32NonProp.should.be(6 * multiplier);
-      Int64.eq(obj.i64NonProp, 7 * multiplier).should.be(true);
-      Int64.eq(obj.ui64NonProp, 8 * multiplier).should.be(true);
+      obj.i64NonProp.should.be(7 * multiplier);
+      obj.ui64NonProp.should.be(8 * multiplier);
       obj.floatProp.should.beCloseTo(9.1 * multiplier);
       obj.doubleNonProp.should.be(10.2 * multiplier);
     }
@@ -76,10 +76,11 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         var obj1 = UHaxeDerived1.create(),
             obj2 = UHaxeDerived2.create(),
             obj3 = UHaxeDerived3.create();
-        Int64.eq(obj1.setText("MyText"), Int64.ofInt(0xD00D)).should.be(true);
+        var i64:Int64 = 0;
+        obj1.setText("MyText").should.be(i64 = cast haxe.Int64.ofInt(0xD00D));
         obj1.textNonProp.toString().should.be("MyText");
         obj2.getSomeInt().should.be(0xf00ba5);
-        Int64.eq(obj3.setText("MyText"), Int64.make(0x0111,0xF0FA)).should.be(true);
+        obj3.setText("MyText").should.be(i64 = cast haxe.Int64.make(0x0111,0xF0FA));
         obj3.boolProp.should.be(true);
         obj3.stringProp.toString().should.be("MyText");
         obj3.ui8Prop.should.be(100);
@@ -284,7 +285,7 @@ class UHaxeDerived3 extends UHaxeDerived2 {
   override public function setText(txt:unreal.FText):unreal.Int64 {
     this.setBool_String_UI8_I8(true,txt.toString(),100,101);
     this.textProp = this.test();
-    return unreal.Int64.make(0x0111,0xF0FA);
+    return cast haxe.Int64.make(0x0111,0xF0FA);
   }
 
   override public function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool

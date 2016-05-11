@@ -1,6 +1,5 @@
 package cases;
 using buddy.Should;
-import haxe.Int64;
 import UBasicTypesSub;
 import unreal.*;
 
@@ -43,8 +42,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
           empty.i16NonProp.should.be(0);
           empty.i32Prop.should.be(0);
           empty.ui32NonProp.should.be(0);
-          Int64.eq(empty.i64NonProp, 0).should.be(true);
-          Int64.eq(empty.ui64NonProp, 0).should.be(true);
+          empty.i64NonProp.should.be(0);
+          empty.ui64NonProp.should.be(0);
           empty.floatProp.should.be(0);
           empty.doubleNonProp.should.be(0);
 
@@ -58,13 +57,14 @@ class TestUObjectExterns extends buddy.BuddySuite {
           basic.i16NonProp.should.be(4);
           basic.i32Prop.should.be(5);
           basic.ui32NonProp.should.be(6);
-          Int64.eq(basic.i64NonProp, 7).should.be(true);
-          Int64.eq(basic.ui64NonProp, 8).should.be(true);
+          basic.i64NonProp.should.be(7);
+          basic.ui64NonProp.should.be(8);
           basic.floatProp.should.beCloseTo(9.1);
           basic.doubleNonProp.should.be(10.2);
         });
 
         it('should be able to be accessed through reflection (basic)', {
+          var i64:Int64 = 0;
           var basicDyn:Dynamic = basic;
 
           Reflect.setProperty(basicDyn,"boolNonProp", false);
@@ -78,8 +78,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Reflect.setProperty(basicDyn,"i16NonProp", 40);
           Reflect.setProperty(basicDyn,"i32NonProp", 50);
           Reflect.setProperty(basicDyn,"ui32NonProp", 60);
-          Reflect.setProperty(basicDyn,"i64NonProp", Int64.make(0xf0f0f0f0, 0xc0c0c0));
-          Reflect.setProperty(basicDyn,"ui64NonProp", Int64.make(0xC001, 0x0FF1C3));
+          Reflect.setProperty(basicDyn,"i64NonProp", i64 = cast haxe.Int64.make(0xf0f0f0f0, 0xc0c0c0));
+          Reflect.setProperty(basicDyn,"ui64NonProp", i64 = cast haxe.Int64.make(0xC001, 0x0FF1C3));
           Reflect.setProperty(basicDyn,"floatNonProp", 99.1);
           Reflect.setProperty(basicDyn,"doubleNonProp", 100.2);
 
@@ -94,8 +94,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
           Reflect.getProperty(basicDyn,"i16NonProp").should.be(40);
           Reflect.getProperty(basicDyn,"i32NonProp").should.be(50);
           Reflect.getProperty(basicDyn,"ui32NonProp").should.be(60);
-          Int64.eq(Reflect.getProperty(basicDyn,"i64NonProp"), Int64.make(0xf0f0f0f0, 0xc0c0c0)).should.be(true);
-          Int64.eq(Reflect.getProperty(basicDyn,"ui64NonProp"), Int64.make(0xC001, 0x0FF1C3)).should.be(true);
+          Reflect.getProperty(basicDyn,"i64NonProp").should.be(i64 = cast haxe.Int64.make(0xf0f0f0f0, 0xc0c0c0));
+          Reflect.getProperty(basicDyn,"ui64NonProp").should.be(i64 = cast haxe.Int64.make(0xC001, 0x0FF1C3));
           (Reflect.getProperty(basicDyn,"floatNonProp") : Float).should.beCloseTo(99.1);
           (Reflect.getProperty(basicDyn,"doubleNonProp") : Float).should.be(100.2);
         });
@@ -170,19 +170,21 @@ class TestUObjectExterns extends buddy.BuddySuite {
           basic.ui32Prop.should.be(0xD3ADB33F);
           basic.i32Prop.should.be(0xBADA55);
 
-          basic.setUI64_I64_Float_Double(Int64.make(0xCAF3,0xBAB3), Int64.make(0xD3AD,0xD00D), 11.1, 22.2).should.be(false);
-          Int64.eq(basic.ui64Prop, Int64.make(0xCAF3,0xBAB3)).should.be(true);
-          Int64.eq(basic.i64Prop, Int64.make(0xD3AD,0xD00D)).should.be(true);
+          basic.setUI64_I64_Float_Double(cast haxe.Int64.make(0xCAF3,0xBAB3), cast haxe.Int64.make(0xD3AD,0xD00D), 11.1, 22.2).should.be(false);
+          var i64:Int64 = 0;
+          basic.ui64Prop.should.be((i64 = cast haxe.Int64.make(0xCAF3,0xBAB3)));
+          basic.i64Prop.should.be(i64 = cast haxe.Int64.make(0xD3AD,0xD00D));
           basic.floatProp.should.beCloseTo(11.1);
           basic.doubleProp.should.be(22.2);
 
-          Int64.eq(basic.setText("Hello, FText!"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
+          basic.setText("Hello, FText!").should.be(i64 = cast haxe.Int64.make(0xDEADBEEF, 0x8BADF00D));
           basic.textNonProp.toString().should.be("Hello, FText!");
 
           basic.getSomeNumber().should.be(42);
         });
 
         it('should be able to be called from subclasses (basic)', {
+          var i64:Int64 = 0;
           var sub1 = UBasicTypesSub1.CreateFromCpp();
           var sub2 = UBasicTypesSub2.CreateFromCpp();
           var sub3 = UBasicTypesSub3.CreateFromCpp();
@@ -191,9 +193,9 @@ class TestUObjectExterns extends buddy.BuddySuite {
           sub2.getSomeNumber().should.be(44);
           sub3.getSomeNumber().should.be(45);
 
-          Int64.eq(sub1.setText("testing subclass call"), Int64.ofInt(0xD00D)).should.be(true);
-          Int64.eq(sub2.setText("testing subclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
-          Int64.eq(sub3.setText("testing subclass call3"), Int64.make(0,0xDEADF00D)).should.be(true);
+          sub1.setText("testing subclass call").should.be(i64 = cast haxe.Int64.ofInt(0xD00D));
+          sub2.setText("testing subclass call2").should.be(i64 = cast haxe.Int64.make(0xDEADBEEF, 0x8BADF00D));
+          sub3.setText("testing subclass call3").should.be(i64 = cast haxe.Int64.make(0,0xDEADF00D));
           sub1.textNonProp.toString().should.be("testing subclass call");
           sub2.textNonProp.toString().should.be("testing subclass call2");
           sub3.textProp.toString().should.be("testing subclass call3");
@@ -206,15 +208,15 @@ class TestUObjectExterns extends buddy.BuddySuite {
           base2.getSomeNumber().should.be(44);
           base3.getSomeNumber().should.be(45);
 
-          Int64.eq(base1.setText("testing baseclass call"), Int64.ofInt(0xD00D)).should.be(true);
-          Int64.eq(base2.setText("testing baseclass call2"), Int64.make(0xDEADBEEF, 0x8BADF00D)).should.be(true);
-          Int64.eq(base3.setText("testing baseclass call3"), Int64.make(0,0xDEADF00D)).should.be(true);
+          base1.setText("testing baseclass call").should.be(i64 = cast haxe.Int64.ofInt(0xD00D));
+          base2.setText("testing baseclass call2").should.be(i64 = cast haxe.Int64.make(0xDEADBEEF, 0x8BADF00D));
+          base3.setText("testing baseclass call3").should.be(i64 = cast haxe.Int64.make(0,0xDEADF00D));
           base1.textNonProp.toString().should.be("testing baseclass call");
           base2.textNonProp.toString().should.be("testing baseclass call2");
           base3.textProp.toString().should.be("testing baseclass call3");
 
           sub2 = sub3;
-          Int64.eq(sub2.setText("testing subclass call3-1"), Int64.make(0,0xDEADF00D)).should.be(true);
+          sub2.setText("testing subclass call3-1").should.be(i64 = cast haxe.Int64.make(0,0xDEADF00D));
           sub2.textProp.toString().should.be("testing subclass call3-1");
         });
       });
