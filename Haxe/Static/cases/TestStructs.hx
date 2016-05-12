@@ -12,6 +12,10 @@ typedef FHaxeStruct = UnrealStruct<FHaxeStruct, [{
   var name:FString;
   @:uproperty
   var fname:FName;
+
+  function someFunction() {
+    return "name: " + name.toString();
+  }
 }]>
 
 typedef FHaxeStruct2 = UnrealStruct<FHaxeStruct2, [{
@@ -482,6 +486,7 @@ class TestStructs extends buddy.BuddySuite {
         var s = FHaxeStruct.create();
         s.name = FString.fromString("val"); // haxe issue #5226
         s.name.toString().should.be("val");
+        s.someFunction().should.be('name: val');
 
         var s = FHaxeStruct2.create();
         s.embedded.fname = FName.fromString("foo"); // haxe issue #5226
