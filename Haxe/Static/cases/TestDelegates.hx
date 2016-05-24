@@ -1,8 +1,12 @@
 package cases;
 using buddy.Should;
 import NonUObject;
+import UBasicTypesSub;
 import Delegates;
 import helpers.TestHelper;
+import cases.TestUObjectOverrides;
+import cases.TestUEnum;
+import SomeEnum;
 import unreal.*;
 
 typedef FDelHaxe0 = unreal.DynamicMulticastDelegate<FDelHaxe0, Void->Void>;
@@ -22,6 +26,12 @@ typedef FDelHaxe1_RV = unreal.DynamicDelegate<FDelHaxe1_RV, Int->Int>;
 typedef FDelHaxeStrInt = unreal.Delegate<FDelHaxeStrInt, FString->Int>;
 typedef FDelHaxeStr_Multi = unreal.MulticastDelegate<FDelHaxeStr_Multi, FString->Void>;
 typedef FDelHaxe_Multi = unreal.MulticastDelegate<FDelHaxe_Multi, Void->Void>;
+
+typedef FDelTest1 = unreal.Delegate<FDelTest1, IBasicType2->Int>;
+typedef FDelTest2 = unreal.Delegate<FDelTest2, FString->ETestHxEnumClass>;
+typedef FDelTest3 = unreal.Delegate<FDelTest3, TWeakObjectPtr<UBasicTypesSub1>->EMyEnum>;
+typedef FDelTest4 = unreal.Delegate<FDelTest4, Const<PRef<TWeakObjectPtr<UHaxeDerived2>>>->Int>;
+typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
 
 @:uclass class UUsesDelegate extends unreal.UObject {
   @:uproperty(BlueprintAssignable, Category=Game)
@@ -116,11 +126,95 @@ class TestDelegates extends buddy.BuddySuite {
         FDelHaxe7.create();
         FDelHaxe8.create();
       });
-      // Delegate examples from SeekPlayerState.h
-      //
-      // DECLARE_DYNAMIC_MULTICAST_DELEGATE(FLootEvent);
-      // DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDeathEvent, ASeekPlayerState*, PlayerState, ASeekPlayerState*, Killer, const FVector&, Location);
-      //
+      it('should be able to use different kinds of types as arguments', {
+        var t1 = FDelTest1.create();
+        var didRun = false;
+        t1.BindLambda(function(iface:IBasicType2) {
+          iface.getSomeInt().should.be(0xf00ba5);
+          iface.doSomething().getSomeInt().should.be(0xf00ba5);
+          didRun = true;
+          return iface.getSomeInt();
+        });
+        var derived = UObject.NewObject(new TypeParam<UHaxeDerived2>());
+        t1.Execute(derived).should.be(0xf00ba5);
+        didRun.should.be(true);
+        didRun = false;
+
+        t1.Unbind();
+        t1.BindLambda(function(iface:IBasicType2) {
+          iface.getSomeInt().should.be(0xf00);
+          iface.doSomething().getSomeInt().should.be(0xf00);
+          didRun = true;
+          return iface.getSomeInt();
+        });
+        var basic = UObject.NewObject(new TypeParam<UBasicTypesSub2>());
+        t1.Execute(basic).should.be(0xf00);
+        didRun.should.be(true);
+        didRun = false;
+
+        var t2 = FDelTest2.create();
+        t2.BindLambda(function(str:FString) {
+          str.toString().should.be('hello');
+          didRun = true;
+          return E_2nd;
+        });
+        t2.Execute('hello').should.be(E_2nd);
+        didRun.should.be(true);
+        didRun = false;
+        var basic = UBasicTypesUObject.CreateFromCpp();
+        basic.stringNonProp = 'hello';
+        t2.Execute(basic.stringNonProp).should.be(E_2nd);
+        didRun.should.be(true);
+        didRun = false;
+
+        var t3 = FDelTest3.create();
+        t3.BindLambda(function(sub1:TWeakObjectPtr<UBasicTypesSub1>) {
+          didRun = true;
+          if(sub1 == null) return SomeEnum2;
+          (sub1.stringNonProp.toString() == 'Works').should.be(true);
+          return SomeEnum1;
+        });
+        var basic2 = UObject.NewObject(new TypeParam<UBasicTypesSub1>());
+        basic2.stringNonProp = 'Works';
+        t3.Execute(basic2).should.be(SomeEnum1);
+        didRun.should.be(true);
+        didRun = false;
+        t3.Execute(null).should.be(SomeEnum2);
+        didRun.should.be(true);
+        didRun = false;
+
+        var t4 = FDelTest4.create();
+        t4.BindLambda(function(d:TWeakObjectPtr<UHaxeDerived2>) {
+          didRun = true;
+          if(d == null) return 1;
+          d.getSomeInt().should.be(0xf00ba5);
+          (d.stringNonProp.equals(basic2.stringNonProp).should.be(true));
+          (d.stringNonProp.toString() == 'Works').should.be(true);
+          return 2;
+        });
+        derived.stringNonProp = 'Works';
+        t4.Execute(derived).should.be(2);
+        didRun.should.be(true);
+        didRun = false;
+        t4.Execute(null).should.be(1);
+        didRun.should.be(true);
+        didRun = false;
+
+        var t5 = FDelTest5.create();
+        t5.BindLambda(function(sub:TSubclassOf<UHaxeDerived1>) {
+          didRun = true;
+          return sub == null ? 1 : 2;
+        });
+        t5.Execute(UHaxeDerived1.StaticClass()).should.be(2);
+        didRun.should.be(true);
+        didRun = false;
+        t5.Execute(UBasicTypesSub1.StaticClass()).should.be(1);
+        didRun.should.be(true);
+        didRun = false;
+        t5.Execute(null).should.be(1);
+        didRun.should.be(true);
+        didRun = false;
+      });
     });
   }
 }

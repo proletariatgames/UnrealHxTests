@@ -139,6 +139,12 @@ class TestTArray extends buddy.BuddySuite {
         arr.indexOf('Hello, World!').should.be(0);
         arr.indexOf(basic.stringNonProp).should.be(1);
         arr.indexOf('Testing').should.be(1);
+
+        arr.sort(function(s1,s2) return -Reflect.compare(s1.toString(), s2.toString()));
+        arr[0].toString().should.be('Testing');
+        arr[1].toString().should.be('Hello, World!');
+        arr.indexOf(basic.stringNonProp).should.be(0);
+        arr.indexOf('Testing').should.be(0);
       });
       it('should be able to use TArray on structs');
     });
