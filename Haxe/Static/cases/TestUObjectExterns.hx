@@ -120,8 +120,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
         it('should be able to check structural equality', {
           //This just checks pointers for uobjects
           var basicType =  UBasicTypesUObject.CreateFromCpp();
-          basicType.getSelf().equals(null).should.be(false);
-          basicType.getSelf().equals(basicType.getSelf()).should.be(true);
+          (basicType.getSelf() == null).should.be(false);
+          (basicType.getSelf() == basicType.getSelf()).should.be(true);
         });
         it('should be able to be accessed from subclasses (basic)', {
           var sub1 = UBasicTypesSub1.CreateFromCpp();

@@ -126,6 +126,20 @@ class TestTArray extends buddy.BuddySuite {
         obj.array.length.should.be(1);
         obj.array[0].toString().should.be("Hello from Haxe!");
       });
+      it('should be able to use indexOf structs', {
+        var basic = UBasicTypesUObject.CreateFromCpp();
+        var arr = TArray.create(new TypeParam<FString>());
+        // fstring has == defined
+        arr.Push("Hello, World!");
+        basic.stringNonProp = "Testing";
+        arr.Push(basic.stringNonProp);
+        arr[0].toString().should.be('Hello, World!');
+        arr[1].toString().should.be('Testing');
+        arr.indexOf('?').should.be(-1);
+        arr.indexOf('Hello, World!').should.be(0);
+        arr.indexOf(basic.stringNonProp).should.be(1);
+        arr.indexOf('Testing').should.be(1);
+      });
       it('should be able to use TArray on structs');
     });
   }
