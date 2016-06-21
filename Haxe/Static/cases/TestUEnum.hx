@@ -82,9 +82,46 @@ class TestUEnum extends buddy.BuddySuite {
         obj.setTest(E_3rd);
         obj.getTest().should.be(E_3rd);
       });
+      it('should be able to reference enums with params', {
+        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
+        var e1 = NoParam,
+            e2 = FTextParam("SomeText"),
+            e3 = ObjParam(obj),
+            e4 = ArrParam(TArray.fromIterable([new FString("Test")]));
+        e1.match(NoParam).should.be(true);
+        var match = switch(e2) {
+          case FTextParam(param) if (param.toString() == "SomeText"):
+            true;
+          case _:
+            false;
+        };
+        match.should.be(true);
+        match = switch(e3) {
+          case ObjParam(mobj) if (mobj == obj):
+            true;
+          case _:
+            false;
+        };
+        match.should.be(true);
+        match = switch(e4) {
+          case ArrParam(arr) if (arr[0].toString() == "Test"):
+            true;
+          case _:
+            false;
+        };
+        match.should.be(true);
+      });
     });
   }
 }
+
+enum EnumWithParams {
+  NoParam;
+  FTextParam(txt:FText);
+  ObjParam(uobj:UObject);
+  ArrParam(arr:TArray<FString>);
+}
+
   // public var myEnum:SomeEnum.EMyEnum;
   // public var myCppEnum:SomeEnum.EMyCppEnum;
   // public var myNamespacedEnum:SomeEnum.EMyNamespacedEnum;
