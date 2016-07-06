@@ -31,7 +31,7 @@ class HaxeProgram extends HaxeProgramRules {
 
   override function getConfig() {
     var ret = super.getConfig();
-    // ret.disableUObject = true;
+    ret.disableUObject = true;
     return ret;
   }
 }
