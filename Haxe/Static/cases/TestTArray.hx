@@ -3,6 +3,7 @@ import unreal.*;
 import NonUObject;
 import helpers.TestHelper;
 import UBasicTypesSub;
+import cases.TestUObjectOverrides;
 
 using buddy.Should;
 
@@ -78,6 +79,24 @@ class TestTArray extends buddy.BuddySuite {
           arr[i].i32Prop.should.be(9 - i);
         }
 
+        var arr = TArray.fromIterable([ for (i in 0...3) UHaxeDerived2.create() ]);
+        arr[0].intProp = 0;
+        arr[0].stringProp = 'db';
+        arr[1].intProp = 123;
+        arr[1].stringProp = 'p';
+        arr[2].intProp = 0;
+        arr[2].stringProp = 'dy';
+        arr.sort(function(a,b) {
+          if (a.intProp != b.intProp) {
+            return b.intProp - a.intProp;
+          }
+          // return Reflect.compare(a.stringProp.toString(), b.stringProp.toString());
+          var compare = b.stringProp.toString() > a.stringProp.toString() ? -1 : 1;
+          return compare;
+        });
+        arr[0].stringProp.toString().should.be('p');
+        arr[1].stringProp.toString().should.be('db');
+        arr[2].stringProp.toString().should.be('dy');
       });
       it('should be able to use TArray of structs', {
         function run() {
