@@ -496,7 +496,24 @@ class TestStructs extends buddy.BuddySuite {
         var s2 = s.embedded;
         s2.fname.toString().should.be("foo");
       });
+#if (debug || UHX_CHECK_POINTER)
+      it('should catch null references when running on debug mode / UE_CHECK_POINTER', {
+        var fs:FSimpleStruct = getNullStruct();
+        var caught = false;
+        try {
+          checkValues(fs, 0, true);
+          true.should.be(false);
+        }
+        catch(e:Dynamic) {
+          caught = true;
+        }
+        caught.should.be(true);
+      });
+#end
     });
   }
 
+  public function getNullStruct():FSimpleStruct {
+    return null;
+  }
 }
