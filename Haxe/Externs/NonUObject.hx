@@ -34,6 +34,7 @@ import unreal.*;
 
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("NonUObject.h")
+@:ustruct
 @:uextern @:ustruct extern class FPODStruct {
   public var f:Float32;
   public var d:Float64;

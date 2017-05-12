@@ -1,6 +1,7 @@
 
 @:glueCppIncludes("SomeEnum.h")
 @:umodule("HaxeUnitTests")
+@:uenum
 @:uextern extern enum EMyEnum {
   SomeEnum1;
   SomeEnum2;
@@ -9,6 +10,7 @@
 
 @:glueCppIncludes("SomeEnum.h")
 @:umodule("HaxeUnitTests")
+@:uenum
 @:uextern @:class extern enum EMyCppEnum {
   CppEnum1;
   CppEnum2;
@@ -18,6 +20,7 @@
 @:glueCppIncludes("SomeEnum.h")
 @:umodule("HaxeUnitTests")
 @:uname('EMyNamespacedEnum.Value')
+@:uenum
 @:uextern extern enum EMyNamespacedEnum {
   NSEnum1;
   NSEnum2;

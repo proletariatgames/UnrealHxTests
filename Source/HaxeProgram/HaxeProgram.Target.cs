@@ -69,7 +69,6 @@ public class HaxeProgramTarget : TargetRules
 		UEBuildConfiguration.bCompileAgainstEngine = false;
 		UEBuildConfiguration.bCompileAgainstCoreUObject = true;
 		UEBuildConfiguration.bUseLoggingInShipping = true;
-		UEBuildConfiguration.bCompileSteamOSS = false;
 
 		UEBuildConfiguration.bIncludeADO = false;
 		UEBuildConfiguration.bBuildWithEditorOnlyData = true;
@@ -90,25 +89,5 @@ public class HaxeProgramTarget : TargetRules
 		// Epic Games Launcher needs to run on OS X 10.9, so HaxeProgram needs this as well
 		// OutCPPEnvironmentConfiguration.bEnableOSX109Support = true;
 		OutLinkEnvironmentConfiguration.bIsBuildingConsoleApplication = true;
-	}
-    public override bool GUBP_AlwaysBuildWithTools(UnrealTargetPlatform InHostPlatform, out bool bInternalToolOnly, out bool SeparateNode, out bool CrossCompile)
-	{
-		bInternalToolOnly = false;
-		SeparateNode = false;
-		CrossCompile = true;
-		return true;
-	}
-	public override List<UnrealTargetPlatform> GUBP_ToolPlatforms(UnrealTargetPlatform InHostPlatform)
-	{
-		if (InHostPlatform == UnrealTargetPlatform.Win64)
-		{
-			return new List<UnrealTargetPlatform> { UnrealTargetPlatform.Win64, UnrealTargetPlatform.Win32};
-		}
-		return base.GUBP_ToolPlatforms(InHostPlatform);
-	}
-
-	public override List<UnrealTargetConfiguration> GUBP_ToolConfigs( UnrealTargetPlatform InHostPlatform )
-	{
-		return new List<UnrealTargetConfiguration> { UnrealTargetConfiguration.Shipping };
 	}
 }

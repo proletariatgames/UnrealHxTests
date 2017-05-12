@@ -6,6 +6,7 @@ REM install all needed libraries
 haxelib install hxcpp || exit 1
 haxelib install hxcs || exit 1
 haxelib install buddy || exit 1
+haxelib install promhx || exit 1
 
 REM build the build scripts
 cd Plugins/UE4Haxe

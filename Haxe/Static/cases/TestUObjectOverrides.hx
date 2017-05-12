@@ -71,25 +71,49 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         testObj(obj1,1);
         testObj(obj2,2);
         testObj(obj3,3);
+#if (pass >= 2)
+        var obj4 = UHaxeDerived4.create();
+        setSomeValues(obj4, 3);
+        checkValues(obj4, 3, __status);
+        obj4.nonNative(10).should.be(320);
+        obj4.getSubName().toString().should.be("HaxeDerived4");
+        testObj(obj4,3);
+#end
       });
       it('should be able to have their functions overridden', {
         var obj1 = UHaxeDerived1.create(),
             obj2 = UHaxeDerived2.create(),
             obj3 = UHaxeDerived3.create();
-        var i64:Int64 = 0;
-        obj1.setText("MyText").should.be(i64 = cast haxe.Int64.ofInt(0xD00D));
+        obj1.setText("MyText").should.be(unreal.Int64Helpers.make(0,0xD00D));
         obj1.textNonProp.toString().should.be("MyText");
         obj2.getSomeInt().should.be(0xf00ba5);
-        obj3.setText("MyText").should.be(i64 = cast haxe.Int64.make(0x0111,0xF0FA));
+        obj3.setText("MyText").should.be(unreal.Int64Helpers.make(0x0111,0xF0FA));
         obj3.boolProp.should.be(true);
         obj3.stringProp.toString().should.be("MyText");
         obj3.ui8Prop.should.be(100);
         obj3.i8Prop.should.be(101);
 
-        obj1.uFunction4();
-        obj1.otherInt.should.be(10);
-        obj2.uFunction4();
-        obj2.otherInt.should.be(25);
+        // obj1.uFunction4();
+        // obj1.otherInt.should.be(10);
+        // obj2.uFunction4();
+        // obj2.otherInt.should.be(25);
+#if (pass >= 2)
+        var obj4 = UHaxeDerived4.create();
+        obj4.setText("MyText").should.be(unreal.Int64Helpers.make(0x0111,0xF0F0));
+        obj4.otherProp = unreal.Int64Helpers.make(0x0222,0xF0F5);
+        obj4.otherProp2 = unreal.Int64Helpers.make(0x1333,0xF3F4);
+        obj4.otherProp.should.be(unreal.Int64Helpers.make(0x0222, 0xF0F5));
+        obj4.otherProp2.should.be(unreal.Int64Helpers.make(0x1333, 0xF3F4));
+
+        obj4.boolProp.should.be(true);
+        obj4.stringProp.toString().should.be("MyText");
+        obj4.ui8Prop.should.be(100);
+        obj4.i8Prop.should.be(101);
+
+        obj4.newProperty.toString().should.be('Dynamic load ok');
+        obj4.getSubName().toString().should.be('HaxeDerived4');
+        obj4.textProp.toString().should.be('test2()');
+#end
       }); // check if native side sees it as well
       it('should be able to check physical equality', {
         var derived =  UHaxeDerived1.create();
@@ -115,6 +139,9 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         UHaxeDerived2.StaticClass().GetDesc().toString().should.be('HaxeDerived2');
         UHaxeDerived3.StaticClass().should.not.be(null);
         UHaxeDerived3.StaticClass().GetDesc().toString().should.be('HaxeDerived3');
+#if (pass >= 2)
+        UHaxeDerived4.StaticClass().GetDesc().toString().should.be('HaxeDerived4');
+#end
       });
       // test const this
       it('should be able to call super methods');
@@ -137,6 +164,8 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         derived.intProp = 0xBA5;
         derived.subclassArray.Push(UHaxeDerived2.StaticClass());
         derived.fname = 'Serialization works!';
+        derived.subclassArray.length.should.be(1);
+        derived.subclassArray[0].should.be(UHaxeDerived2.StaticClass());
         var d2:UHaxeDerived1 = cast UObject.StaticDuplicateObject(derived, UObject.GetTransientPackage(), 'None');
         d2.should.not.be(derived);
         d2.i32Prop.should.be(0xF00);
@@ -285,7 +314,7 @@ class UHaxeDerived3 extends UHaxeDerived2 {
   override public function setText(txt:unreal.FText):unreal.Int64 {
     this.setBool_String_UI8_I8(true,txt.toString(),100,101);
     this.textProp = this.test();
-    return cast haxe.Int64.make(0x0111,0xF0FA);
+    return unreal.Int64Helpers.make(0x0111,0xF0FA);
   }
 
   override public function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool
@@ -329,3 +358,66 @@ class AHaxeTestActorReplication extends AActor {
   function onRep_replicatedPropB(i:unreal.Int32) : Void {
   }
 }
+
+#if (pass >= 2)
+@:uclass
+class UHaxeDerived4 extends UHaxeDerived3 {
+  @:uname("newProp") @:uproperty
+  public var newProperty:FString;
+
+  @:uproperty
+  public var otherProp:Int64;
+
+  @:uproperty
+  public var otherProp2:Int64;
+
+  public var notAProp:String;
+
+  public function new(wrapped) {
+    super(wrapped);
+    this.newProperty = "Dynamic load ok";
+  }
+  public static function create():UHaxeDerived4 {
+    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDerived4.StaticClass(), "", 0);
+    return cast ret;
+  }
+
+  override public function setText(txt:unreal.FText):unreal.Int64 {
+    this.setBool_String_UI8_I8(true,txt.toString(),100,101);
+    this.textProp = this.test();
+    return unreal.Int64Helpers.make(0x0111,0xF0F0);
+  }
+
+  override public function getSubName():FString {
+    return "HaxeDerived4";
+  }
+
+  override private function test() {
+    return "test2()";
+  }
+}
+
+@:uclass
+class AHaxeTestActorReplication2 extends AActor {
+  @:uproperty @:ureplicate
+  public var replicatedPropA:unreal.Int32;
+
+  @:uproperty(Transient) @:ureplicate(OwnerOnly)
+  public var replicatedPropB:unreal.Int32;
+
+  @:uproperty @:ureplicate(customRepFunction)
+  public var replicatedPropC:unreal.Int32;
+
+  public function customRepFunction() : Bool {
+    return true;
+  }
+
+  @:ufunction
+  function onRep_replicatedPropA() : Void {
+  }
+
+  @:ufunction
+  function onRep_replicatedPropB(i:unreal.Int32) : Void {
+  }
+}
+#end

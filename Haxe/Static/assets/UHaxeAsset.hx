@@ -6,7 +6,7 @@ import unreal.*;
  **/
 @:uclass(BlueprintType, HideCategories=[Object])
 class UHaxeAsset extends UObject {
-  @:uproperty(BlueprintReadOnly, Category="HaxeAsset")
+  @:uexpose @:uproperty(BlueprintReadOnly, Category="HaxeAsset")
   private var rawContents:FString;
 
   @:isVar public var data(get,set):Dynamic;

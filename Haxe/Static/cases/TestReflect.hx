@@ -8,6 +8,7 @@ using buddy.Should;
 
 class TestReflect extends buddy.BuddySuite {
   public function new() {
+    return;
     describe('ReflectAPI extensions', {
       it('should be able to set normal fields', {
         function run() {
