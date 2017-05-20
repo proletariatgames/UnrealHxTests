@@ -17,5 +17,6 @@ class HAXEUNITTESTS_API IBasicType2
   public:
     virtual IBasicType2 *doSomething() = 0;
     virtual FString getSubName() = 0;
+    UFUNCTION()
     virtual int32 getSomeInt() = 0;
 };

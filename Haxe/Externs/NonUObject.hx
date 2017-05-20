@@ -34,6 +34,25 @@ import unreal.*;
 
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("NonUObject.h")
+@:ustruct @:uextern extern class FSimpleUStruct {
+  public static var nDestructorCalled:Int32;
+  public static var nConstructorCalled:Int32;
+  public static var nCopyConstructorCalled:Int32;
+
+  public var f1:Float32;
+  public var d1:Float64;
+  public var i32:Int32;
+  public var ui32:UInt32;
+  public var usedDefaultConstructor:Bool;
+
+  @:uname('.ctor') public static function create():FSimpleUStruct;
+  @:uname('new') public static function createNew():POwnedPtr<FSimpleUStruct>;
+  @:uname('.ctor') public static function createWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):FSimpleUStruct;
+  @:uname('new') public static function createNewWithArgs(f1:Float32, d1:Float64, i32:Int32, ui32:FakeUInt32):POwnedPtr<FSimpleUStruct>;
+}
+
+@:umodule("HaxeUnitTests")
+@:glueCppIncludes("NonUObject.h")
 @:ustruct
 @:uextern @:ustruct extern class FPODStruct {
   public var f:Float32;

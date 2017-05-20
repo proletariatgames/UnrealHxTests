@@ -4,6 +4,7 @@ using buddy.Should;
 import UBasicTypesSub;
 
 using unreal.CoreAPI;
+using helpers.TestHelper;
 
 class TestUObjectOverrides extends buddy.BuddySuite {
 
@@ -62,6 +63,7 @@ class TestUObjectOverrides extends buddy.BuddySuite {
           obj1.i32Prop = 222;
           obj1.getSomeNumber().should.be(2220);
           obj1.returnsItself().getSomeNumber().should.be(2220);
+          TestHelper.reflectCall(obj1.returnsItself()).getSomeNumber().should.be(2220);
         }
         obj1.nonNative(10).should.be(20);
         obj2.nonNative(10).should.be(120);
@@ -93,10 +95,10 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         obj3.ui8Prop.should.be(100);
         obj3.i8Prop.should.be(101);
 
-        // obj1.uFunction4();
-        // obj1.otherInt.should.be(10);
-        // obj2.uFunction4();
-        // obj2.otherInt.should.be(25);
+        TestHelper.reflectCallPass2(obj1.uFunction4());
+        obj1.otherInt.should.be(10);
+        TestHelper.reflectCallPass2(obj2.uFunction4());
+        obj2.otherInt.should.be(25);
 #if (pass >= 2)
         var obj4 = UHaxeDerived4.create();
         obj4.setText("MyText").should.be(unreal.Int64Helpers.make(0x0111,0xF0F0));
@@ -177,14 +179,35 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         d2.nonNative(25).should.be(35);
         d2.intProp = 10;
         d2.uFunction1().should.be(42);
+        TestHelper.reflectCall(d2.uFunction1()).should.be(42);
         derived.intProp.should.be(0xBA5);
       });
     });
   }
 }
 
+#if (cppia || WITH_CPPIA)
+// because of a cppia dynamic uproperties limitation, we have to define a class that implements native interface with the
+// @:upropertyExpose meta tag
 @:uclass
-class UHaxeDerived1 extends UBasicTypesSub1 {
+@:upropertyExpose
+class UHaxeDerived0 extends UBasicTypesSub1 implements IBasicType2 {
+  public function doSomething():IBasicType2 {
+    return null;
+  }
+
+  public function getSubName():unreal.FString {
+    return "UHaxeDerived0";
+  }
+
+  public function getSomeInt():Int {
+    return 0xf0f0;
+  }
+}
+#end
+
+@:uclass
+class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasicTypesSub1 #end {
   public static function create():UHaxeDerived1 {
     var ret = UObject.NewObject(new TypeParam<UHaxeDerived1>());
     return ret;
@@ -262,7 +285,7 @@ class UHaxeDerived1 extends UBasicTypesSub1 {
 }
 
 @:uclass
-class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
+class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements IBasicType2 #end {
   public static function create():UHaxeDerived2 {
     var ret = UObject.NewObject(new TypeParam<UHaxeDerived2>());
     return ret;
@@ -280,15 +303,15 @@ class UHaxeDerived2 extends UHaxeDerived1 implements IBasicType2 {
     return super.nonNative(i) + 100;
   }
 
-  public function doSomething():IBasicType2 {
+  #if (cppia || WITH_CPPIA) override #end public function doSomething():IBasicType2 {
     return this;
   }
 
-  public function getSubName():unreal.FString {
+  #if (cppia || WITH_CPPIA) override #end public function getSubName():unreal.FString {
     return "HaxeDerived2";
   }
 
-  public function getSomeInt():Int {
+  #if (cppia || WITH_CPPIA) override #end public function getSomeInt():Int {
     return 0xf00ba5;
   }
 
@@ -312,7 +335,7 @@ class UHaxeDerived3 extends UHaxeDerived2 {
   }
 
   override public function setText(txt:unreal.FText):unreal.Int64 {
-    this.setBool_String_UI8_I8(true,txt.toString(),100,101);
+    TestHelper.reflectCallPass2(this.setBool_String_UI8_I8(true,txt.toString(),100,101));
     this.textProp = this.test();
     return unreal.Int64Helpers.make(0x0111,0xF0FA);
   }
@@ -383,7 +406,7 @@ class UHaxeDerived4 extends UHaxeDerived3 {
   }
 
   override public function setText(txt:unreal.FText):unreal.Int64 {
-    this.setBool_String_UI8_I8(true,txt.toString(),100,101);
+    TestHelper.reflectCallPass2(this.setBool_String_UI8_I8(true,txt.toString(),100,101));
     this.textProp = this.test();
     return unreal.Int64Helpers.make(0x0111,0xF0F0);
   }

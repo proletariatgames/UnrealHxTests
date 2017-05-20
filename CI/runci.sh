@@ -44,6 +44,8 @@ echo "building unit tests"
 echo "$BUILD_PATH HaxeUnitTests $PLATFORM Development \"-project=$WORKSPACE/HaxeUnitTests.uproject\" -editorrecompile -noubtmakefiles"
 $TIMECMD $BUILD_PATH HaxeUnitTests $PLATFORM Development "-project=$WORKSPACE/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles $EXTRAARGS || exit $?
 
+haxe --cwd "$WORKSPACE/Haxe" gen-build-script.hxml || exit $?
+
 # build the commandlet to create/update asset
 echo "running the update asset commandlet"
 export CUSTOM_STAMP="`date`"
@@ -51,4 +53,8 @@ $TIMECMD "$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -run=HaxeUnitTests.
 
 echo "running unit tests"
 MAP=/Game/Maps/HaxeTestEntryPoint
+$TIMECMD "$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -server "$MAP" -log -stdout
+
+echo "pass 2"
+haxe --cwd "$WORKSPACE/Haxe" gen-build-script.hxml -D pass=2 || exit $?
 $TIMECMD "$UE4"/$BINPATH "$WORKSPACE"/HaxeUnitTests.uproject -server "$MAP" -log -stdout || exit $?

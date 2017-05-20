@@ -9,6 +9,8 @@ import cases.TestUEnum;
 import SomeEnum;
 import unreal.*;
 
+using unreal.CoreAPI;
+
 typedef FDelHaxe0 = unreal.DynamicMulticastDelegate<FDelHaxe0, Void->Void>;
 typedef FDelHaxe1 = unreal.MulticastDelegate<FDelHaxe1, PRef<Int>->Void>;
 typedef FDelHaxe1_2 = unreal.MulticastDelegate<FDelHaxe1_2, PRef<FString>->Void>;
@@ -20,6 +22,12 @@ typedef FDelHaxe5 = unreal.DynamicMulticastDelegate<FDelHaxe5, Int->Int->Int->In
 typedef FDelHaxe6 = unreal.DynamicMulticastDelegate<FDelHaxe6, Int->Int->Int->Int->Int->Int->Void>;
 typedef FDelHaxe7 = unreal.DynamicMulticastDelegate<FDelHaxe7, Int->Int->Int->Int->Int->Int->Int->Void>;
 typedef FDelHaxe8 = unreal.DynamicMulticastDelegate<FDelHaxe8, Int->UUsesDelegate->Int->Int->Int->Int->Int->Int->Void>;
+
+typedef FDelHaxeUFun3 = unreal.DynamicMulticastDelegate<FDelHaxeUFun3, PRef<FSimpleUStruct>->Void>;
+typedef FDelHaxeUFun3_RV = unreal.DynamicDelegate<FDelHaxeUFun3_RV, PRef<FSimpleUStruct>->Int>;
+typedef FDelHaxeUFun4 = unreal.DynamicMulticastDelegate<FDelHaxeUFun4, Const<PRef<FSimpleUStruct>>->Void>;
+typedef FDelHaxeUFun4_RV = unreal.DynamicDelegate<FDelHaxeUFun4_RV, Const<PRef<FSimpleUStruct>>->UUsesDelegate>;
+typedef FDelHaxeUFun5 = unreal.DynamicDelegate<FDelHaxeUFun5, Float32->Float64->Int32->UInt32->FSimpleUStruct>;
 
 typedef FDelHaxe0_RV = unreal.Delegate<FDelHaxe0_RV, Void->Int>;
 typedef FDelHaxe1_RV = unreal.DynamicDelegate<FDelHaxe1_RV, Int->Int>;
@@ -37,36 +45,81 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
   @:uproperty(BlueprintAssignable, Category=Game)
   public var test0:FDelHaxe0;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test1:FDelHaxe0;
+  public var test1:DelIntInt;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test2:FDelHaxe0;
+  public var test2:FDelHaxe2;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test3:FDelHaxe0;
+  public var test3:FDelHaxe3;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test4:FDelHaxe0;
+  public var test4:FDelHaxe4;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test5:FDelHaxe0;
+  public var test5:FDelHaxe5;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test6:FDelHaxe0;
+  public var test6:FDelHaxe6;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test7:FDelHaxe0;
+  public var test7:FDelHaxe7;
   @:uproperty(BlueprintAssignable, Category=Game)
-  public var test8:FDelHaxe0;
+  public var test8:FDelHaxe8;
 
   @:uproperty
   public var testRV:FDelHaxe1_RV;
 
   public var testCRV:FDelHaxe0_RV;
 
+  public var lastSimpleStruct:FSimpleUStruct;
+
   public var numCallbacks:Int = 0;
   @:ufunction public function ufun() : Void {
     numCallbacks++;
+  }
+
+  @:ufunction public function ufun2(i:Int) : Int {
+    numCallbacks += i;
+    return numCallbacks;
+  }
+
+  @:ufunction public function ufun3(someStruct:PRef<FSimpleUStruct>):Void {
+    numCallbacks += 1;
+    someStruct.d1 = someStruct.f1;
+  }
+
+  @:ufunction public function ufun3_ret(someStruct:PRef<FSimpleUStruct>):Int {
+    numCallbacks += 1;
+    someStruct.d1 = someStruct.f1;
+    return someStruct.i32;
+  }
+
+  @:ufunction public function ufun4(someStruct:Const<PRef<FSimpleUStruct>>):Void {
+    numCallbacks += 1;
+    this.lastSimpleStruct = someStruct.copy();
+  }
+
+  @:ufunction public function ufun4_ret(someStruct:Const<PRef<FSimpleUStruct>>):UUsesDelegate {
+    numCallbacks += 1;
+    this.lastSimpleStruct = someStruct.copy();
+    return this;
+  }
+
+  @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32):FSimpleUStruct {
+    numCallbacks += 1;
+    return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
   }
 }
 
 class TestDelegates extends buddy.BuddySuite {
   public function new() {
     describe('Haxe - Delegates', {
+      cpp.vm.Gc.run(true);
+      cpp.vm.Gc.run(true);
+      var nDestructors = FSimpleUStruct.nDestructorCalled,
+          nCreated = FSimpleUStruct.nConstructorCalled + FSimpleUStruct.nCopyConstructorCalled;
+      inline function check(dif:Int, ?pos:haxe.PosInfos) {
+        var difDestruct = FSimpleUStruct.nDestructorCalled - nDestructors,
+            difCreated = FSimpleUStruct.nConstructorCalled + FSimpleUStruct.nCopyConstructorCalled - nCreated;
+        (difCreated - difDestruct).should.be(dif);
+        nDestructors = FSimpleUStruct.nDestructorCalled;
+        nCreated = FSimpleUStruct.nConstructorCalled + FSimpleUStruct.nCopyConstructorCalled;
+      }
       it('should be able to call delegates', {
         var x = DelIntInt.create();
         x.IsBound().should.be(false);
@@ -91,11 +144,176 @@ class TestDelegates extends buddy.BuddySuite {
       });
       it('should be able to bind to uobject functions', {
         var del = FDelHaxe_Multi.create();
+#if (!cppia && !WITH_CPPIA)
         var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
         obj.numCallbacks.should.be(0);
-        // del.AddUObject(obj, MethodPointer.fromMethod(obj.ufun));
-        // del.Broadcast();
-        // obj.numCallbacks.should.be(1);
+        del.AddUObject(obj, MethodPointer.fromMethod(obj.ufun));
+        del.Broadcast();
+        obj.numCallbacks.should.be(1);
+#end
+
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        obj.numCallbacks.should.be(0);
+        del.AddUFunction(obj.ufun);
+        del.Broadcast();
+        obj.numCallbacks.should.be(1);
+
+        var del = FDelHaxe0.create();
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        obj.numCallbacks.should.be(0);
+        del.AddDynamic(obj.ufun);
+        del.Broadcast();
+        obj.numCallbacks.should.be(1);
+
+        var del = FDelHaxe1_RV.create();
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        obj.numCallbacks.should.be(0);
+        obj.ufun2(10);
+        del.BindDynamic(obj.ufun2);
+        del.IsBound().should.be(true);
+        del.Execute(1).should.be(11);
+        obj.numCallbacks.should.be(11);
+        del.Execute(10).should.be(21);
+        obj.numCallbacks.should.be(21);
+
+        function run() {
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          obj.numCallbacks.should.be(0);
+          var del = new FDelHaxeUFun3();
+          del.AddDynamic(obj.ufun3);
+          var simple = FSimpleUStruct.create();
+          simple.f1 = 10;
+          simple.d1.should.be(0);
+          del.Broadcast(simple);
+          obj.numCallbacks.should.be(1);
+          simple.d1.should.be(10);
+        }
+        run();
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(0); // the same amount of constructors and destructors are called
+
+        function run() {
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          obj.numCallbacks.should.be(0);
+          var del = new FDelHaxeUFun3_RV();
+          del.BindDynamic(obj.ufun3_ret);
+          var simple = FSimpleUStruct.create();
+          simple.f1 = 22.2;
+          simple.i32 = 100;
+          simple.d1.should.be(0);
+          del.Execute(simple).should.be(100);
+          obj.numCallbacks.should.be(1);
+          simple.d1.should.beCloseTo(22.2);
+        }
+        run();
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(0); // the same amount of constructors and destructors are called
+
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        function run() {
+          obj.numCallbacks.should.be(0);
+          var del = new FDelHaxeUFun4();
+          del.AddDynamic(obj.ufun4);
+          var simple = FSimpleUStruct.create();
+          simple.f1 = 30;
+          simple.d1 = 40;
+          simple.i32 = 50;
+          simple.ui32 = 60;
+          del.Broadcast(simple);
+          obj.numCallbacks.should.be(1);
+          obj.lastSimpleStruct.f1.should.be(30);
+          obj.lastSimpleStruct.d1.should.be(40);
+          obj.lastSimpleStruct.i32.should.be(50);
+          obj.lastSimpleStruct.ui32.should.be(60);
+        }
+        run();
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(1);
+
+        function run() {
+          obj.lastSimpleStruct.f1.should.be(30);
+          obj.lastSimpleStruct = null;
+        }
+        run();
+
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(-1); // make it up for the last destructor
+
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        function run() {
+          obj.numCallbacks.should.be(0);
+          var del = new FDelHaxeUFun4_RV();
+          del.BindDynamic(obj.ufun4_ret);
+          var simple = FSimpleUStruct.create();
+          simple.f1 = 22.2;
+          simple.i32 = 100;
+          simple.d1.should.be(0);
+          del.Execute(simple).should.be(obj);
+          obj.numCallbacks.should.be(1);
+        }
+        run();
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(1);
+
+        function run() {
+          obj.lastSimpleStruct.f1.should.beCloseTo(22.2);
+          obj.lastSimpleStruct = null;
+        }
+        run();
+
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(-1); // make it up for the last destructor
+
+        var simple = null;
+        function run() {
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          obj.numCallbacks.should.be(0);
+          var del = new FDelHaxeUFun5();
+          del.BindDynamic(obj.ufun5);
+          simple = del.Execute(1.1, 2.2, 3, 4);
+          obj.numCallbacks.should.be(1);
+          simple.f1.should.beCloseTo(1.1);
+          simple.d1.should.beCloseTo(2.2);
+          simple.i32.should.beCloseTo(3);
+          simple.ui32.should.beCloseTo(4);
+        }
+        run();
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(1);
+
+        function run() {
+          simple.f1.should.beCloseTo(1.1);
+          simple.d1.should.beCloseTo(2.2);
+          simple.i32.should.beCloseTo(3);
+          simple.ui32.should.beCloseTo(4);
+          simple = null;
+        }
+        run();
+
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(-1); // make it up for the last destructor
       });
       it('should be able to unregister delegates from Haxe code', {
         var called = 0;

@@ -28,8 +28,8 @@ class ATestEntryPoint extends unreal.AActor {
       cases.TestStructs,
       cases.TestTemplates,
       cases.TestTArray,
-      cases.TestDelegates,
-      cases.TestUObjectOverrides
+      cases.TestUObjectOverrides,
+      cases.TestDelegates
     ));
 
     runner.run().then(function(_) {

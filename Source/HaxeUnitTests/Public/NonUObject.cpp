@@ -5,6 +5,10 @@ int FSimpleStruct::someStaticInt = 442;
 
 int32 FSimpleStruct::nDestructorCalled = 0;
 int32 FSimpleStruct::nConstructorCalled = 0;
+int32 FSimpleUStruct::nDestructorCalled = 0;
+int32 FSimpleUStruct::nConstructorCalled = 0;
+int32 FSimpleUStruct::nCopyConstructorCalled = 0;
+// int32 FSimpleUStruct::nMoveConstructorCalled = 0;
 
 static FSimpleStruct sharedRef = FSimpleStruct();
 

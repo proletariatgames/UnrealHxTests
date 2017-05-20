@@ -4,6 +4,7 @@ import UBasicTypesSub;
 import unreal.*;
 
 using unreal.CoreAPI;
+using helpers.TestHelper;
 
 class TestUObjectExterns extends buddy.BuddySuite {
 
@@ -156,7 +157,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
       describe('native functions', {
         it('should be able to be called (basic)', {
-          var ret = basic.setBool_String_UI8_I8(false, "Hello from function", 255, 127);
+          TestHelper.reflectCallPass2(var ret = basic.setBool_String_UI8_I8(false, "Hello from function", 255, 127));
           ret.should.not.be(null);
           ret.stringProp.toString().should.be("Hello from function");
           basic.boolProp.should.be(false);
@@ -295,7 +296,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
 @:uclass
 class UHaxeProtected1 extends UBasicTypesUObject {
   public function callProtectedFunc1() : UBasicTypesUObject {
-    return setBool_String_UI8_I8_protected(true, "Hello from protected", 254, -99);
+    TestHelper.reflectCallPass2(return setBool_String_UI8_I8_protected(true, "Hello from protected", 254, -99));
   }
   public function callProtectedFunc2() : Void  {
     nonUFUNCTION_setBool_String_UI8_I8_protected(false, "Second hello from protected", 253, -88);

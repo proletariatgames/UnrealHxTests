@@ -19,6 +19,17 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
   UFUNCTION()
   virtual int64 setText(FText text) override;
 
+  UFUNCTION(BlueprintImplementableEvent)
+  int32 bpImplementableEvent(const FString& s);
+
+  UFUNCTION(BlueprintNativeEvent)
+  int32 bpNativeEvent(FString& s);
+
+  int32 bpNativeEvent_Implementation(FString& s) {
+    return s.Len();
+  }
+
+
   virtual int32 getSomeNumber() const override {
     return 43;
   }

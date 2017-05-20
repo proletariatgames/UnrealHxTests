@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdio>
-#include <Engine.h>
+#include "Engine.h"
 #include "SomeEnum.h"
 #include "NonUObject.generated.h"
 
@@ -17,6 +17,52 @@ struct HAXEUNITTESTS_API FPODStruct {
   int32 i32;
   UPROPERTY()
   uint32 ui32;
+};
+
+USTRUCT()
+struct HAXEUNITTESTS_API FSimpleUStruct {
+  GENERATED_USTRUCT_BODY()
+
+  static int32 nDestructorCalled;
+  static int32 nConstructorCalled;
+  static int32 nCopyConstructorCalled;
+  // static int32 nMoveConstructorCalled;
+
+  float f1;
+  double d1;
+  int32 i32;
+  uint32 ui32;
+
+  bool usedDefaultConstructor;
+
+  FSimpleUStruct() : usedDefaultConstructor(true) {
+    nConstructorCalled++;
+  }
+
+  FSimpleUStruct(float iF1, double iD1, int32 iI32, uint32 iUi32) :
+    f1(iF1),
+    d1(iD1),
+    i32(iI32),
+    ui32(iUi32),
+    usedDefaultConstructor(false)
+  {
+    nConstructorCalled++;
+  }
+
+  FSimpleUStruct(const FSimpleUStruct& inOrig) :
+    f1(inOrig.f1),
+    d1(inOrig.d1),
+    i32(inOrig.i32),
+    ui32(inOrig.ui32),
+    usedDefaultConstructor(inOrig.usedDefaultConstructor)
+  {
+    nCopyConstructorCalled++;
+  }
+
+  virtual ~FSimpleUStruct() {
+    nDestructorCalled++;
+  }
+
 };
 
 class HAXEUNITTESTS_API FSimpleStruct {

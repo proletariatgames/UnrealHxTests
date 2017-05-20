@@ -16,6 +16,7 @@ export CI_RUNNING=1
 # haxelib install hxcpp || exit $?
 haxelib install hxcs || exit $?
 haxelib install buddy || exit $?
+haxelib install promhx || exit $?
 
 # build the build scripts
 cd Plugins/UE4Haxe
