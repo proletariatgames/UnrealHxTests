@@ -382,7 +382,6 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(FSimpleStruct.getRef(), 12, true);
           var copy2 = FSimpleStruct.getRef().copy();
           nObjects++;
-          nDestructors++;
           checkValues(copy2, 12, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
           copy2.i32 = 0xF1F0;
@@ -392,7 +391,6 @@ class TestStructs extends buddy.BuddySuite {
 
           var copy2 = FSimpleStruct.getRef().copy();
           nObjects++;
-          nDestructors++;
           setSomeValues(copy2, 14);
           checkValues(copy2, 14, true);
           checkValues(rawCopy, 13, true);

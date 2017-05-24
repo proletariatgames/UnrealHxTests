@@ -37,8 +37,14 @@ class ATestEntryPoint extends unreal.AActor {
       cpp.vm.Gc.run(true);
       trace('Ending stub implementation');
       if (Sys.getEnv("CI_RUNNING") == "1") {
+#if (pass == 2)
+        trace(Sys.getCwd());
         var success = !runner.failed();
         Sys.exit(success ? 0 : 2);
+#else
+        var success = !runner.failed();
+        Sys.exit(success ? 0 : 2);
+#end
       }
     });
     // do some tests

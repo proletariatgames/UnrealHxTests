@@ -5,6 +5,7 @@
 #include "BasicType2.h"
 #include "BasicTypesSub.generated.h"
 
+DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(int32, FDynIntInt, int32, name);
 /**
  * 
  */
@@ -24,6 +25,9 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
 
   UFUNCTION(BlueprintNativeEvent)
   int32 bpNativeEvent(FString& s);
+
+  UPROPERTY()
+  FDynIntInt someDelegate;
 
   int32 bpNativeEvent_Implementation(FString& s) {
     return s.Len();

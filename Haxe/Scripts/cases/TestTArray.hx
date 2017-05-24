@@ -140,10 +140,24 @@ class TestTArray extends buddy.BuddySuite {
       });
       it('should be able to use TArray as member of extern uclass types');
       it('should be able to use TArray as member of declared uclass types (UPROPERTY)', {
-        var obj = UObject.NewObject(new TypeParam<UTestTArray>());
-        obj.array.Push("Hello from Haxe!");
-        obj.array.length.should.be(1);
-        obj.array[0].toString().should.be("Hello from Haxe!");
+        var str = null;
+        function run() {
+          var obj = UObject.NewObject(new TypeParam<UTestTArray>());
+          obj.array.Push("Hello from Haxe!");
+          obj.array.length.should.be(1);
+          obj.array[0].toString().should.be("Hello from Haxe!");
+          obj.array.indexOf("Hello from Haxe!").should.be(0);
+          obj.array.indexOf("").should.be(-1);
+          // str = obj.array.Pop(false);
+          // obj.array.length.should.be(0);
+          // obj.array.Push("Test");
+          // obj.array.length.should.be(1);
+        }
+        run();
+
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+        // str.toString().should.be("Hello from Haxe!");
       });
       it('should be able to use indexOf structs', {
         var basic = UBasicTypesUObject.CreateFromCpp();

@@ -175,6 +175,7 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         d2.subclassArray.length.should.be(1);
         d2.subclassArray[0].should.be(UHaxeDerived2.StaticClass());
         d2.fname.toString().should.be('Serialization works!');
+        d2.uFunction5().toString().should.be('Serialization works!');
         d2.getSomeNumber().should.be(0xF00 * 10);
         d2.nonNative(25).should.be(35);
         d2.intProp = 10;
@@ -214,8 +215,14 @@ class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasic
   }
 
   public var otherInt:Int32;
+
+#if (pass >= 3)
+  @:uproperty
+  @:uname('someFName') public var fname:unreal.FString;
+#else
   @:uproperty
   @:uname('someFName') public var fname:unreal.FName;
+#end
 
   @:uproperty
   @:uname('protectedFName') private var protectedFName:unreal.FName;
@@ -267,10 +274,17 @@ class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasic
     this.otherInt = 10;
   }
 
+#if (pass >= 3)
+  @:ufunction
+  public function uFunction5():unreal.FString {
+    return fname;
+  }
+#else
   @:ufunction
   public function uFunction5():unreal.FName {
     return fname;
   }
+#end
 
   @:uproperty
   private var ttest:Bool;

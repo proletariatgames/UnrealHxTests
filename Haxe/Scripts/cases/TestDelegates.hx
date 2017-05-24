@@ -27,7 +27,17 @@ typedef FDelHaxeUFun3 = unreal.DynamicMulticastDelegate<FDelHaxeUFun3, PRef<FSim
 typedef FDelHaxeUFun3_RV = unreal.DynamicDelegate<FDelHaxeUFun3_RV, PRef<FSimpleUStruct>->Int>;
 typedef FDelHaxeUFun4 = unreal.DynamicMulticastDelegate<FDelHaxeUFun4, Const<PRef<FSimpleUStruct>>->Void>;
 typedef FDelHaxeUFun4_RV = unreal.DynamicDelegate<FDelHaxeUFun4_RV, Const<PRef<FSimpleUStruct>>->UUsesDelegate>;
+
+#if (pass >= 3)
+typedef FDelHaxeUFun5 = unreal.DynamicDelegate<FDelHaxeUFun5, Float32->Float64->Int32->UInt32->Bool->FSimpleUStruct>;
+#else
 typedef FDelHaxeUFun5 = unreal.DynamicDelegate<FDelHaxeUFun5, Float32->Float64->Int32->UInt32->FSimpleUStruct>;
+#end
+
+
+#if (pass >= 2)
+typedef FDelHaxeUFun5_Pass2 = unreal.DynamicDelegate<FDelHaxeUFun5_Pass2, Float32->Float64->Int32->UInt32->FSimpleUStruct>;
+#end
 
 typedef FDelHaxe0_RV = unreal.Delegate<FDelHaxe0_RV, Void->Int>;
 typedef FDelHaxe1_RV = unreal.DynamicDelegate<FDelHaxe1_RV, Int->Int>;
@@ -60,6 +70,26 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
   public var test7:FDelHaxe7;
   @:uproperty(BlueprintAssignable, Category=Game)
   public var test8:FDelHaxe8;
+
+  @:uproperty(BlueprintAssignable, Category=Game)
+  public var delUFun3:FDelHaxeUFun3;
+
+  @:uproperty(BlueprintAssignable, Category=Game)
+  public var delUFun3_RV:FDelHaxeUFun3_RV;
+
+  @:uproperty(BlueprintAssignable, Category=Game)
+  public var delUFun4:FDelHaxeUFun4;
+
+  @:uproperty(BlueprintAssignable, Category=Game)
+  public var delUFun4_RV:FDelHaxeUFun4_RV;
+
+  @:uproperty(BlueprintAssignable, Category=Game)
+  public var delUFun5:FDelHaxeUFun5;
+
+#if (pass >= 2)
+  @:uproperty(BlueprintAssignable, Category=Game)
+  public var delUFun5_pass2:FDelHaxeUFun5_Pass2;
+#end
 
   @:uproperty
   public var testRV:FDelHaxe1_RV;
@@ -100,10 +130,21 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
     return this;
   }
 
+#if (pass >= 3)
+  @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32, b:Bool):FSimpleUStruct {
+    numCallbacks += 1;
+    if (b) {
+      i32 = ui32;
+      d1 = f1;
+    }
+    return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
+  }
+#else
   @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32):FSimpleUStruct {
     numCallbacks += 1;
     return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
   }
+#end
 }
 
 class TestDelegates extends buddy.BuddySuite {
@@ -116,6 +157,9 @@ class TestDelegates extends buddy.BuddySuite {
       inline function check(dif:Int, ?pos:haxe.PosInfos) {
         var difDestruct = FSimpleUStruct.nDestructorCalled - nDestructors,
             difCreated = FSimpleUStruct.nConstructorCalled + FSimpleUStruct.nCopyConstructorCalled - nCreated;
+        if (difCreated - difDestruct != dif) {
+          haxe.Log.trace('$difCreated - $difDestruct', pos);
+        }
         (difCreated - difDestruct).should.be(dif);
         nDestructors = FSimpleUStruct.nDestructorCalled;
         nCreated = FSimpleUStruct.nConstructorCalled + FSimpleUStruct.nCopyConstructorCalled;
@@ -126,7 +170,7 @@ class TestDelegates extends buddy.BuddySuite {
       });
       it('should be able to declare delegates', {
         var x = FDelHaxe3.create();
-        // x.IsBound().should.be(false);
+        x.IsBound().should.be(false);
         x.Broadcast(1, 2, 3);
       });
       it('should be able to register delegates from Haxe code', {
@@ -158,35 +202,35 @@ class TestDelegates extends buddy.BuddySuite {
         del.Broadcast();
         obj.numCallbacks.should.be(1);
 
-        var del = FDelHaxe0.create();
         var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
         obj.numCallbacks.should.be(0);
-        del.AddDynamic(obj.ufun);
-        del.Broadcast();
+        obj.test0.AddDynamic(obj.ufun);
+        obj.test0.Broadcast();
         obj.numCallbacks.should.be(1);
 
-        var del = FDelHaxe1_RV.create();
         var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
         obj.numCallbacks.should.be(0);
         obj.ufun2(10);
-        del.BindDynamic(obj.ufun2);
-        del.IsBound().should.be(true);
-        del.Execute(1).should.be(11);
+        obj.testRV.BindDynamic(obj.ufun2);
+        obj.testRV.IsBound().should.be(true);
+        obj.testRV.Execute(1).should.be(11);
         obj.numCallbacks.should.be(11);
-        del.Execute(10).should.be(21);
+        obj.testRV.Execute(10).should.be(21);
         obj.numCallbacks.should.be(21);
 
         function run() {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
           obj.numCallbacks.should.be(0);
-          var del = new FDelHaxeUFun3();
-          del.AddDynamic(obj.ufun3);
+          obj.delUFun3.AddDynamic(obj.ufun3);
           var simple = FSimpleUStruct.create();
           simple.f1 = 10;
           simple.d1.should.be(0);
-          del.Broadcast(simple);
+          obj.delUFun3.Broadcast(simple);
           obj.numCallbacks.should.be(1);
+          simple.f1.should.be(10);
           simple.d1.should.be(10);
+          simple.i32.should.be(0);
+          simple.ui32.should.be(0);
         }
         run();
         // run twice to make sure that the finalizers run
@@ -198,13 +242,12 @@ class TestDelegates extends buddy.BuddySuite {
         function run() {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
           obj.numCallbacks.should.be(0);
-          var del = new FDelHaxeUFun3_RV();
-          del.BindDynamic(obj.ufun3_ret);
+          obj.delUFun3_RV.BindDynamic(obj.ufun3_ret);
           var simple = FSimpleUStruct.create();
           simple.f1 = 22.2;
           simple.i32 = 100;
           simple.d1.should.be(0);
-          del.Execute(simple).should.be(100);
+          obj.delUFun3_RV.Execute(simple).should.be(100);
           obj.numCallbacks.should.be(1);
           simple.d1.should.beCloseTo(22.2);
         }
@@ -218,14 +261,13 @@ class TestDelegates extends buddy.BuddySuite {
         var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
         function run() {
           obj.numCallbacks.should.be(0);
-          var del = new FDelHaxeUFun4();
-          del.AddDynamic(obj.ufun4);
+          obj.delUFun4.AddDynamic(obj.ufun4);
           var simple = FSimpleUStruct.create();
           simple.f1 = 30;
           simple.d1 = 40;
           simple.i32 = 50;
           simple.ui32 = 60;
-          del.Broadcast(simple);
+          obj.delUFun4.Broadcast(simple);
           obj.numCallbacks.should.be(1);
           obj.lastSimpleStruct.f1.should.be(30);
           obj.lastSimpleStruct.d1.should.be(40);
@@ -254,13 +296,12 @@ class TestDelegates extends buddy.BuddySuite {
         var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
         function run() {
           obj.numCallbacks.should.be(0);
-          var del = new FDelHaxeUFun4_RV();
-          del.BindDynamic(obj.ufun4_ret);
+          obj.delUFun4_RV.BindDynamic(obj.ufun4_ret);
           var simple = FSimpleUStruct.create();
           simple.f1 = 22.2;
           simple.i32 = 100;
           simple.d1.should.be(0);
-          del.Execute(simple).should.be(obj);
+          obj.delUFun4_RV.Execute(simple).should.be(obj);
           obj.numCallbacks.should.be(1);
         }
         run();
@@ -285,9 +326,55 @@ class TestDelegates extends buddy.BuddySuite {
         function run() {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
           obj.numCallbacks.should.be(0);
-          var del = new FDelHaxeUFun5();
-          del.BindDynamic(obj.ufun5);
-          simple = del.Execute(1.1, 2.2, 3, 4);
+          obj.delUFun5.BindDynamic(obj.ufun5);
+#if (pass >= 3)
+          simple = obj.delUFun5.Execute(1.1, 2.2, 3, 4, false);
+#else
+          simple = obj.delUFun5.Execute(1.1, 2.2, 3, 4);
+#end
+          obj.numCallbacks.should.be(1);
+          simple.f1.should.beCloseTo(1.1);
+          simple.d1.should.beCloseTo(2.2);
+          simple.i32.should.beCloseTo(3);
+          simple.ui32.should.beCloseTo(4);
+
+#if (pass >= 3)
+          var cur = obj.delUFun5.Execute(1.1, 2.2, 3, 4, true);
+          obj.numCallbacks.should.be(2);
+          simple.f1.should.beCloseTo(1.1);
+          simple.d1.should.beCloseTo(1.1);
+          simple.i32.should.beCloseTo(4);
+          simple.ui32.should.beCloseTo(4);
+#end
+        }
+        run();
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(1);
+
+        function run() {
+          simple.f1.should.beCloseTo(1.1);
+          simple.d1.should.beCloseTo(2.2);
+          simple.i32.should.beCloseTo(3);
+          simple.ui32.should.beCloseTo(4);
+          simple = null;
+        }
+        run();
+
+        // run twice to make sure that the finalizers run
+        cpp.vm.Gc.run(true);
+        cpp.vm.Gc.run(true);
+
+        check(-1); // make it up for the last destructor
+
+#if (pass >= 2)
+        var simple = null;
+        function run() {
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          obj.numCallbacks.should.be(0);
+          obj.delUFun5_pass2.BindDynamic(obj.ufun5);
+          simple = obj.delUFun5_pass2.Execute(1.1, 2.2, 3, 4);
           obj.numCallbacks.should.be(1);
           simple.f1.should.beCloseTo(1.1);
           simple.d1.should.beCloseTo(2.2);
@@ -314,6 +401,7 @@ class TestDelegates extends buddy.BuddySuite {
         cpp.vm.Gc.run(true);
 
         check(-1); // make it up for the last destructor
+#end
       });
       it('should be able to unregister delegates from Haxe code', {
         var called = 0;
