@@ -61,8 +61,8 @@ class TestReflect extends buddy.BuddySuite {
           obj1.struct2.simple.d1.should.be(2);
           obj1.struct2.simple.i32.should.be(333);
           obj1.struct2.simple.ui32.should.be(444);
-          obj1.struct2.myEnum.should.be(SomeEnum.EMyEnum.SomeEnum2);
-          obj1.struct2.myCppEnum.should.be(SomeEnum.EMyCppEnum.CppEnum2);
+          obj1.struct2.myEnum.should.equal(SomeEnum.EMyEnum.SomeEnum2);
+          obj1.struct2.myCppEnum.should.equal(SomeEnum.EMyCppEnum.CppEnum2);
         }
         run();
       });

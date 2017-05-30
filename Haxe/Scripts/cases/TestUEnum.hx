@@ -42,45 +42,45 @@ class TestUEnum extends buddy.BuddySuite {
         s.myEnum = SomeEnum1;
         s.myCppEnum = CppEnum1;
         s.myNamespacedEnum = NSEnum1;
-        s.myEnum.should.be(SomeEnum1);
-        s.myCppEnum.should.be(CppEnum1);
-        s.myNamespacedEnum.should.be(NSEnum1);
+        s.myEnum.should.equal(SomeEnum1);
+        s.myCppEnum.should.equal(CppEnum1);
+        s.myNamespacedEnum.should.equal(NSEnum1);
 
         s.myEnum = SomeEnum2;
         s.myCppEnum = CppEnum2;
         s.myNamespacedEnum = NSEnum2;
-        s.myEnum.should.be(SomeEnum2);
-        s.myCppEnum.should.be(CppEnum2);
-        s.myNamespacedEnum.should.be(NSEnum2);
+        s.myEnum.should.equal(SomeEnum2);
+        s.myCppEnum.should.equal(CppEnum2);
+        s.myNamespacedEnum.should.equal(NSEnum2);
 
         s.myEnum = SomeEnum3;
         s.myCppEnum = CppEnum3;
         s.myNamespacedEnum = NSEnum3;
-        s.myEnum.should.be(SomeEnum3);
-        s.myCppEnum.should.be(CppEnum3);
-        s.myNamespacedEnum.should.be(NSEnum3);
+        s.myEnum.should.equal(SomeEnum3);
+        s.myCppEnum.should.equal(CppEnum3);
+        s.myNamespacedEnum.should.equal(NSEnum3);
       });
       it('should be able to define new UEnums', {
         var val = E_1st;
-        val.should.be(E_1st);
+        val.should.equal(E_1st);
       });
       it('should be able to use uenums as uproperties', {
         var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
         obj.test1 = E_1st;
-        obj.test1.should.be(E_1st);
+        obj.test1.should.equal(E_1st);
         obj.test1 = E_2nd;
-        obj.test1.should.be(E_2nd);
+        obj.test1.should.equal(E_2nd);
         obj.test1 = E_3rd;
-        obj.test1.should.be(E_3rd);
+        obj.test1.should.equal(E_3rd);
       });
       it('should be able to pass enums back and forth to C++', {
         var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
         obj.setTest(E_1st);
-        obj.getTest().should.be(E_1st);
+        obj.getTest().should.equal(E_1st);
         obj.setTest(E_2nd);
-        obj.getTest().should.be(E_2nd);
+        obj.getTest().should.equal(E_2nd);
         obj.setTest(E_3rd);
-        obj.getTest().should.be(E_3rd);
+        obj.getTest().should.equal(E_3rd);
       });
       it('should be able to reference enums with params', {
         var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());

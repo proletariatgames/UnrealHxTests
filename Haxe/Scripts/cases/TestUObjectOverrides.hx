@@ -179,8 +179,15 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         d2.getSomeNumber().should.be(0xF00 * 10);
         d2.nonNative(25).should.be(35);
         d2.intProp = 10;
+#if (pass >= 3)
+        d2.uFunction1(10,true).should.be(20);
+        TestHelper.reflectCall(d2.uFunction1(10,true)).should.be(20);
+        d2.uFunction1(10,false).should.be(10);
+        TestHelper.reflectCall(d2.uFunction1(10,false)).should.be(10);
+#else
         d2.uFunction1().should.be(42);
         TestHelper.reflectCall(d2.uFunction1()).should.be(42);
+#end
         derived.intProp.should.be(0xBA5);
       });
     });
@@ -207,7 +214,7 @@ class UHaxeDerived0 extends UBasicTypesSub1 implements IBasicType2 {
 }
 #end
 
-@:uclass
+@:uclass(BlueprintType)
 class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasicTypesSub1 #end {
   public static function create():UHaxeDerived1 {
     var ret = UObject.NewObject(new TypeParam<UHaxeDerived1>());
@@ -216,7 +223,7 @@ class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasic
 
   public var otherInt:Int32;
 
-#if (pass >= 3)
+#if (pass >= 4)
   @:uproperty
   @:uname('someFName') public var fname:unreal.FString;
 #else
@@ -251,10 +258,17 @@ class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasic
     return this;
   }
 
-  @:ufunction
+#if (pass >= 3)
+  @:ufunction(BlueprintCallable, Category=Test)
+  public function uFunction1(i:Int, b:Bool):Int {
+    return b ? i * 2 : i;
+  }
+#else
+  @:ufunction(BlueprintCallable, Category=Test)
   public function uFunction1():Int {
     return 42;
   }
+#end
 
   @:ufunction(BlueprintCallable, Category=Testing)
   @:uname('uFunctionNameChanged') public function uFunction2():Int {
@@ -274,7 +288,7 @@ class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasic
     this.otherInt = 10;
   }
 
-#if (pass >= 3)
+#if (pass >= 4)
   @:ufunction
   public function uFunction5():unreal.FString {
     return fname;
@@ -298,7 +312,7 @@ class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasic
   public function TestFText(i32:unreal.Int32, someText:unreal.Const<unreal.PRef<unreal.FText>>) : Void;
 }
 
-@:uclass
+@:uclass(BlueprintType)
 class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements IBasicType2 #end {
   public static function create():UHaxeDerived2 {
     var ret = UObject.NewObject(new TypeParam<UHaxeDerived2>());
@@ -334,7 +348,7 @@ class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements 
   }
 }
 
-@:uclass
+@:uclass(BlueprintType)
 class UHaxeDerived3 extends UHaxeDerived2 {
   public static function create():UHaxeDerived3 {
     var ret = UObject.NewObject(new TypeParam<UHaxeDerived3>());

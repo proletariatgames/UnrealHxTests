@@ -28,14 +28,16 @@ typedef FDelHaxeUFun3_RV = unreal.DynamicDelegate<FDelHaxeUFun3_RV, PRef<FSimple
 typedef FDelHaxeUFun4 = unreal.DynamicMulticastDelegate<FDelHaxeUFun4, Const<PRef<FSimpleUStruct>>->Void>;
 typedef FDelHaxeUFun4_RV = unreal.DynamicDelegate<FDelHaxeUFun4_RV, Const<PRef<FSimpleUStruct>>->UUsesDelegate>;
 
-#if (pass >= 3)
+#if (pass >= 4)
 typedef FDelHaxeUFun5 = unreal.DynamicDelegate<FDelHaxeUFun5, Float32->Float64->Int32->UInt32->Bool->FSimpleUStruct>;
 #else
 typedef FDelHaxeUFun5 = unreal.DynamicDelegate<FDelHaxeUFun5, Float32->Float64->Int32->UInt32->FSimpleUStruct>;
 #end
 
 
-#if (pass >= 2)
+#if (pass >= 4)
+typedef FDelHaxeUFun5_Pass2 = unreal.DynamicDelegate<FDelHaxeUFun5_Pass2, Float32->Float64->Int32->UInt32->Bool->FSimpleUStruct>;
+#elseif (pass >= 2)
 typedef FDelHaxeUFun5_Pass2 = unreal.DynamicDelegate<FDelHaxeUFun5_Pass2, Float32->Float64->Int32->UInt32->FSimpleUStruct>;
 #end
 
@@ -54,8 +56,8 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
 @:uclass class UUsesDelegate extends unreal.UObject {
   @:uproperty(BlueprintAssignable, Category=Game)
   public var test0:FDelHaxe0;
-  @:uproperty(BlueprintAssignable, Category=Game)
-  public var test1:DelIntInt;
+  // @:uproperty(BlueprintAssignable, Category=Game)
+  // public var test1:DelIntInt;
   @:uproperty(BlueprintAssignable, Category=Game)
   public var test2:FDelHaxe2;
   @:uproperty(BlueprintAssignable, Category=Game)
@@ -130,7 +132,7 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
     return this;
   }
 
-#if (pass >= 3)
+#if (pass >= 4)
   @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32, b:Bool):FSimpleUStruct {
     numCallbacks += 1;
     if (b) {
@@ -327,7 +329,7 @@ class TestDelegates extends buddy.BuddySuite {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
           obj.numCallbacks.should.be(0);
           obj.delUFun5.BindDynamic(obj.ufun5);
-#if (pass >= 3)
+#if (pass >= 4)
           simple = obj.delUFun5.Execute(1.1, 2.2, 3, 4, false);
 #else
           simple = obj.delUFun5.Execute(1.1, 2.2, 3, 4);
@@ -338,7 +340,7 @@ class TestDelegates extends buddy.BuddySuite {
           simple.i32.should.beCloseTo(3);
           simple.ui32.should.beCloseTo(4);
 
-#if (pass >= 3)
+#if (pass >= 4)
           var cur = obj.delUFun5.Execute(1.1, 2.2, 3, 4, true);
           obj.numCallbacks.should.be(2);
           simple.f1.should.beCloseTo(1.1);
@@ -374,12 +376,24 @@ class TestDelegates extends buddy.BuddySuite {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
           obj.numCallbacks.should.be(0);
           obj.delUFun5_pass2.BindDynamic(obj.ufun5);
+#if (pass >= 4)
+          simple = obj.delUFun5_pass2.Execute(1.1, 2.2, 3, 4, false);
+#else
           simple = obj.delUFun5_pass2.Execute(1.1, 2.2, 3, 4);
+#end
           obj.numCallbacks.should.be(1);
           simple.f1.should.beCloseTo(1.1);
           simple.d1.should.beCloseTo(2.2);
           simple.i32.should.beCloseTo(3);
           simple.ui32.should.beCloseTo(4);
+#if (pass >= 4)
+          var cur = obj.delUFun5_pass2.Execute(1.1, 2.2, 3, 4, true);
+          obj.numCallbacks.should.be(2);
+          simple.f1.should.beCloseTo(1.1);
+          simple.d1.should.beCloseTo(1.1);
+          simple.i32.should.beCloseTo(4);
+          simple.ui32.should.beCloseTo(4);
+#end
         }
         run();
         cpp.vm.Gc.run(true);
@@ -464,12 +478,12 @@ class TestDelegates extends buddy.BuddySuite {
           didRun = true;
           return E_2nd;
         });
-        t2.Execute('hello').should.be(E_2nd);
+        t2.Execute('hello').should.equal(E_2nd);
         didRun.should.be(true);
         didRun = false;
         var basic = UBasicTypesUObject.CreateFromCpp();
         basic.stringNonProp = 'hello';
-        t2.Execute(basic.stringNonProp).should.be(E_2nd);
+        t2.Execute(basic.stringNonProp).should.equal(E_2nd);
         didRun.should.be(true);
         didRun = false;
 
@@ -482,10 +496,10 @@ class TestDelegates extends buddy.BuddySuite {
         });
         var basic2 = UObject.NewObject(new TypeParam<UBasicTypesSub1>());
         basic2.stringNonProp = 'Works';
-        t3.Execute(basic2).should.be(SomeEnum1);
+        t3.Execute(basic2).should.equal(SomeEnum1);
         didRun.should.be(true);
         didRun = false;
-        t3.Execute(null).should.be(SomeEnum2);
+        t3.Execute(null).should.equal(SomeEnum2);
         didRun.should.be(true);
         didRun = false;
 

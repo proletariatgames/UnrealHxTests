@@ -18,7 +18,8 @@ class ATestEntryPoint extends unreal.AActor {
     var f:UFactory = null;
   }
 
-  override public function Tick(deltaTime:Float32) {
+  // we define this as live so we can load a new cppia version on the third pass
+  @:live override public function Tick(deltaTime:Float32) {
     if (!didTick) didTick = true; else return;
     var reporter = new buddy.reporting.TraceReporter();
 
@@ -32,19 +33,38 @@ class ATestEntryPoint extends unreal.AActor {
       cases.TestDelegates
     ));
 
+    var curPass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
+
+    var nextPass:Null<Int> = null;
+    if (curPass == 2) {
+      nextPass = curPass + 1;
+    }
+
+    trace('running pass $curPass');
+
     runner.run().then(function(_) {
       cpp.vm.Gc.run(true);
       cpp.vm.Gc.run(true);
       trace('Ending stub implementation');
       if (Sys.getEnv("CI_RUNNING") == "1") {
-#if (pass == 2)
-        trace(Sys.getCwd());
         var success = !runner.failed();
-        Sys.exit(success ? 0 : 2);
-#else
-        var success = !runner.failed();
-        Sys.exit(success ? 0 : 2);
-#end
+        if (nextPass != null) {
+          if (!success) {
+            Sys.exit(nextPass);
+          }
+
+          CoreAPI.onCppiaReload(function() {
+            didTick = false;
+          });
+
+          var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
+          if (cmd != 0) {
+            trace('Error', 'Error while compiling pass $nextPass');
+            Sys.exit(cmd);
+          }
+        } else {
+          Sys.exit(success ? 0 : 2);
+        }
       }
     });
     // do some tests

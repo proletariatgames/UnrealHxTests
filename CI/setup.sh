@@ -13,7 +13,7 @@ export CI=1
 export CI_RUNNING=1
 
 # install all needed libraries
-# haxelib install hxcpp || exit $?
+haxelib install hxcpp || exit $?
 haxelib install hxcs || exit $?
 haxelib install buddy || exit $?
 haxelib install promhx || exit $?
