@@ -28,11 +28,7 @@ typedef FDelHaxeUFun3_RV = unreal.DynamicDelegate<FDelHaxeUFun3_RV, PRef<FSimple
 typedef FDelHaxeUFun4 = unreal.DynamicMulticastDelegate<FDelHaxeUFun4, Const<PRef<FSimpleUStruct>>->Void>;
 typedef FDelHaxeUFun4_RV = unreal.DynamicDelegate<FDelHaxeUFun4_RV, Const<PRef<FSimpleUStruct>>->UUsesDelegate>;
 
-#if (pass >= 4)
-typedef FDelHaxeUFun5 = unreal.DynamicDelegate<FDelHaxeUFun5, Float32->Float64->Int32->UInt32->Bool->FSimpleUStruct>;
-#else
 typedef FDelHaxeUFun5 = unreal.DynamicDelegate<FDelHaxeUFun5, Float32->Float64->Int32->UInt32->FSimpleUStruct>;
-#end
 
 
 #if (pass >= 4)
@@ -132,18 +128,18 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
     return this;
   }
 
+  @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32):FSimpleUStruct {
+    numCallbacks += 1;
+    return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
+  }
+
 #if (pass >= 4)
-  @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32, b:Bool):FSimpleUStruct {
+  @:ufunction public function ufun6(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32, b:Bool):FSimpleUStruct {
     numCallbacks += 1;
     if (b) {
       i32 = ui32;
       d1 = f1;
     }
-    return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
-  }
-#else
-  @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32):FSimpleUStruct {
-    numCallbacks += 1;
     return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
   }
 #end
@@ -329,25 +325,12 @@ class TestDelegates extends buddy.BuddySuite {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
           obj.numCallbacks.should.be(0);
           obj.delUFun5.BindDynamic(obj.ufun5);
-#if (pass >= 4)
-          simple = obj.delUFun5.Execute(1.1, 2.2, 3, 4, false);
-#else
           simple = obj.delUFun5.Execute(1.1, 2.2, 3, 4);
-#end
           obj.numCallbacks.should.be(1);
           simple.f1.should.beCloseTo(1.1);
           simple.d1.should.beCloseTo(2.2);
           simple.i32.should.beCloseTo(3);
           simple.ui32.should.beCloseTo(4);
-
-#if (pass >= 4)
-          var cur = obj.delUFun5.Execute(1.1, 2.2, 3, 4, true);
-          obj.numCallbacks.should.be(2);
-          simple.f1.should.beCloseTo(1.1);
-          simple.d1.should.beCloseTo(1.1);
-          simple.i32.should.beCloseTo(4);
-          simple.ui32.should.beCloseTo(4);
-#end
         }
         run();
         cpp.vm.Gc.run(true);
@@ -375,10 +358,11 @@ class TestDelegates extends buddy.BuddySuite {
         function run() {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
           obj.numCallbacks.should.be(0);
-          obj.delUFun5_pass2.BindDynamic(obj.ufun5);
 #if (pass >= 4)
+          obj.delUFun5_pass2.BindDynamic(obj.ufun6);
           simple = obj.delUFun5_pass2.Execute(1.1, 2.2, 3, 4, false);
 #else
+          obj.delUFun5_pass2.BindDynamic(obj.ufun5);
           simple = obj.delUFun5_pass2.Execute(1.1, 2.2, 3, 4);
 #end
           obj.numCallbacks.should.be(1);
@@ -389,10 +373,10 @@ class TestDelegates extends buddy.BuddySuite {
 #if (pass >= 4)
           var cur = obj.delUFun5_pass2.Execute(1.1, 2.2, 3, 4, true);
           obj.numCallbacks.should.be(2);
-          simple.f1.should.beCloseTo(1.1);
-          simple.d1.should.beCloseTo(1.1);
-          simple.i32.should.beCloseTo(4);
-          simple.ui32.should.beCloseTo(4);
+          cur.f1.should.beCloseTo(1.1);
+          cur.d1.should.beCloseTo(1.1);
+          cur.i32.should.beCloseTo(4);
+          cur.ui32.should.beCloseTo(4);
 #end
         }
         run();

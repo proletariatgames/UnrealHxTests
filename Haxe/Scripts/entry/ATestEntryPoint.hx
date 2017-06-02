@@ -15,7 +15,6 @@ class ATestEntryPoint extends unreal.AActor {
   public function new(wrapped) {
     super(wrapped);
     this.PrimaryActorTick.bCanEverTick = true;
-    var f:UFactory = null;
   }
 
   // we define this as live so we can load a new cppia version on the third pass
@@ -46,8 +45,25 @@ class ATestEntryPoint extends unreal.AActor {
       cpp.vm.Gc.run(true);
       cpp.vm.Gc.run(true);
       trace('Ending stub implementation');
+      var success = !runner.failed();
+
       if (Sys.getEnv("CI_RUNNING") == "1") {
-        var success = !runner.failed();
+#if WITH_EDITOR
+        if (GetWorld().IsPlayInEditor()) {
+          if (!success) {
+            trace('Error', 'Test failed. Exiting');
+            // the only way to make sure that UE exits with a non-0 code is to actually exit ourselves
+            Sys.exit(curPass == null ? 10 : curPass);
+          }
+
+          var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
+          if (pc != null) {
+            pc.ConsoleCommand("Exit", true);
+          }
+
+          return;
+        }
+#end
         if (nextPass != null) {
           if (!success) {
             Sys.exit(nextPass);
@@ -69,13 +85,6 @@ class ATestEntryPoint extends unreal.AActor {
     });
     // do some tests
   }
-
-  // override function BeginDestroy() {
-  //   super.BeginDestroy();
-  //   // test hot reload when begin destroy is overridden
-  //
-  //   trace('Begin destroy!');
-  // }
 }
 #end
 

@@ -1,5 +1,6 @@
 package cases;
 import unreal.*;
+import NonUObject;
 using buddy.Should;
 import UBasicTypesSub;
 
@@ -62,6 +63,7 @@ class TestUObjectOverrides extends buddy.BuddySuite {
 
           obj1.i32Prop = 222;
           obj1.getSomeNumber().should.be(2220);
+          var cur = obj1.returnsItself();
           obj1.returnsItself().getSomeNumber().should.be(2220);
           TestHelper.reflectCall(obj1.returnsItself()).getSomeNumber().should.be(2220);
         }
@@ -80,6 +82,16 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         obj4.nonNative(10).should.be(320);
         obj4.getSubName().toString().should.be("HaxeDerived4");
         testObj(obj4,3);
+
+        var obj5 = UHaxeDerived5.create();
+        obj5.theStr.toString().should.be("the str");
+        obj5.theStr = "test";
+        obj5.theStr.toString().should.be("test");
+        setSomeValues(obj5, 3);
+        checkValues(obj5, 3, __status);
+        obj5.nonNative(10).should.be(320);
+        obj5.getSubName().toString().should.be("HaxeDerived5");
+        testObj(obj5,3);
 #end
       });
       it('should be able to have their functions overridden', {
@@ -115,6 +127,22 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         obj4.newProperty.toString().should.be('Dynamic load ok');
         obj4.getSubName().toString().should.be('HaxeDerived4');
         obj4.textProp.toString().should.be('test2()');
+
+        var obj5 = UHaxeDerived5.create();
+        obj5.setText("MyText").should.be(unreal.Int64Helpers.make(0x0111,0xF0F0));
+        obj5.otherProp = unreal.Int64Helpers.make(0x0222,0xF0F5);
+        obj5.otherProp2 = unreal.Int64Helpers.make(0x1333,0xF3F4);
+        obj5.otherProp.should.be(unreal.Int64Helpers.make(0x0222, 0xF0F5));
+        obj5.otherProp2.should.be(unreal.Int64Helpers.make(0x1333, 0xF3F4));
+
+        obj5.boolProp.should.be(true);
+        obj5.stringProp.toString().should.be("MyText");
+        obj5.ui8Prop.should.be(100);
+        obj5.i8Prop.should.be(101);
+
+        obj5.newProperty.toString().should.be('Dynamic load ok');
+        obj5.getSubName().toString().should.be('HaxeDerived5');
+        obj5.textProp.toString().should.be('test3()');
 #end
       }); // check if native side sees it as well
       it('should be able to check physical equality', {
@@ -136,22 +164,142 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       });
       it('should be able to call StaticClass', {
         UHaxeDerived1.StaticClass().should.not.be(null);
-        UHaxeDerived1.StaticClass().GetDesc().toString().should.be('HaxeDerived1');
+        UHaxeDerived1.StaticClass().GetName().toString().should.be('HaxeDerived1');
         UHaxeDerived2.StaticClass().should.not.be(null);
-        UHaxeDerived2.StaticClass().GetDesc().toString().should.be('HaxeDerived2');
+        UHaxeDerived2.StaticClass().GetName().toString().should.be('HaxeDerived2');
         UHaxeDerived3.StaticClass().should.not.be(null);
-        UHaxeDerived3.StaticClass().GetDesc().toString().should.be('HaxeDerived3');
+        UHaxeDerived3.StaticClass().GetName().toString().should.be('HaxeDerived3');
 #if (pass >= 2)
-        UHaxeDerived4.StaticClass().GetDesc().toString().should.be('HaxeDerived4');
+        trace(1);
+        UHaxeDerived4.StaticClass().GetName().toString().should.be('HaxeDerived4');
+        trace(2);
+        UHaxeDerived5.StaticClass().GetName().toString().should.be('HaxeDerived5');
+
+        trace(6);
+        UHaxeDynamicClass1.StaticClass().GetName().toString().should.be('HaxeDynamicClass1');
+        trace(3);
+        UHaxeDynamicClass2.StaticClass().GetName().toString().should.be('HaxeDynamicClass2');
+        trace(4);
+        UHaxeDynamicClass3.StaticClass().GetName().toString().should.be('HaxeDynamicClass3');
+        trace(5);
+        UHaxeDynamicClass4.StaticClass().GetName().toString().should.be('HaxeDynamicClass4');
 #end
       });
-      // test const this
-      it('should be able to call super methods');
-      it('should be able to define non-uclass classes');
-      it('should be able to define new uproperties (basic)');
-      it('should be able to define new ufunctions (basic)');
-      it('should be able to perform garbage-collection operations inside an overridden code');
-      it('should be able to throw inside overridden code');
+
+#if (pass >= 2)
+      it('should be able to create dynamic classes', {
+        function testDynamicClass(obj:UHaxeDynamicClass1, name:String) {
+          trace(name);
+          obj.nonUPropInt64.should.be(0);
+          obj.nonUPropInt64 = 0x42424242;
+          obj.nonUPropInt64.should.be(0x42424242);
+          obj.setProps("obj-str2", 0xF0F1F2F3, 0x1B2B3B4).toString().should.be("setProps obj-str2");
+          obj.str.toString().should.be("obj-str2");
+          obj.i32.should.be(0xF0F1F2F3);
+          obj.ui32.should.be(0x1B2B3B4);
+
+          TestHelper.reflectCall(obj.setProps("obj-str3", 0xA0A1A2A3, 0x1C2C3C4)).toString().should.be("setProps obj-str3");
+          obj.str.toString().should.be("obj-str3");
+          obj.i32.should.be(0xA0A1A2A3);
+          obj.ui32.should.be(0x1C2C3C4);
+
+          obj.str = "obj-str";
+          obj.i32 = 0xF00B45;
+          obj.ui32 = 0x00DF00D;
+          obj.str.toString().should.be('obj-str');
+          obj.i32.should.be(0xF00B45);
+          obj.ui32.should.be(0x00DF00D);
+          obj.getSelf().should.be(obj);
+
+          obj.getName().toString().should.be(name);
+          obj.getSelf().getName().toString().should.be(name);
+          TestHelper.reflectCall(obj.getName()).toString().should.be(name);
+          TestHelper.reflectCall(TestHelper.reflectCall(obj.getSelf()).getName()).toString().should.be(name);
+        }
+
+        var obj1 = UHaxeDynamicClass1.create();
+        testDynamicClass(obj1, "Dynamic1");
+
+        var obj2 = UHaxeDynamicClass2.create();
+#if (pass >= 4)
+        obj2.test.toString().should.be("test");
+#end
+        obj2.str.toString().should.be("UHaxeDynamicClass2");
+        obj2.i32_2.should.be(0);
+        obj2.someStruct.i32.should.be(0);
+        testDynamicClass(obj2, "Dynamic2");
+#if (pass >= 4)
+        obj2.test = "test2";
+        obj2.test.toString().should.be("test2");
+#end
+        obj2.i32_2.should.be(10);
+        obj2.someStruct.i32.should.be(0);
+        obj2.someStruct.ui32.should.be(0);
+        obj2.someStruct.f.should.be(0);
+        obj2.someStruct.d.should.be(0);
+        obj2.i32_2 = 0x606060;
+        obj2.i32_2.should.be(0x606060);
+
+        var obj3 = UHaxeDynamicClass3.create();
+#if (pass >= 4)
+        obj3.test.toString().should.be("test");
+#end
+        obj3.str.toString().should.be("UHaxeDynamicClass3");
+        obj3.i32_2.should.be(0);
+#if (pass >= 3)
+        obj3.i32_3.should.be(0);
+#end
+        obj3.someStruct.i32.should.be(0);
+        testDynamicClass(obj3, "Dynamic3");
+#if (pass >= 4)
+        obj3.test = "test2";
+        obj3.test.toString().should.be("test2");
+#end
+        obj3.otherStr.toString().should.be('getSelf()');
+        obj3.i32_2.should.be(10);
+        obj3.someStruct.i32.should.be(0);
+        obj3.someStruct.ui32.should.be(0);
+        obj3.someStruct.f.should.be(0);
+        obj3.someStruct.d.should.be(0);
+        obj3.i32_2 = 0x606060;
+        obj3.i32_2.should.be(0x606060);
+#if (pass >= 3)
+        obj3.i32_3 = 0x060606;
+        obj3.i32_3.should.be(0x060606);
+#end
+
+        var obj4 = UHaxeDynamicClass4.create();
+#if (pass >= 4)
+        obj4.test.toString().should.be("test");
+#end
+        obj4.str.toString().should.be("UHaxeDynamicClass4");
+        obj4.otherStr2.toString().should.be("Test");
+        obj4.i32_2.should.be(0);
+#if (pass >= 3)
+        obj4.i32_3.should.be(0);
+#end
+        obj4.someStruct.i32.should.be(0);
+        testDynamicClass(obj4, "Dynamic4");
+#if (pass >= 4)
+        obj4.test = "test2";
+        obj4.test.toString().should.be("test2");
+#end
+        obj4.otherStr2.toString().should.be("getSelf2()");
+        obj4.otherStr.toString().should.be('getSelf()');
+        obj4.i32_2.should.be(10);
+        obj4.someStruct.i32.should.be(0);
+        obj4.someStruct.ui32.should.be(0);
+        obj4.someStruct.f.should.be(0);
+        obj4.someStruct.d.should.be(0);
+        obj4.i32_2 = 0x606060;
+        obj4.i32_2.should.be(0x606060);
+#if (pass >= 3)
+        obj4.i32_3 = 0x060606;
+        obj4.i32_3.should.be(0x060606);
+#end
+      });
+#end
+
       it('should be released when UObject is garbage collected');
       it('should be able to access super protected fields');
 
@@ -449,6 +597,32 @@ class UHaxeDerived4 extends UHaxeDerived3 {
 }
 
 @:uclass
+class UHaxeDerived5 extends UHaxeDerived4 {
+#if (pass >= 3)
+  @:uproperty public var theStr:FString;
+#else
+  @:uproperty public var theStr:FName;
+#end
+  public function new(wrapped) {
+    super(wrapped);
+    this.theStr = "the str";
+  }
+
+  public static function create():UHaxeDerived5 {
+    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDerived5.StaticClass(), "", 0);
+    return cast ret;
+  }
+
+  override public function getSubName():FString {
+    return "HaxeDerived5";
+  }
+
+  override private function test() {
+    return "test3()";
+  }
+}
+
+@:uclass
 class AHaxeTestActorReplication2 extends AActor {
   @:uproperty @:ureplicate
   public var replicatedPropA:unreal.Int32;
@@ -469,6 +643,137 @@ class AHaxeTestActorReplication2 extends AActor {
 
   @:ufunction
   function onRep_replicatedPropB(i:unreal.Int32) : Void {
+  }
+}
+
+@:uclass
+class UHaxeDynamicClass1 extends UObject {
+  @:uproperty
+  public var str:FString;
+
+  @:uproperty
+  public var i32:Int32;
+
+  @:uproperty
+  public var ui32:UInt32;
+
+  public var nonUPropInt64:Int64;
+
+  public function new(wrapped) {
+    super(wrapped);
+    this.str = "UHaxeDynamicClass1";
+  }
+
+  @:ufunction public function getSelf():UHaxeDynamicClass1 {
+    return this;
+  }
+
+  @:ufunction public function getName():FString {
+    return "Dynamic1";
+  }
+
+  @:ufunction public function setProps(str:FString, i32:Int32, ui32:UInt32):FString {
+    this.str = str;
+    this.i32 = i32;
+    this.ui32 = ui32;
+    return "setProps " + str;
+  }
+
+  public static function create():UHaxeDynamicClass1 {
+    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass1.StaticClass(), "", 0);
+    return cast ret;
+  }
+}
+
+@:uclass
+class UHaxeDynamicClass2 extends UHaxeDynamicClass1 {
+#if (pass >= 4)
+  @:uproperty
+  public var test:FString;
+#end
+
+  @:uproperty public var i32_2:Int32;
+
+  @:uproperty public var someStruct:FPODStruct;
+
+  public function new(wrapped) {
+    super(wrapped);
+    this.str = "UHaxeDynamicClass2";
+#if (pass >= 4)
+    this.test = "test";
+#end
+  }
+
+  override public function getName():FString {
+    return "Dynamic2";
+  }
+
+  public static function create():UHaxeDynamicClass2 {
+    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass2.StaticClass(), "", 0);
+    return cast ret;
+  }
+
+  override public function getSelf():UHaxeDynamicClass2 {
+    i32_2 = 10;
+    return this;
+  }
+}
+
+@:uclass
+class UHaxeDynamicClass3 extends UHaxeDynamicClass2 {
+#if (pass >= 3)
+  @:uproperty
+  public var otherStr:FString;
+
+  @:uproperty
+  public var i32_3:Int32;
+#else
+  @:uproperty
+  public var otherStr:FName;
+#end
+
+  public function new(wrapped) {
+    super(wrapped);
+    this.str = "UHaxeDynamicClass3";
+  }
+
+  override public function getName():FString {
+    return "Dynamic3";
+  }
+
+  public static function create():UHaxeDynamicClass3 {
+    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass3.StaticClass(), "", 0);
+    return cast ret;
+  }
+
+  override public function getSelf():UHaxeDynamicClass3 {
+    otherStr = "getSelf()";
+    return cast super.getSelf();
+  }
+}
+
+@:uclass
+class UHaxeDynamicClass4 extends UHaxeDynamicClass3 {
+  @:uproperty public var otherStr2:FString;
+
+  public function new(wrapped) {
+    super(wrapped);
+    this.str = "UHaxeDynamicClass4";
+    this.otherStr2 = "Test";
+  }
+
+  override public function getName():FString {
+    return "Dynamic4";
+  }
+
+  public static function create():UHaxeDynamicClass4 {
+    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass4.StaticClass(), "", 0);
+    return cast ret;
+  }
+
+  override public function getSelf():UHaxeDynamicClass4 {
+    otherStr2 = "getSelf2()";
+    return cast super.getSelf();
   }
 }
 #end
