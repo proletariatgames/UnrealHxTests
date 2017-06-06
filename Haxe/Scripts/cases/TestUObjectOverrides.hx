@@ -170,18 +170,12 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         UHaxeDerived3.StaticClass().should.not.be(null);
         UHaxeDerived3.StaticClass().GetName().toString().should.be('HaxeDerived3');
 #if (pass >= 2)
-        trace(1);
         UHaxeDerived4.StaticClass().GetName().toString().should.be('HaxeDerived4');
-        trace(2);
         UHaxeDerived5.StaticClass().GetName().toString().should.be('HaxeDerived5');
 
-        trace(6);
         UHaxeDynamicClass1.StaticClass().GetName().toString().should.be('HaxeDynamicClass1');
-        trace(3);
         UHaxeDynamicClass2.StaticClass().GetName().toString().should.be('HaxeDynamicClass2');
-        trace(4);
         UHaxeDynamicClass3.StaticClass().GetName().toString().should.be('HaxeDynamicClass3');
-        trace(5);
         UHaxeDynamicClass4.StaticClass().GetName().toString().should.be('HaxeDynamicClass4');
 #end
       });
@@ -189,7 +183,6 @@ class TestUObjectOverrides extends buddy.BuddySuite {
 #if (pass >= 2)
       it('should be able to create dynamic classes', {
         function testDynamicClass(obj:UHaxeDynamicClass1, name:String) {
-          trace(name);
           obj.nonUPropInt64.should.be(0);
           obj.nonUPropInt64 = 0x42424242;
           obj.nonUPropInt64.should.be(0x42424242);
