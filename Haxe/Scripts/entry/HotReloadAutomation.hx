@@ -1,4 +1,6 @@
 package entry;
+#if WITH_EDITOR
+import unreal.editor.ULevelEditorPlaySettings;
 import unreal.automation.EAutomationFlags;
 import unreal.automation.EngineLatentCommands;
 import unreal.*;
@@ -6,13 +8,26 @@ import unreal.*;
 class HotReloadAutomation extends unreal.automation.AutomationTest {
   static var pass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
   override private function RunTest(Parameters:unreal.FString):Bool {
-    this.addHaxeCommand(EngineLatentCommands.loadMapPIE("/Game/Maps/HaxeTestEntryPoint"));
+    this.addHaxeCommand(loadPIE("/Game/Maps/HaxeTestEntryPoint"));
     this.addHaxeCommand(EngineLatentCommands.waitForMapToLoadCommand());
     this.addHaxeCommand(waitUntilTestFinishes());
     if (pass == 3) {
       this.addHaxeCommand(buildNextPass());
     }
     return true;
+  }
+
+  static function loadPIE(name:String) {
+    var fn = null;
+    return function() {
+      if (fn == null) {
+        var config:ULevelEditorPlaySettings = cast ULevelEditorPlaySettings.StaticClass().GetDefaultObject(true);
+        config.SetPlayNetDedicated(false);
+        config.SetPlayNumberOfClients(1);
+        fn = EngineLatentCommands.loadMapPIE(name);
+      }
+      return fn();
+    }
   }
 
   static function buildNextPass() {
@@ -56,3 +71,4 @@ class HotReloadAutomation extends unreal.automation.AutomationTest {
     return EAutomationFlags.EditorContext | CommandletContext | EngineFilter;
   }
 }
+#end
