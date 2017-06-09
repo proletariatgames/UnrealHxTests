@@ -23,4 +23,27 @@ public:
     DOREPLIFETIME(AReplicationTests, intArray);
     DOREPLIFETIME(AReplicationTests, something);
   }
+
+
+  UFUNCTION(NetMulticast, Reliable)
+  void doSomething(const FString& str);
+
+  void doSomething_Implementation(const FString& str) {
+  }
+
+  UFUNCTION(NetMulticast, Reliable)
+  void doSomething2(const FString& str);
+
+  void doSomething2_Implementation(const FString& str) {
+  }
+
+  UFUNCTION(Server, WithValidation, Reliable)
+  void Server_WithValidation_Reliable(const FString& str);
+
+  void Server_WithValidation_Reliable_Implementation(const FString& str) {
+  }
+
+  bool Server_WithValidation_Reliable_Validate(const FString& str) {
+    return true;
+  }
 };

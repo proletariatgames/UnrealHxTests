@@ -59,6 +59,7 @@ import unreal.*;
   public var d:Float64;
   public var i32:Int32;
   public var ui32:FakeUInt32;
+  public function new();
 }
 
 @:umodule("HaxeUnitTests")

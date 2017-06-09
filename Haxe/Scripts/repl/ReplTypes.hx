@@ -2,15 +2,14 @@ package repl;
 import unreal.*;
 import NonUObject;
 
+using unreal.CoreAPI;
+
 @:uclass class AReplicationTest extends AActor {
   @:uproperty(Transient) @:ureplicate(InitialOnly)
   public var initialOnRep:Int32;
 
   @:uproperty @:ureplicate
   public var i32:Int32;
-
-  @:uproperty @:ureplicate(OwnerOnly)
-  public var i32OwnerOnly:Int32;
 
   @:uproperty @:ureplicate
   public var fstring:FString;
@@ -21,11 +20,16 @@ import NonUObject;
   @:uproperty @:ureplicate(i32ShouldRep)
   public var i32RepFunc:Int32;
 
-  @:uproperty @:ureplicate
-  public var ustruct:FSimpleUStruct;
+  @:uproperty @:ureplicate(i32ShouldRep2)
+  public var i32RepFunc2:Int32;
 
   @:uproperty @:ureplicate
+  public var ustruct:FPODStruct;
+
+#if (pass <= 5)
+  @:uproperty @:ureplicate
   public var someArray:TArray<FText>;
+#end
 
   @:uproperty
 #if (pass >= 6)
@@ -36,24 +40,22 @@ import NonUObject;
   public var hotReload1:Int64;
 
   public var fn_i32:Void->Void;
-  public var fn_i32OwnerOnly:Int32->Void;
   public var fn_fstring:FString->Void;
   public var fn_ustruct:Void->Void;
   public var fn_someArray:Void->Void;
+  public var fn_startTest:Void->Void;
 #if (pass >= 5)
   public var fn_hotReload1:Void->Void;
 #end
 
   public var fn_i32ShouldRep:Void->Bool;
+  public var fn_i32ShouldRep2:Void->Bool;
 #if (pass >= 6)
   public var fn_hotReload1ShouldRep:Void->Bool;
 #end
 
   public function new(wrapped) {
     super(wrapped);
-    trace('hello');
-    trace(GetNetMode());
-    trace(this.Role);
     this.RootComponent = FObjectInitializer.Get().CreateDefaultSubobject(new TypeParam<USceneComponent>(), this, "Root", false);
     this.SetReplicates(true);
     bAlwaysRelevant = true;
@@ -63,7 +65,6 @@ import NonUObject;
     super.BeginPlay();
 
     if (this.Role == ROLE_Authority) {
-      trace('dedicated server');
       this.initialOnRep = 0xD0D0D0D0;
       this.ftextInitialOnly = "FText Initial Property";
     }
@@ -83,11 +84,6 @@ import NonUObject;
   }
 
   @:ufunction
-  function onRep_i32OwnerOnly(i32:Int32) {
-    this.fn_i32OwnerOnly(i32);
-  }
-
-  @:ufunction
   function onRep_fstring(str:FString) : Void {
     this.fn_fstring(str);
   }
@@ -98,14 +94,21 @@ import NonUObject;
   }
 
   @:ufunction
+  public dynamic function onRep_i32RepFunc2() {
+    throw 'Not replaced';
+  }
+
+  @:ufunction
   function onRep_ustruct() {
     this.fn_ustruct();
   }
 
+#if (pass <= 5)
   @:ufunction
   function onRep_someArray() {
     this.fn_someArray();
   }
+#end
 
 #if (pass >= 5)
   @:ufunction
@@ -115,7 +118,20 @@ import NonUObject;
 #end
 
   function i32ShouldRep() : Bool {
-    return this.fn_i32ShouldRep();
+    // TODO should we really call this every network event, even if nothing has changed?
+    if (this.fn_i32ShouldRep != null) {
+      return this.fn_i32ShouldRep();
+    } else {
+      return false;
+    }
+  }
+
+  function i32ShouldRep2() : Bool {
+    if (this.fn_i32ShouldRep2 != null) {
+      return this.fn_i32ShouldRep2();
+    } else {
+      return false;
+    }
   }
 
 #if (pass >= 6)
@@ -128,6 +144,7 @@ import NonUObject;
   public function startTest();
 
   function startTest_Implementation() {
+    fn_startTest();
   }
 }
 
@@ -137,23 +154,31 @@ import NonUObject;
 
   public var validateCalled:Bool;
 
-  public var fn_canCallServerFn:Void->Void;
-  public var fn_onServerCall:TArray<FSimpleUStruct>->Void;
+  public var fn_onServerCall:TArray<FPODStruct>->Void;
   public var fn_onClientCalled:String->String->Void;
 
-  @:ufunction
-  function onRep_canCallServerFn() {
-    this.fn_canCallServerFn();
+  @:ufunction(Server,Reliable)
+  public function clientReady();
+  function clientReady_Implementation() {
+    var mode = this.GetWorld().GetAuthGameMode().as(AReplGameMode);
+    if (mode == null) {
+      trace('Fatal', 'Invalid game mode (${this.GetWorld().GetAuthGameMode()})');
+    }
+
+    mode.numReadyPlayers++;
+    if (mode.onPlayerReady != null) {
+      mode.onPlayerReady(this);
+    }
   }
 
   @:ufunction(Server, Reliable, WithValidation)
-  public function Server_Reliable_WithValidation(arr:TArray<FSimpleUStruct>);
+  public function Server_Reliable_WithValidation(arr:TArray<FPODStruct>);
 
-  function Server_Reliable_WithValidation_Implementation(arr:TArray<FSimpleUStruct>) {
+  function Server_Reliable_WithValidation_Implementation(arr:TArray<FPODStruct>) {
     this.fn_onServerCall(arr);
   }
 
-  function Server_Reliable_WithValidation_Validate(arr:TArray<FSimpleUStruct>) {
+  function Server_Reliable_WithValidation_Validate(arr:TArray<FPODStruct>) {
     this.validateCalled = true;
     return canCallServerFn && (arr.length == 0 || arr[0].i32 != 0xf00);
   }
@@ -167,7 +192,7 @@ import NonUObject;
 }
 
 #if (pass >= 5)
-@:uclass ADynamicReplActor extends AActor {
+@:uclass class ADynamicReplActor extends AActor {
   @:uproperty @:ureplicate(stringShouldRep)
   public var fstringRepl:FString;
 
@@ -189,3 +214,8 @@ import NonUObject;
   }
 }
 #end
+
+@:uclass class AReplGameMode extends AGameMode {
+  public var onPlayerReady:APlayerController->Void;
+  public var numReadyPlayers = 0;
+}

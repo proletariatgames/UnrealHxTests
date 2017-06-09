@@ -32,7 +32,7 @@ import unreal.*;
 
     var reporter = new buddy.reporting.TraceReporter();
 
-    var runner = new buddy.SuitesRunner([new repl.TestReplication(found)]);
+    var runner = new buddy.SuitesRunner([new repl.TestReplication(found)], reporter);
     var curPass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
     var nextPass:Null<Int> = null;
     if (curPass == 2) {
@@ -51,15 +51,20 @@ import unreal.*;
 #if WITH_EDITOR
         if (GetWorld().IsPlayInEditor()) {
           if (!success) {
-            trace('Error', 'Test failed. Exiting');
+            trace('Fatal', 'Test failed. Exiting');
             // the only way to make sure that UE exits with a non-0 code is to actually exit ourselves
             Sys.exit(curPass == null ? 10 : curPass);
           }
 
-          var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
-          if (pc != null) {
-            pc.ConsoleCommand("Exit", true);
-          }
+          // Timer.delay(1, function() {
+          //   if (!this.isValid()) {
+          //     return;
+          //   }
+            var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
+            if (pc != null) {
+              pc.ConsoleCommand("Exit", true);
+            }
+          // });
 
           return;
         }
