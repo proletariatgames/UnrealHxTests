@@ -159,12 +159,8 @@ class TestReplication extends buddy.BuddySuite {
             done();
           } else {
             repl.fn_fstring = function(str:FString) {
-              if (repl.fstring.toString() != 'test') {
-                trace('Fatal', 'str ${repl.fstring} != test');
-              }
-              if (str.toString() != 'foo bar') {
-                trace('Fatal', 'str ${str} != foo bar');
-              }
+              repl.fstring.toString().should.be('test');
+              str.toString().should.be('foo bar');
               done();
             };
           }
@@ -184,9 +180,7 @@ class TestReplication extends buddy.BuddySuite {
             done();
           } else {
             repl.fn_hotReload1 = function() {
-              if (repl.hotReload1 != Int64Helpers.make(0xF00B45,0xF00)) {
-                trace('Fatal', 'hotReload1 ${repl.hotReload1} != ${Int64Helpers.make(0xF00B45,0xF00)}');
-              }
+              repl.hotReload1.should.be(Int64Helpers.make(0xF00B45,0xF00));
               done();
             };
           }
@@ -229,6 +223,7 @@ class TestReplication extends buddy.BuddySuite {
           } else {
             repl.fn_hotReload1 = function() trace('Fatal', 'hotReload1 should not replicate');
           }
+          done();
         }, done);
       });
 #end

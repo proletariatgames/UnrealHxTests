@@ -9,13 +9,21 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
   inline public static var NUM_PLAYERS = 2;
   static var pass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
   override private function RunTest(Parameters:unreal.FString):Bool {
-    this.addHaxeCommand(loadPIE("/Game/Maps/ClientServerEntryPoint"));
-    this.addHaxeCommand(EngineLatentCommands.waitForMapToLoadCommand());
-    this.addHaxeCommand(function() { trace('here'); return true; });
-    this.addHaxeCommand(waitUntilTestFinishes());
-    this.addHaxeCommand(EngineLatentCommands.exitGame());
-    if (pass < 6) {
-      this.addHaxeCommand(buildNextPass());
+    var times = pass < 6 ? 3 : 1;
+    for (i in 0...times) {
+      this.addHaxeCommand(loadPIE("/Game/Maps/ClientServerEntryPoint"));
+      this.addHaxeCommand(EngineLatentCommands.waitForMapToLoadCommand());
+      this.addHaxeCommand(waitUntilTestFinishes());
+      this.addHaxeCommand(EngineLatentCommands.exitGame());
+      if ((i == 0 || i == 1) && pass < 6) {
+        this.addHaxeCommand(buildNextPass());
+      }
+    }
+    if (Sys.getEnv("CI_RUNNING") == "1") {
+      this.addHaxeCommand(function() {
+        unreal.FPlatformMisc.RequestExit(true);
+        return true;
+      });
     }
     return true;
   }
@@ -57,16 +65,18 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
         cppiaReloaded = false;
     return function() {
       if (!didCall) {
-        if (pass == null || pass < 5) {
-          pass = 5;
+        if (pass == null || pass < 4) {
+          pass = 4;
         }
         var nextPass = pass + 1;
 
         unreal.CoreAPI.onCppiaReload(function() {
-          trace('cppia reloaded');
           cppiaReloaded = true;
         });
+        trace('Building haxe pass $nextPass');
         var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
+        didCall = true;
+        pass = nextPass;
         if (cmd != 0) {
           trace('Error', 'Error while compiling pass $nextPass');
           Sys.exit(cmd);

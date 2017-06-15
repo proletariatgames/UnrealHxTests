@@ -56,15 +56,10 @@ import unreal.*;
             Sys.exit(curPass == null ? 10 : curPass);
           }
 
-          // Timer.delay(1, function() {
-          //   if (!this.isValid()) {
-          //     return;
-          //   }
-            var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
-            if (pc != null) {
-              pc.ConsoleCommand("Exit", true);
-            }
-          // });
+          var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
+          if (pc != null) {
+            pc.ConsoleCommand("Exit", true);
+          }
 
           return;
         }

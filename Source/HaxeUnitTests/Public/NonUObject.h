@@ -7,7 +7,7 @@
 
 USTRUCT()
 struct HAXEUNITTESTS_API FPODStruct {
-  GENERATED_USTRUCT_BODY()
+  GENERATED_BODY()
 
   UPROPERTY()
   float f;
@@ -21,7 +21,7 @@ struct HAXEUNITTESTS_API FPODStruct {
 
 USTRUCT()
 struct HAXEUNITTESTS_API FSimpleUStruct {
-  GENERATED_USTRUCT_BODY()
+  GENERATED_BODY()
 
   static int32 nDestructorCalled;
   static int32 nConstructorCalled;

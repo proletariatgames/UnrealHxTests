@@ -8,11 +8,14 @@ import unreal.*;
 class HotReloadAutomation extends unreal.automation.AutomationTest {
   static var pass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
   override private function RunTest(Parameters:unreal.FString):Bool {
-    this.addHaxeCommand(loadPIE("/Game/Maps/HaxeTestEntryPoint"));
-    this.addHaxeCommand(EngineLatentCommands.waitForMapToLoadCommand());
-    this.addHaxeCommand(waitUntilTestFinishes());
-    if (pass == 3) {
-      this.addHaxeCommand(buildNextPass());
+    var times = pass == 3 ? 2 : 1;
+    for (i in 0...times) {
+      this.addHaxeCommand(loadPIE("/Game/Maps/HaxeTestEntryPoint"));
+      this.addHaxeCommand(EngineLatentCommands.waitForMapToLoadCommand());
+      this.addHaxeCommand(waitUntilTestFinishes());
+      if (i == 0 && pass == 3) {
+        this.addHaxeCommand(buildNextPass());
+      }
     }
     return true;
   }
@@ -38,10 +41,11 @@ class HotReloadAutomation extends unreal.automation.AutomationTest {
         var nextPass = 4;
 
         unreal.CoreAPI.onCppiaReload(function() {
-          trace('cppia reloaded');
           cppiaReloaded = true;
         });
+        trace('Building haxe pass $nextPass');
         var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
+        didCall = true;
         if (cmd != 0) {
           trace('Error', 'Error while compiling pass $nextPass');
           Sys.exit(cmd);

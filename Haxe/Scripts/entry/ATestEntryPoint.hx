@@ -43,8 +43,8 @@ class ATestEntryPoint extends unreal.AActor {
     runner.run().then(function(_) {
       cpp.vm.Gc.run(true);
       cpp.vm.Gc.run(true);
-      trace('Ending stub implementation');
       var success = !runner.failed();
+      trace('tests success=$success');
 
       if (Sys.getEnv("CI_RUNNING") == "1") {
 #if WITH_EDITOR
@@ -55,9 +55,13 @@ class ATestEntryPoint extends unreal.AActor {
             Sys.exit(curPass == null ? 10 : curPass);
           }
 
-          var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
-          if (pc != null) {
-            pc.ConsoleCommand("Exit", true);
+          if (curPass == 4) {
+            unreal.FPlatformMisc.RequestExit(true);
+          } else {
+            var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
+            if (pc != null) {
+              pc.ConsoleCommand("Exit", true);
+            }
           }
 
           return;
@@ -74,7 +78,7 @@ class ATestEntryPoint extends unreal.AActor {
 
           var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
           if (cmd != 0) {
-            trace('Error', 'Error while compiling pass $nextPass');
+            trace('Fatal', 'Error while compiling pass $nextPass');
             Sys.exit(cmd);
           }
         } else {

@@ -8,7 +8,8 @@ class HaxeProgram extends HaxeProgramRules {
     super(target);
 
     // var engineDir = UnrealBuildTool.EngineSourceDirectory;
-    var engineDir:String = untyped __cs__("UnrealBuildTool.UnrealBuildTool.EngineSourceDirectory.FullName");
+    var engineDir = Helpers.getUbtDir("EngineSourceDirectory").FullName;
+    // var engineDir:String = untyped __cs__("UnrealBuildTool.UnrealBuildTool.EngineSourceDirectory.FullName");
     PublicIncludePaths.Add('$engineDir/Runtime/Launch/Public');
     PrivateIncludePaths.Add('$engineDir/Runtime/Launch/Private');		// For LaunchEngineLoop.cpp include
 

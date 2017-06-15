@@ -136,7 +136,11 @@ using unreal.CoreAPI;
 
 #if (pass >= 6)
   function hotReload1ShouldRep() : Bool {
-    return this.fn_hotReload1ShouldRep();
+    if (this.fn_hotReload1ShouldRep != null) {
+      return this.fn_hotReload1ShouldRep();
+    } else {
+      return false;
+    }
   }
 #end
 
