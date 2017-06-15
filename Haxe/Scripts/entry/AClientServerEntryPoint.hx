@@ -28,7 +28,22 @@ import unreal.*;
     didTick = true;
 
     buddy.BuddySuite.useDefaultTrace = true;
+#if (pass < 7)
     var found:AReplicationTest = cast UObject.StaticFindObjectFast(AReplicationTest.StaticClass(), this.GetOuter(), "TheReplActor", false, false, 0);
+#else
+    var found:AReplicationTest = null;
+    if (GetNetMode() == NM_DedicatedServer) {
+      var params = FActorSpawnParameters.create();
+      found = cast GetWorld().SpawnActor(AReplicationTest.StaticClass(), this.GetTransform().GetLocation(), this.GetTransform().Rotator(), params);
+    } else {
+      found = cast UObject.StaticFindObjectFast(AReplicationTest.StaticClass(), this.GetOuter(), "DynamicReplicationTest_0", false, false, 0);
+      if (found == null) {
+        trace('Waiting for the dynamic replication actor');
+        didTick = false;
+        return;
+      }
+    }
+#end
 
     var reporter = new buddy.reporting.TraceReporter();
 

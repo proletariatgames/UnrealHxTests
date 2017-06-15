@@ -4,7 +4,14 @@ import NonUObject;
 
 using unreal.CoreAPI;
 
+#if (pass >= 7)
+typedef AReplicationTest = ADynamicReplicationTest;
+
+// force this replication
+@:uclass class ADynamicReplicationTest extends AActor {
+#else
 @:uclass class AReplicationTest extends AActor {
+#end
   @:uproperty(Transient) @:ureplicate(InitialOnly)
   public var initialOnRep:Int32;
 
@@ -58,6 +65,7 @@ using unreal.CoreAPI;
     super(wrapped);
     this.RootComponent = FObjectInitializer.Get().CreateDefaultSubobject(new TypeParam<USceneComponent>(), this, "Root", false);
     this.SetReplicates(true);
+    this.bNetLoadOnClient = true;
     bAlwaysRelevant = true;
   }
 

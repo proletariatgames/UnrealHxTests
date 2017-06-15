@@ -9,13 +9,13 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
   inline public static var NUM_PLAYERS = 2;
   static var pass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
   override private function RunTest(Parameters:unreal.FString):Bool {
-    var times = pass < 6 ? 3 : 1;
+    var times = pass < 7 ? 4 : 1;
     for (i in 0...times) {
       this.addHaxeCommand(loadPIE("/Game/Maps/ClientServerEntryPoint"));
       this.addHaxeCommand(EngineLatentCommands.waitForMapToLoadCommand());
       this.addHaxeCommand(waitUntilTestFinishes());
       this.addHaxeCommand(EngineLatentCommands.exitGame());
-      if ((i == 0 || i == 1) && pass < 6) {
+      if (i <= 2 && pass < 7) {
         this.addHaxeCommand(buildNextPass());
       }
     }
@@ -77,6 +77,11 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
         var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
         didCall = true;
         pass = nextPass;
+        if (pass >= 7) {
+          unreal.Timer.delay(2.5, function() {
+            cppiaReloaded = true;
+          });
+        }
         if (cmd != 0) {
           trace('Error', 'Error while compiling pass $nextPass');
           Sys.exit(cmd);

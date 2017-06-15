@@ -14,6 +14,7 @@ class TestReplication extends buddy.BuddySuite {
       it('should have a replication actor in scene', {
         repl.should.not.be(null);
       });
+#if (pass < 7)
       it('should propagate initialOnly properties', function(done) {
         var nChecks = 0;
         if (repl.initialOnRep != 0xD0D0D0D0) {
@@ -47,6 +48,7 @@ class TestReplication extends buddy.BuddySuite {
           done();
         }
       });
+#end
 
       function syncFirst(done) {
         repl.fn_startTest = function() {
