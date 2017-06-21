@@ -5,6 +5,7 @@ class TestProgram {
 
   static function __init__() {
     unreal.CoreAPI.runAtInit(function() {
+      trace('hello, world!');
     });
   }
 

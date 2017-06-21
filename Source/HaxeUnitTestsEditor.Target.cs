@@ -3,23 +3,14 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class HaxeUnitTestsEditorTarget : TargetRules
+public class HaxeUnitTestsEditorTarget : BaseTargetRules
 {
-	public HaxeUnitTestsEditorTarget(TargetInfo Target)
-	{
-		Type = TargetType.Editor;
-	}
+  public HaxeUnitTestsEditorTarget(TargetInfo Target) : base(Target)
+  {
+    Type = TargetType.Editor;
+  }
 
-	//
-	// TargetRules interface.
-	//
-
-	public override void SetupBinaries(
-		TargetInfo Target,
-		ref List<UEBuildBinaryConfiguration> OutBuildBinaryConfigurations,
-		ref List<string> OutExtraModuleNames
-		)
-	{
-		OutExtraModuleNames.AddRange( new string[] { "HaxeUnitTests" } );
-	}
+  override protected void setupBinaries(List<string> moduleNames) {
+    moduleNames.Add("HaxeUnitTests");
+  }
 }
