@@ -1,6 +1,6 @@
 package cases;
 using buddy.Should;
-import NonUObject;
+import haxeunittests.*;
 import helpers.TestHelper;
 
 class TestVector extends buddy.BuddySuite {

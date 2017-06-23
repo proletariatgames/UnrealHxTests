@@ -28,7 +28,8 @@ class ATestEntryPoint extends unreal.AActor {
       cases.TestTemplates,
       cases.TestTArray,
       cases.TestUObjectOverrides,
-      cases.TestDelegates
+      cases.TestDelegates,
+      cases.TestReflect
     ));
 
     var curPass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));

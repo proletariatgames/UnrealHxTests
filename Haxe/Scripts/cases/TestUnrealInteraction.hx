@@ -1,5 +1,6 @@
 package cases;
 using buddy.Should;
+import NonUObject;
 
 class TestUnrealInteraction extends buddy.BuddySuite {
 

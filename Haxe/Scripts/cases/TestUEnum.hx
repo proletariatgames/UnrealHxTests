@@ -1,7 +1,8 @@
 package cases;
+import unreal.*;
 import NonUObject;
 import SomeEnum;
-import unreal.*;
+import haxeunittests.*;
 using buddy.Should;
 
 @:uenum(BlueprintType) @:class(uint8) enum ETestHxEnumClass {

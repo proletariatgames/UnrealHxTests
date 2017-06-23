@@ -1,7 +1,8 @@
 package cases;
 import unreal.*;
 import unreal.Timer;
-import UBasicTypesUObject;
+import NonUObject;
+import haxeunittests.*;
 
 using buddy.Should;
 

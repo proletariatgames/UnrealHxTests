@@ -16,7 +16,7 @@ haxelib install promhx || exit /b 1
 
 REM build the build scripts
 cd Plugins/UE4Haxe
-haxe init-plugin.hxml -D UE_VER=%UE_VER%|| exit /b 1
+rem haxe init-plugin.hxml -D UE_VER=%UE_VER%|| exit /b 1
 
 cd %WORKSPACE%
 

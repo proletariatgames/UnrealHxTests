@@ -2,8 +2,8 @@ package cases;
 import unreal.*;
 import NonUObject;
 import helpers.TestHelper;
-import UBasicTypesSub;
 import cases.TestUObjectOverrides;
+import haxeunittests.*;
 
 using buddy.Should;
 

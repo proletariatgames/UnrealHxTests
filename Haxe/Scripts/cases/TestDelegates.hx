@@ -1,12 +1,12 @@
 package cases;
 using buddy.Should;
+import haxeunittests.*;
 import NonUObject;
-import UBasicTypesSub;
 import Delegates;
+import SomeEnum;
 import helpers.TestHelper;
 import cases.TestUObjectOverrides;
 import cases.TestUEnum;
-import SomeEnum;
 import unreal.*;
 
 using unreal.CoreAPI;

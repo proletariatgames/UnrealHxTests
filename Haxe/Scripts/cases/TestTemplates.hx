@@ -1,9 +1,8 @@
 package cases;
 import NonUObject;
-import UBasicTypesSub;
-import SomeEnum;
 import templates.TemplatesDef;
 import unreal.*;
+import haxeunittests.*;
 
 using buddy.Should;
 

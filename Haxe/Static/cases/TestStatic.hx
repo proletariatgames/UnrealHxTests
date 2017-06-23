@@ -1,5 +1,6 @@
 package cases;
 import unreal.*;
+import haxeunittests.*;
 
 using buddy.Should;
 using unreal.CoreAPI;

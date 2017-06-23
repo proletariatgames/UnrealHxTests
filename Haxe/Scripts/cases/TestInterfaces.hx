@@ -1,5 +1,7 @@
 package cases;
 using buddy.Should;
+import NonUObject;
+import haxeunittests.*;
 
 class TestInterfaces extends buddy.BuddySuite {
   public function new() {

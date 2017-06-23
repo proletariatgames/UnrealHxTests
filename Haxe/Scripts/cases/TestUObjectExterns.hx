@@ -1,7 +1,8 @@
 package cases;
 using buddy.Should;
-import UBasicTypesSub;
+import NonUObject;
 import unreal.*;
+import haxeunittests.*;
 
 using unreal.CoreAPI;
 using helpers.TestHelper;

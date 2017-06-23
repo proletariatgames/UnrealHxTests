@@ -1,6 +1,7 @@
 package cases;
 using buddy.Should;
-import UBasicTypesUObject;
+import haxeunittests.*;
+import NonUObject;
 
 class TestConst extends buddy.BuddySuite {
 

@@ -3,6 +3,7 @@ using buddy.Should;
 import NonUObject;
 import helpers.TestHelper;
 import unreal.*;
+import haxeunittests.*;
 
 using unreal.CoreAPI;
 

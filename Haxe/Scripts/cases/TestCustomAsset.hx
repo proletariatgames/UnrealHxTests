@@ -2,7 +2,8 @@ package cases;
 using buddy.Should;
 import unreal.*;
 import assets.*;
-import UBasicTypesUObject;
+import haxeunittests.*;
+import NonUObject;
 
 class TestCustomAsset extends buddy.BuddySuite {
 

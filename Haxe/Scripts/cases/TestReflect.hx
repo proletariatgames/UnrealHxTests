@@ -1,14 +1,14 @@
 package cases;
 import cases.TestUObjectOverrides;
+import SomeEnum;
 import NonUObject;
-import UBasicTypesSub;
 import unreal.*;
+import haxeunittests.*;
 
 using buddy.Should;
 
 class TestReflect extends buddy.BuddySuite {
   public function new() {
-    return;
     describe('ReflectAPI extensions', {
       it('should be able to set normal fields', {
         function run() {
@@ -36,6 +36,10 @@ class TestReflect extends buddy.BuddySuite {
       it('should be able to convert anonymous fields into structs', {
         function run() {
           var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>());
+          obj1.struct1.text.toString().should.be("");
+          obj1.struct2.simple.text.toString().should.be("");
+          obj1.struct2.simple.text = "TEXT";
+          obj1.struct2.simple.text.toString().should.be("TEXT");
           ReflectAPI.extSetField(obj1, 'struct1', {
             f1: 1.1,
             d1: 2.2,

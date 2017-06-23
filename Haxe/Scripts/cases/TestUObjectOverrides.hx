@@ -1,8 +1,9 @@
 package cases;
-import unreal.*;
+import haxeunittests.*;
 import NonUObject;
+import SomeEnum;
+import unreal.*;
 using buddy.Should;
-import UBasicTypesSub;
 
 using unreal.CoreAPI;
 using helpers.TestHelper;
@@ -349,7 +350,7 @@ class UHaxeDerived0 extends UBasicTypesSub1 implements IBasicType2 {
     return "UHaxeDerived0";
   }
 
-  public function getSomeInt():Int {
+  public function getSomeInt():unreal.Int32 {
     return 0xf0f0;
   }
 }
@@ -480,7 +481,7 @@ class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements 
     return "HaxeDerived2";
   }
 
-  #if (cppia || WITH_CPPIA) override #end public function getSomeInt():Int {
+  #if (cppia || WITH_CPPIA) override #end public function getSomeInt():unreal.Int32 {
     return 0xf00ba5;
   }
 
