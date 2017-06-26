@@ -2,6 +2,8 @@ package cases;
 import unreal.*;
 import NonUObject;
 import SomeEnum;
+import haxeunittests.EMyCppEnum;
+import haxeunittests.EMyEnum;
 import haxeunittests.*;
 using buddy.Should;
 

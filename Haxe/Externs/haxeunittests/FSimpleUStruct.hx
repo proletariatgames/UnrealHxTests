@@ -12,11 +12,10 @@
  * It only includes UPROPERTYs and UFUNCTIONs. Do not modify it!
  * In order to add more definitions, create or edit a type with the same name/package, but with an `_Extra` suffix
 **/
-package commandlets;
+package haxeunittests;
 
 @:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("UpdateAssetCommandlet.h")
-@:uextern @:uclass extern class UUpdateAssetCommandlet extends unreal.UCommandlet {
+@:glueCppIncludes("NonUObject.h")
+@:uextern @:ustruct extern class FSimpleUStruct {
   
 }

@@ -4,6 +4,8 @@ import haxeunittests.*;
 import NonUObject;
 import Delegates;
 import SomeEnum;
+import haxeunittests.EMyCppEnum;
+import haxeunittests.EMyEnum;
 import helpers.TestHelper;
 import cases.TestUObjectOverrides;
 import cases.TestUEnum;

@@ -1,5 +1,6 @@
 package repl;
 import unreal.*;
+import haxeunittests.*;
 import NonUObject;
 
 using unreal.CoreAPI;

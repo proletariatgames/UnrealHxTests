@@ -3,13 +3,6 @@ import unreal.*;
 
 @:glueCppIncludes("TemplatesDef.h")
 @:umodule("HaxeUnitTests")
-@:uextern extern class UTemplatesDef extends unreal.UObject {
-  @:typeName static function getSomeStaticInt<T>():Int;
-  @:typeName function copyNew<T>(withType:T):POwnedPtr<T>;
-}
-
-@:glueCppIncludes("TemplatesDef.h")
-@:umodule("HaxeUnitTests")
 @:uextern extern class FTemplatedClass1<A> {
   public var value:A;
   public function get():A;

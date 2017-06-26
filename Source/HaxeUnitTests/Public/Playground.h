@@ -19,6 +19,11 @@ public:
   void OnRep_something() {
   }
 
+
+  DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInnerDelTest, int32, argument);
+  UPROPERTY()
+  FInnerDelTest delTest;
+
   void GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const override {
     DOREPLIFETIME(AReplicationTests, intArray);
     DOREPLIFETIME(AReplicationTests, something);

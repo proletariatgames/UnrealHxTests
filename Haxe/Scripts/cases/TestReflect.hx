@@ -58,15 +58,15 @@ class TestReflect extends buddy.BuddySuite {
               i32: 333,
               ui32: 444
             },
-            myEnum: SomeEnum.EMyEnum.SomeEnum2,
-            myCppEnum: SomeEnum.EMyCppEnum.CppEnum2
+            myEnum: EMyEnum.SomeEnum2,
+            myCppEnum: EMyCppEnum.CppEnum2
           });
           obj1.struct2.simple.f1.should.beCloseTo(1.11);
           obj1.struct2.simple.d1.should.be(2);
           obj1.struct2.simple.i32.should.be(333);
           obj1.struct2.simple.ui32.should.be(444);
-          obj1.struct2.myEnum.should.equal(SomeEnum.EMyEnum.SomeEnum2);
-          obj1.struct2.myCppEnum.should.equal(SomeEnum.EMyCppEnum.CppEnum2);
+          obj1.struct2.myEnum.should.equal(EMyEnum.SomeEnum2);
+          obj1.struct2.myCppEnum.should.equal(EMyCppEnum.CppEnum2);
         }
         run();
       });
@@ -210,7 +210,7 @@ typedef FHaxeReflectStruct2 = UnrealStruct<FHaxeReflectStruct2, [{
   @:uproperty
   var simple:FHaxeReflectStruct1;
   @:uproperty
-  var myEnum:SomeEnum.EMyEnum;
+  var myEnum:EMyEnum;
   @:uproperty
-  var myCppEnum:SomeEnum.EMyCppEnum;
+  var myCppEnum:EMyCppEnum;
 }]>;
