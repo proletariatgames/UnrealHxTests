@@ -68,7 +68,7 @@ class TestUEnum extends buddy.BuddySuite {
         val.should.equal(E_1st);
       });
       it('should be able to use uenums as uproperties', {
-        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
+        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>(), UObject.GetTransientPackage(), UTestUseEnum.StaticClass());
         obj.test1 = E_1st;
         obj.test1.should.equal(E_1st);
         obj.test1 = E_2nd;
@@ -77,7 +77,7 @@ class TestUEnum extends buddy.BuddySuite {
         obj.test1.should.equal(E_3rd);
       });
       it('should be able to pass enums back and forth to C++', {
-        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
+        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>(), UObject.GetTransientPackage(), UTestUseEnum.StaticClass());
         obj.setTest(E_1st);
         obj.getTest().should.equal(E_1st);
         obj.setTest(E_2nd);
@@ -86,7 +86,7 @@ class TestUEnum extends buddy.BuddySuite {
         obj.getTest().should.equal(E_3rd);
       });
       it('should be able to reference enums with params', {
-        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>());
+        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>(), UObject.GetTransientPackage(), UTestUseEnum.StaticClass());
         var e1 = NoParam,
             e2 = FTextParam("SomeText"),
             e3 = ObjParam(obj),

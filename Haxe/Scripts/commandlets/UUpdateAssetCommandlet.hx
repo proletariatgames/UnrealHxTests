@@ -15,7 +15,7 @@ class UUpdateAssetCommandlet extends UCommandlet {
     var ret = UObject.LoadObject(new TypeParam<UHaxeAsset>(), UHaxeAsset.StaticClass(), '/Game/SomeAsset', '/Game/SomeAsset', 0, null);
     if (ret == null) {
       var pack = UObject.CreatePackage(null, '/Game/SomeAsset');
-      ret = UObject.NewObjectWithFlags(new TypeParam<UHaxeAsset>(), pack, UHaxeAsset.StaticClass(), 'SomeAsset', EObjectFlags.RF_Public | EObjectFlags.RF_Standalone);
+      ret = UObject.NewObject(new TypeParam<UHaxeAsset>(), pack, UHaxeAsset.StaticClass(), 'SomeAsset', EObjectFlags.RF_Public | EObjectFlags.RF_Standalone);
     } else {
       FLinker.ResetLoaders(ret);
       FLinker.ResetLoaders(ret.GetOutermost());

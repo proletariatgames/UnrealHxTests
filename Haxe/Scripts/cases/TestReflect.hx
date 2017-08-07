@@ -35,7 +35,7 @@ class TestReflect extends buddy.BuddySuite {
       });
       it('should be able to convert anonymous fields into structs', {
         function run() {
-          var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>());
+          var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>(), UObject.GetTransientPackage(), UObjectReflect.StaticClass());
           obj1.struct1.text.toString().should.be("");
           obj1.struct2.simple.text.toString().should.be("");
           obj1.struct2.simple.text = "TEXT";
@@ -72,7 +72,7 @@ class TestReflect extends buddy.BuddySuite {
       });
       it('should be able to transform String into FString, FText and FName', {
         function run() {
-          var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>());
+          var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>(), UObject.GetTransientPackage(), UObjectReflect.StaticClass());
           ReflectAPI.extSetField(obj1, 'name', 'hello');
           ReflectAPI.extSetField(obj1, 'str', 'hello, str');
           ReflectAPI.extSetField(obj1, 'text', 'hello, text');
@@ -93,7 +93,7 @@ class TestReflect extends buddy.BuddySuite {
       });
       it('should be able to convert Array fields into TArray', {
         function run() {
-          var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>());
+          var obj1 = UObject.NewObject(new TypeParam<UObjectReflect>(), UObject.GetTransientPackage(), UObjectReflect.StaticClass());
           ReflectAPI.extSetField(obj1, 'struct1Arr', [
             { str:"hello str", vec:{ X:1, Y:2, Z:3 }, vec2d: { X:10, Y:20 } },
             { fname:"hello fname", arr:[{ X:100, Y:200, Z:300 }, { X:111, Y:222, Z:333 }] }
@@ -120,7 +120,7 @@ class TestReflect extends buddy.BuddySuite {
       it('should be able to set data on blueprint-only types', {
         var cls = ReflectAPI.getBlueprintClass('/Game/Blueprints/BPObjectReflect');
         cls.should.not.be(null);
-        var obj:UObject = UObject.NewObjectByClass(new TypeParam<UObject>(), UObject.GetTransientPackage(), cls);
+        var obj:UObject = UObject.NewObject(new TypeParam<UObject>(), UObject.GetTransientPackage(), cls);
         obj.should.not.be(null);
 
         var val = {

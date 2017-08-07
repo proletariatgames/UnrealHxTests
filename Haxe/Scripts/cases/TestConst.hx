@@ -2,11 +2,12 @@ package cases;
 using buddy.Should;
 import haxeunittests.*;
 import NonUObject;
+import unreal.*;
 
 class TestConst extends buddy.BuddySuite {
 
   public function new() {
-    var const1 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeConst>());
+    var const1 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeConst>(), UObject.GetTransientPackage(), UHaxeConst.StaticClass());
     var geo = unreal.slatecore.FGeometry.create();
     describe('Haxe - Const params', {
       it('should be able to generate code that uses const types', {

@@ -359,7 +359,7 @@ class UHaxeDerived0 extends UBasicTypesSub1 implements IBasicType2 {
 @:uclass(BlueprintType)
 class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasicTypesSub1 #end {
   public static function create():UHaxeDerived1 {
-    var ret = UObject.NewObject(new TypeParam<UHaxeDerived1>());
+    var ret = UObject.NewObject(new TypeParam<UHaxeDerived1>(), UObject.GetTransientPackage(), UHaxeDerived1.StaticClass());
     return ret;
   }
 
@@ -457,7 +457,7 @@ class UHaxeDerived1 extends #if (cppia || WITH_CPPIA) UHaxeDerived0 #else UBasic
 @:uclass(BlueprintType)
 class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements IBasicType2 #end {
   public static function create():UHaxeDerived2 {
-    var ret = UObject.NewObject(new TypeParam<UHaxeDerived2>());
+    var ret = UObject.NewObject(new TypeParam<UHaxeDerived2>(), UObject.GetTransientPackage(), UHaxeDerived2.StaticClass());
     return ret;
   }
   public var myEnum:EMyEnum;
@@ -493,7 +493,7 @@ class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements 
 @:uclass(BlueprintType)
 class UHaxeDerived3 extends UHaxeDerived2 {
   public static function create():UHaxeDerived3 {
-    var ret = UObject.NewObject(new TypeParam<UHaxeDerived3>());
+    var ret = UObject.NewObject(new TypeParam<UHaxeDerived3>(), UObject.GetTransientPackage(), UHaxeDerived3.StaticClass());
     return ret;
   }
 
@@ -571,7 +571,7 @@ class UHaxeDerived4 extends UHaxeDerived3 {
     this.newProperty = "Dynamic load ok";
   }
   public static function create():UHaxeDerived4 {
-    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDerived4.StaticClass(), "", 0);
+    var ret = UObject.NewObject(UObject.GetTransientPackage(), UHaxeDerived4.StaticClass(), "", 0);
     return cast ret;
   }
 
@@ -603,7 +603,7 @@ class UHaxeDerived5 extends UHaxeDerived4 {
   }
 
   public static function create():UHaxeDerived5 {
-    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDerived5.StaticClass(), "", 0);
+    var ret = UObject.NewObject(UObject.GetTransientPackage(), UHaxeDerived5.StaticClass(), "", 0);
     return cast ret;
   }
 
@@ -674,7 +674,7 @@ class UHaxeDynamicClass1 extends UObject {
   }
 
   public static function create():UHaxeDynamicClass1 {
-    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass1.StaticClass(), "", 0);
+    var ret = UObject.NewObject(UObject.GetTransientPackage(), UHaxeDynamicClass1.StaticClass(), "", 0);
     return cast ret;
   }
 }
@@ -703,7 +703,7 @@ class UHaxeDynamicClass2 extends UHaxeDynamicClass1 {
   }
 
   public static function create():UHaxeDynamicClass2 {
-    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass2.StaticClass(), "", 0);
+    var ret = UObject.NewObject(UObject.GetTransientPackage(), UHaxeDynamicClass2.StaticClass(), "", 0);
     return cast ret;
   }
 
@@ -736,7 +736,7 @@ class UHaxeDynamicClass3 extends UHaxeDynamicClass2 {
   }
 
   public static function create():UHaxeDynamicClass3 {
-    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass3.StaticClass(), "", 0);
+    var ret = UObject.NewObject(UObject.GetTransientPackage(), UHaxeDynamicClass3.StaticClass(), "", 0);
     return cast ret;
   }
 
@@ -761,7 +761,7 @@ class UHaxeDynamicClass4 extends UHaxeDynamicClass3 {
   }
 
   public static function create():UHaxeDynamicClass4 {
-    var ret = UObject.NewObject_NoTemplate(UObject.GetTransientPackage(), UHaxeDynamicClass4.StaticClass(), "", 0);
+    var ret = UObject.NewObject(UObject.GetTransientPackage(), UHaxeDynamicClass4.StaticClass(), "", 0);
     return cast ret;
   }
 

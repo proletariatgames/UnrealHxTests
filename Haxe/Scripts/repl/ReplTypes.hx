@@ -64,7 +64,7 @@ typedef AReplicationTest = ADynamicReplicationTest;
 
   public function new(wrapped) {
     super(wrapped);
-    this.RootComponent = FObjectInitializer.Get().CreateDefaultSubobject(new TypeParam<USceneComponent>(), this, "Root", false);
+    this.RootComponent = CreateDefaultSubobject(new TypeParam<USceneComponent>(), "Root", USceneComponent.StaticClass());
     this.SetReplicates(true);
     this.bNetLoadOnClient = true;
     bAlwaysRelevant = true;

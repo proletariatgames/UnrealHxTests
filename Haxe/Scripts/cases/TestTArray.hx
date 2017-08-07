@@ -142,7 +142,7 @@ class TestTArray extends buddy.BuddySuite {
       it('should be able to use TArray as member of declared uclass types (UPROPERTY)', {
         var str = null;
         function run() {
-          var obj = UObject.NewObject(new TypeParam<UTestTArray>());
+          var obj = UObject.NewObject(new TypeParam<UTestTArray>(), UObject.GetTransientPackage(), UTestTArray.StaticClass());
           obj.array.Push("Hello from Haxe!");
           obj.array.length.should.be(1);
           obj.array[0].toString().should.be("Hello from Haxe!");

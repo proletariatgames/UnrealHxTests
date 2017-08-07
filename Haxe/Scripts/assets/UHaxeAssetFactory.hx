@@ -35,7 +35,7 @@ class UHaxeAssetFactory extends UFactory {
     var cur = UFactory.GetCurrentFilename().toString();
     if (cur.length > 0 && FileSystem.exists(cur)) {
       FEditorDelegates.OnAssetPreImport.Broadcast(this, inClass, inParent, name, 'hxser');
-      var ret = UObject.NewObjectWithFlags(new TypeParam<UHaxeAsset>(), inParent, inClass, name, flags);
+      var ret = UObject.NewObject(new TypeParam<UHaxeAsset>(), inParent, inClass, name, flags);
       ret.rawContents = sys.io.File.getContent(cur);
       FEditorDelegates.OnAssetPostImport.Broadcast(this, ret);
       return ret;

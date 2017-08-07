@@ -9,5 +9,11 @@
 	],
 	"FileVersion": 3,
 	"EngineAssociation": "{FDB869F9-4CB0-3199-3364-288C9067C401}",
-	"Category": ""
+	"Category": "",
+	"Plugins": [
+		{
+			"Name": "UnrealHx",
+			"Enabled": true
+		}
+	]
 }

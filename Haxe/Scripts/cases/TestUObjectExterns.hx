@@ -224,7 +224,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
       });
 
       it('derived classes should be able to access protected members', {
-        var protected1 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeProtected1>());
+        var protected1 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeProtected1>(), UObject.GetTransientPackage(), UHaxeProtected1.StaticClass());
         var ret = protected1.callProtectedFunc1();
         ret.should.not.be(null);
         ret.stringProp.toString().should.be("Hello from protected");
@@ -241,7 +241,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
       });
 
       it('derived classes should be able to override external protected functions', {
-        var protected2 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeProtected2>());
+        var protected2 = unreal.UObject.NewObject(new unreal.TypeParam<UHaxeProtected2>(), UObject.GetTransientPackage(), UHaxeProtected2.StaticClass());
         var ret = protected2.callProtectedFunc1();
         ret.should.not.be(null);
         ret.stringProp.toString().should.be("Overridden in HaxeProtected2!");
@@ -261,7 +261,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
         protected2.getProtectedFString().toString().should.be("FString ALSO overridden!");
       });
       it('should be able to use pointers to uint8', {
-        var bsub = UObject.NewObject(new TypeParam<UBasicTypesSub1>());
+        var bsub = UObject.NewObject(new TypeParam<UBasicTypesSub1>(), UObject.GetTransientPackage(), UBasicTypesSub1.StaticClass());
         var arr = ByteArray.alloc(20);
         arr.set(0,0);
         bsub.writeToByteArray(arr, 0, 15).should.be(true);

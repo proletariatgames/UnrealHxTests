@@ -45,7 +45,7 @@ class TestTemplates extends buddy.BuddySuite {
           UTemplatesDef.getSomeStaticInt(new TypeParam<FSimpleStruct>()).should.be(442);
           UTemplatesDef.getSomeStaticInt(new TypeParam<UTemplatesDef>()).should.be(42);
 
-          var templ = UObject.NewObject(new TypeParam<UTemplatesDef>());
+          var templ = UObject.NewObject(new TypeParam<UTemplatesDef>(), UObject.GetTransientPackage(), UTemplatesDef.StaticClass());
           templ.should.not.be(null);
 
           var struct = FSimpleStruct.create();
@@ -107,8 +107,8 @@ class TestTemplates extends buddy.BuddySuite {
         ntempl.obj.value.should.not.be(null);
 
         var arr = TArrayImpl.create(new TypeParam<UTemplatesDef>());
-        var obj = UObject.NewObject(new TypeParam<UTemplatesDef>());
-        var obj2 = UObject.NewObject(new TypeParam<UTemplatesDef>());
+        var obj = UObject.NewObject(new TypeParam<UTemplatesDef>(), UObject.GetTransientPackage(), UTemplatesDef.StaticClass());
+        var obj2 = UObject.NewObject(new TypeParam<UTemplatesDef>(), UObject.GetTransientPackage(), UTemplatesDef.StaticClass());
         arr.Push(obj);
         arr.get_Item(0).should.not.be(null);
         arr.set_Item(0, obj2);
@@ -116,8 +116,8 @@ class TestTemplates extends buddy.BuddySuite {
         arr.Num().should.be(1);
 
         var arr = TArrayImpl.create(new TypeParam<UTemplateMyClass>());
-        var obj = UObject.NewObject(new TypeParam<UTemplateMyClass>());
-        var obj2 = UObject.NewObject(new TypeParam<UTemplateMyClass>());
+        var obj = UObject.NewObject(new TypeParam<UTemplateMyClass>(), UObject.GetTransientPackage(), UTemplateMyClass.StaticClass());
+        var obj2 = UObject.NewObject(new TypeParam<UTemplateMyClass>(), UObject.GetTransientPackage(), UTemplateMyClass.StaticClass());
         arr.Push(obj);
         arr.get_Item(0).should.be(obj);
         arr.set_Item(0, obj2);

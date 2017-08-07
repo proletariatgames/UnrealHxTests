@@ -189,26 +189,26 @@ class TestDelegates extends buddy.BuddySuite {
       it('should be able to bind to uobject functions', {
         var del = FDelHaxe_Multi.create();
 #if (!cppia && !WITH_CPPIA)
-        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         obj.numCallbacks.should.be(0);
         del.AddUObject(obj, MethodPointer.fromMethod(obj.ufun));
         del.Broadcast();
         obj.numCallbacks.should.be(1);
 #end
 
-        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         obj.numCallbacks.should.be(0);
         del.AddUFunction(obj.ufun);
         del.Broadcast();
         obj.numCallbacks.should.be(1);
 
-        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         obj.numCallbacks.should.be(0);
         obj.test0.AddDynamic(obj.ufun);
         obj.test0.Broadcast();
         obj.numCallbacks.should.be(1);
 
-        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         obj.numCallbacks.should.be(0);
         obj.ufun2(10);
         obj.testRV.BindDynamic(obj.ufun2);
@@ -219,7 +219,7 @@ class TestDelegates extends buddy.BuddySuite {
         obj.numCallbacks.should.be(21);
 
         function run() {
-          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
           obj.numCallbacks.should.be(0);
           obj.delUFun3.AddDynamic(obj.ufun3);
           var simple = FSimpleUStruct.create();
@@ -240,7 +240,7 @@ class TestDelegates extends buddy.BuddySuite {
         check(0); // the same amount of constructors and destructors are called
 
         function run() {
-          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
           obj.numCallbacks.should.be(0);
           obj.delUFun3_RV.BindDynamic(obj.ufun3_ret);
           var simple = FSimpleUStruct.create();
@@ -258,7 +258,7 @@ class TestDelegates extends buddy.BuddySuite {
 
         check(0); // the same amount of constructors and destructors are called
 
-        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         function run() {
           obj.numCallbacks.should.be(0);
           obj.delUFun4.AddDynamic(obj.ufun4);
@@ -293,7 +293,7 @@ class TestDelegates extends buddy.BuddySuite {
 
         check(-1); // make it up for the last destructor
 
-        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         function run() {
           obj.numCallbacks.should.be(0);
           obj.delUFun4_RV.BindDynamic(obj.ufun4_ret);
@@ -324,7 +324,7 @@ class TestDelegates extends buddy.BuddySuite {
 
         var simple = null;
         function run() {
-          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
           obj.numCallbacks.should.be(0);
           obj.delUFun5.BindDynamic(obj.ufun5);
           simple = obj.delUFun5.Execute(1.1, 2.2, 3, 4);
@@ -358,7 +358,7 @@ class TestDelegates extends buddy.BuddySuite {
 #if (pass >= 2)
         var simple = null;
         function run() {
-          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+          var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
           obj.numCallbacks.should.be(0);
 #if (pass >= 4)
           obj.delUFun5_pass2.BindDynamic(obj.ufun6);
@@ -418,7 +418,7 @@ class TestDelegates extends buddy.BuddySuite {
         called.should.be(1);
       });
       it('should be able to create new UCLASS types that use delegates', {
-        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>());
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         obj.test0.Broadcast();
       });
       it('should be able to declare new delegate types', {
@@ -441,7 +441,7 @@ class TestDelegates extends buddy.BuddySuite {
           didRun = true;
           return iface.getSomeInt();
         });
-        var derived = UObject.NewObject(new TypeParam<UHaxeDerived2>());
+        var derived = UObject.NewObject(new TypeParam<UHaxeDerived2>(), UObject.GetTransientPackage(), UHaxeDerived2.StaticClass());
         t1.Execute(derived).should.be(0xf00ba5);
         didRun.should.be(true);
         didRun = false;
@@ -453,7 +453,7 @@ class TestDelegates extends buddy.BuddySuite {
           didRun = true;
           return iface.getSomeInt();
         });
-        var basic = UObject.NewObject(new TypeParam<UBasicTypesSub2>());
+        var basic = UObject.NewObject(new TypeParam<UBasicTypesSub2>(), UObject.GetTransientPackage(), UBasicTypesSub2.StaticClass());
         t1.Execute(basic).should.be(0xf00);
         didRun.should.be(true);
         didRun = false;
@@ -480,7 +480,7 @@ class TestDelegates extends buddy.BuddySuite {
           (sub1.stringNonProp.toString() == 'Works').should.be(true);
           return SomeEnum1;
         });
-        var basic2 = UObject.NewObject(new TypeParam<UBasicTypesSub1>());
+        var basic2 = UObject.NewObject(new TypeParam<UBasicTypesSub1>(), UObject.GetTransientPackage(), UBasicTypesSub1.StaticClass());
         basic2.stringNonProp = 'Works';
         t3.Execute(basic2).should.equal(SomeEnum1);
         didRun.should.be(true);
