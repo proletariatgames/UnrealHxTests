@@ -52,3 +52,36 @@ public:
     return true;
   }
 };
+
+UCLASS(Blueprintable, Category="Cppia")
+class UCppBPTest : public UObject {
+  GENERATED_BODY()
+
+public:
+  UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Cppia")
+  FString theString;
+
+  UFUNCTION(BlueprintImplementableEvent, Category="Cppia")
+  int runBlueprints(const FString& str);
+
+  UFUNCTION(BlueprintCallable, Category="Cppia")
+  int runHaxeFunction(int i, const FString& str) {
+    return i * 100;
+  }
+
+  UFUNCTION(BlueprintImplementableEvent, Category="Cppia")
+  int runBlueprints2(FString& str);
+
+  UFUNCTION(BlueprintCallable, Category="Cppia")
+  FString getOutValue() {
+    FString ret;
+    runBlueprints2(ret);
+    return ret;
+  }
+
+  UFUNCTION(BlueprintCallable, Category="Cppia")
+  void testOut(FString& str) {
+    str = TEXT("ohai called");
+  }
+
+};

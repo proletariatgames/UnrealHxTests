@@ -20,11 +20,10 @@ extern class UBasicTypesUObject_Extra {
 
   @:final function setUI16_I16_UI32_I32(ui16:unreal.UInt16, i16:unreal.Int16, ui32:unreal.FakeUInt32, i32:unreal.Int32):Void;
   function setUI64_I64_Float_Double(ui64:unreal.FakeUInt64, i64:unreal.Int64, f:unreal.Float32, d:unreal.Float64):Bool;
-  function setText(txt:unreal.FText):unreal.Int64;
 
   @:thisConst function getSomeNumber():Int;
 
-  public static function isNull(obj:PPtr<UBasicTypesUObject>) : Bool;
+  public static function isNull(obj:UBasicTypesUObject) : Bool;
   public static function getNull() : PPtr<UBasicTypesUObject>;
 
   public function getSelf() : UBasicTypesUObject;
@@ -33,12 +32,6 @@ extern class UBasicTypesUObject_Extra {
   public function testConstParam(geo:unreal.Const<unreal.PRef<unreal.slatecore.FGeometry>>) : unreal.FString;
 
   private var m_i32:unreal.Int32;
-
-  @:uproperty()
-  private var m_FStringProp:unreal.FString;
-
-  @:ufunction()
-  private function setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : UBasicTypesUObject;
 
   private function nonUFUNCTION_setBool_String_UI8_I8_protected(b:Bool, str:unreal.FString, ui8:unreal.UInt8, i8:unreal.Int8) : Void;
 

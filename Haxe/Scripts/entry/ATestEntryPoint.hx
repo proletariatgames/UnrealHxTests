@@ -14,6 +14,7 @@ class ATestEntryPoint extends unreal.AActor {
   private var didTick = false;
   public function new(wrapped) {
     super(wrapped);
+    buddy.BuddySuite.useDefaultTrace = true;
     this.PrimaryActorTick.bCanEverTick = true;
   }
 
@@ -31,6 +32,7 @@ class ATestEntryPoint extends unreal.AActor {
       cases.TestDelegates,
       cases.TestReflect
     ));
+    // var runner = new buddy.SuitesRunner([new cases.TestUnrealInteraction()]);
 
     var curPass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
 

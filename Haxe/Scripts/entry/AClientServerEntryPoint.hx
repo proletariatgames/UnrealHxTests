@@ -1,6 +1,5 @@
 package entry;
 import repl.ReplTypes;
-import buddy.*;
 import unreal.*;
 
 @:uclass class AClientServerEntryPoint extends AActor {

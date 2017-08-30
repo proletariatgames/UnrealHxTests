@@ -5,7 +5,7 @@
 #include "SomeEnum.h"
 #include "NonUObject.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct HAXEUNITTESTS_API FPODStruct {
   GENERATED_BODY()
 
@@ -13,7 +13,7 @@ struct HAXEUNITTESTS_API FPODStruct {
   float f;
   UPROPERTY()
   double d;
-  UPROPERTY()
+  UPROPERTY(BlueprintReadWrite, Category="POD Struct")
   int32 i32;
   UPROPERTY()
   uint32 ui32;

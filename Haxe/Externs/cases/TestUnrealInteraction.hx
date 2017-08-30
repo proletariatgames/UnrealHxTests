@@ -12,15 +12,11 @@
  * It only includes UPROPERTYs and UFUNCTIONs. Do not modify it!
  * In order to add more definitions, create or edit a type with the same name/package, but with an `_Extra` suffix
 **/
-package assets;
+package cases;
 
-/**
-  Tests the implementation of a custom asset
-**/
 @:umodule("HaxeUnitTests")
 @:haxeGenerated
-@:glueCppIncludes("HaxeAsset.h")
-@:uextern @:uclass extern class UHaxeAsset extends unreal.UObject {
-  @:uproperty public var rawContents : unreal.FString;
+@:glueCppIncludes("BPTest.h")
+@:uextern @:uclass extern class UBPTest extends unreal.UObject {
   
 }

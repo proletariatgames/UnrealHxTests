@@ -1,6 +1,6 @@
 REM run setup and setup some env vars
 set WORKSPACE=%CD%
-SET HAXELIB_PATH=%WORKSPACE%/haxelib
+REM SET HAXELIB_PATH=%WORKSPACE%/haxelib
 SET CI=1
 SET CI_RUNNING=1
 
@@ -9,10 +9,10 @@ REM setup haxelib
 if not exist haxelib mkdir haxelib
 
 REM install all needed libraries
-haxelib install hxcpp || exit /b 1
-haxelib install hxcs || exit /b 1
-haxelib install buddy || exit /b 1
-haxelib install promhx || exit /b 1
+REM haxelib install hxcpp || exit /b 1
+REM haxelib install hxcs || exit /b 1
+REM haxelib install buddy || exit /b 1
+REM haxelib install promhx || exit /b 1
 
 REM build the build scripts
 cd Plugins/UE4Haxe

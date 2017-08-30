@@ -74,6 +74,7 @@ import haxeunittests.*;
 
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("NonUObject.h")
+@:noCopy
 @:uextern extern class FHasStructMember3 {
   public static var nDestructorCalled:Int32;
   public static var nConstructorCalled:Int32;
@@ -93,6 +94,7 @@ import haxeunittests.*;
 
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("NonUObject.h")
+@:noCopy
 @:uextern extern class FHasPointers {
   // var intptr:cpp.Pointer<Int>;
   // var ptrIntptr:cpp.Pointer<cpp.Pointer<Int>>;
