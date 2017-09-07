@@ -23,14 +23,15 @@ class ATestEntryPoint extends unreal.AActor {
     if (!didTick) didTick = true; else return;
     var reporter = new buddy.reporting.TraceReporter();
 
+
     var runner = new buddy.SuitesRunner(ImportAll.getDefs(
       cases.TestUObjectExterns,
       cases.TestStructs,
-      cases.TestTemplates,
-      cases.TestTArray,
-      cases.TestUObjectOverrides,
-      cases.TestDelegates,
-      cases.TestReflect
+      cases.TestTemplates
+      // cases.TestTArray,
+      // cases.TestUObjectOverrides,
+      // cases.TestDelegates
+      // cases.TestReflect
     ));
     // var runner = new buddy.SuitesRunner([new cases.TestUnrealInteraction()]);
 

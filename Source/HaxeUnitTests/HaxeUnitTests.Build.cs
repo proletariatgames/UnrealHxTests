@@ -11,6 +11,7 @@ public class HaxeUnitTests : HaxeModuleRules {
 
   override protected void init() {
     this.PrivateDependencyModuleNames.Add("SlateCore");
+
     this.PrivateDependencyModuleNames.Add("NetworkReplayStreaming");
     this.PrivateDependencyModuleNames.Add("Kismet");
     this.PrivateDependencyModuleNames.Add("InputCore");

@@ -3,6 +3,7 @@ import haxeunittests.*;
 import NonUObject;
 import SomeEnum;
 import unreal.*;
+// import unreal.movieplayer.IGameMoviePlayer;
 using buddy.Should;
 
 using unreal.CoreAPI;
@@ -285,6 +286,7 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         obj4.someStruct.ui32.should.be(0);
         obj4.someStruct.f.should.be(0);
         obj4.someStruct.d.should.be(0);
+
         obj4.i32_2 = 0x606060;
         obj4.i32_2.should.be(0x606060);
 #if (pass >= 3)
@@ -294,6 +296,16 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       });
 #end
 
+      it('should be able to override static classes', {
+        var stat:cases.TestStatic.UStaticClass = UObject.NewObject(UObject.GetTransientPackage(), cases.TestStatic.UStaticClass.StaticClass());
+        stat.doSomething('hey').toString().should.be('hey called by Static');
+        stat = UObject.NewObject(UObject.GetTransientPackage(), UStaticOverride.StaticClass());
+        stat.doSomething('hey').toString().should.be('hey called actually by script');
+#if (pass >= 2)
+        stat = UObject.NewObject(UObject.GetTransientPackage(), UStaticOverride2.StaticClass());
+        stat.doSomething('hey').toString().should.be('hey called actually by dynamic script');
+#end
+      });
       it('should be released when UObject is garbage collected');
       it('should be able to access super protected fields');
 
@@ -352,6 +364,21 @@ class UHaxeDerived0 extends UBasicTypesSub1 implements IBasicType2 {
 
   public function getSomeInt():unreal.Int32 {
     return 0xf0f0;
+  }
+}
+#end
+
+@:uclass
+class UStaticOverride extends cases.TestStatic.UStaticClass {
+  override public function doSomething(str:Const<PRef<FString>>):FString {
+    return str + ' called actually by script';
+  }
+}
+
+#if (pass >= 2)
+@:uclass class UStaticOverride2 extends cases.TestStatic.UStaticClass {
+  override public function doSomething(str:Const<PRef<FString>>):FString {
+    return str + ' called actually by dynamic script';
   }
 }
 #end
@@ -529,7 +556,16 @@ class UHaxeDerived3 extends UHaxeDerived2 {
 }
 
 @:uclass
-class AHaxeTestActorReplication extends AActor {
+#if (pass >= 3)
+@:uname("AHaxeTestActorReplication")
+#end
+#if (pass >= 2)
+class AHaxeTestActorReplication_NotCompiled extends AActor
+#else
+class AHaxeTestActorReplication extends AActor
+#end
+
+{
   @:uproperty @:ureplicate
   public var replicatedPropA:unreal.Int32;
 

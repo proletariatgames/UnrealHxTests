@@ -23,3 +23,10 @@ class TestStatic extends buddy.BuddySuite {
     ];
   }
 }
+
+@:uclass
+class UStaticClass extends UObject {
+  @:ufunction public function doSomething(str:Const<PRef<FString>>):FString {
+    return str.toString() + ' called by Static';
+  }
+}

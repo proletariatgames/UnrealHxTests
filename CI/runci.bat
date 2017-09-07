@@ -25,8 +25,8 @@ cd /D "%UE4%"
 
 REM build the unit tests
 echo "building unit tests"
-echo "Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development \"-project=%WORKSPACE%/HaxeUnitTests.uproject\" -editorrecompile -noubtmakefiles -AllowStdOutLogVerbosity"
-Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTests Win64 Development "-project=%WORKSPACE%/HaxeUnitTests.uproject" -editorrecompile -noubtmakefiles -rocket -AllowStdOutLogVerbosity || exit /b 1
+echo "Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTestsEditor Win64 Development \"-project=%WORKSPACE%/HaxeUnitTests.uproject\" -AllowStdOutLogVerbosity"
+Engine\Binaries\DotNET\UnrealBuildTool.exe HaxeUnitTestsEditor Win64 Development "-project=%WORKSPACE%/HaxeUnitTests.uproject" -AllowStdOutLogVerbosity|| exit /b 1
 haxe --cwd "%WORKSPACE%\Haxe" gen-build-script.hxml || exit /b 1
 
 REM build the commandlet to create/update asset
