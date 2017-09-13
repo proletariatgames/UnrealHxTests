@@ -74,7 +74,8 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
           cppiaReloaded = true;
         });
         trace('Building haxe pass $nextPass');
-        var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
+        var name = Sys.systemName() == 'Windows' ? 'RunCi.exe' : 'RunCi';
+        var cmd = Sys.command(FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/CI/bin/$name', ['pass$nextPass']);
         didCall = true;
         pass = nextPass;
         if (pass >= 7) {

@@ -1,6 +1,9 @@
 class UhxConfig {
   public static function getConfig(data:UhxBuildData, config:UhxBuildConfig) {
-    trace('hello');
+    trace('running custom config');
+    if (data.targetType != Editor) {
+      config.dce = DceFull;
+    }
     return config;
   }
 }

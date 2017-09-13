@@ -84,7 +84,8 @@ class ATestEntryPoint extends unreal.AActor {
           });
 #end
 
-          var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
+          var name = Sys.systemName() == 'Windows' ? 'RunCi.exe' : 'RunCi';
+          var cmd = Sys.command(FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/CI/bin/$name', ['pass$nextPass']);
           if (cmd != 0) {
             trace('Fatal', 'Error while compiling pass $nextPass');
             Sys.exit(cmd);

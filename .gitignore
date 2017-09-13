@@ -18,3 +18,5 @@ export_classes.info
 *.sln
 /.vs
 /.vscode
+
+bin
