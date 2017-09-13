@@ -54,3 +54,11 @@ package cases;
 @:uextern @:uclass extern class UHaxeDerived3 extends cases.TestUObjectOverrides.UHaxeDerived2 {
   
 }
+
+
+@:umodule("HaxeUnitTests")
+@:haxeGenerated
+@:glueCppIncludes("StaticOverride.h")
+@:uextern @:uclass extern class UStaticOverride extends cases.TestStatic.UStaticClass {
+  
+}

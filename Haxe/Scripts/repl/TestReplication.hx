@@ -61,12 +61,16 @@ class TestReplication extends buddy.BuddySuite {
             trace('Fatal', 'gameMode should not be null');
           }
           var nPlayers = gameMode.numReadyPlayers;
-          if (nPlayers >= entry.ClientServerAutomation.NUM_PLAYERS) {
+          var allPlayers = 2;
+#if WITH_EDITOR
+          allPlayers = entry.ClientServerAutomation.NUM_PLAYERS;
+#end
+          if (nPlayers >= allPlayers) {
             gameMode.numReadyPlayers = 0;
             repl.startTest();
           } else {
             gameMode.onPlayerReady = function(_) {
-              if (gameMode.numReadyPlayers == entry.ClientServerAutomation.NUM_PLAYERS) {
+              if (gameMode.numReadyPlayers == allPlayers) {
                 gameMode.numReadyPlayers = 0;
                 gameMode.onPlayerReady = null;
                 repl.startTest();

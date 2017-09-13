@@ -38,9 +38,11 @@ class ATestEntryPoint extends unreal.AActor {
     var curPass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
 
     var nextPass:Null<Int> = null;
+#if WITH_EDITOR
     if (curPass == 2) {
       nextPass = curPass + 1;
     }
+#end
 
     trace('running pass $curPass');
 
@@ -76,9 +78,11 @@ class ATestEntryPoint extends unreal.AActor {
             Sys.exit(nextPass);
           }
 
+#if WITH_EDITOR
           CoreAPI.onCppiaReload(function() {
             didTick = false;
           });
+#end
 
           var cmd = Sys.command('haxe', ['--cwd',FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/Haxe', 'gen-build-script.hxml', '-D', 'pass=$nextPass']);
           if (cmd != 0) {
