@@ -27,9 +27,7 @@ import unreal.*;
     didTick = true;
 
     buddy.BuddySuite.useDefaultTrace = true;
-#if (pass <= 6)
-    var found:AReplicationTest = cast UObject.StaticFindObjectFast(AReplicationTest.StaticClass(), this.GetOuter(), "TheReplActor", false, false, 0);
-#else
+#if (pass >= 7)
     var found:AReplicationTest = null;
     if (GetNetMode() == NM_DedicatedServer) {
       var params = FActorSpawnParameters.create();
@@ -42,6 +40,8 @@ import unreal.*;
         return;
       }
     }
+#else
+    var found:AReplicationTest = cast UObject.StaticFindObjectFast(AReplicationTest.StaticClass(), this.GetOuter(), "TheReplActor", false, false, 0);
 #end
 
     var reporter = new buddy.reporting.TraceReporter();
