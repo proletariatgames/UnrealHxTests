@@ -27,7 +27,7 @@ import unreal.*;
     didTick = true;
 
     buddy.BuddySuite.useDefaultTrace = true;
-#if (pass < 7)
+#if (pass <= 6)
     var found:AReplicationTest = cast UObject.StaticFindObjectFast(AReplicationTest.StaticClass(), this.GetOuter(), "TheReplActor", false, false, 0);
 #else
     var found:AReplicationTest = null;
