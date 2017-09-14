@@ -18,7 +18,7 @@ class TestStatic extends buddy.BuddySuite {
 
   private static function getStructArr():Array<{ fstring:FString, i:Int }> {
     return [
-      { fstring: "Test", i:0 },
+      { fstring: ("Test" : FString), i:0 },
       { fstring: "Test2", i:2 }
     ];
   }
