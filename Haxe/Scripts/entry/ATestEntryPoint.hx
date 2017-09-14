@@ -108,12 +108,17 @@ class ATestEntryPoint extends unreal.AActor {
 class ImportAll {
   macro public static function getDefs(order:Array<haxe.macro.Expr>):haxe.macro.Expr {
     var cps = Context.getClassPath();
-    var defs = [ for (e in order) e.toString() ];
+    var defs = [ for (e in order) e.toString() + '()' ];
     for (cp in cps) {
       if (sys.FileSystem.exists('$cp/cases')) {
         for (file in sys.FileSystem.readDirectory('$cp/cases')) {
           if (file.endsWith('.hx')) {
             var name = 'cases.' + file.substr(0,-3);
+            if (name == 'cases.TestUnrealInteraction') {
+              name += '(this)';
+            } else {
+              name += '()';
+            }
             if (defs.indexOf(name) < 0)
               defs.push(name);
           }
@@ -121,6 +126,6 @@ class ImportAll {
       }
     }
 
-    return { expr:EArrayDecl([ for (def in defs) Context.parse('new $def()', Context.currentPos())]), pos:Context.currentPos() };
+    return { expr:EArrayDecl([ for (def in defs) Context.parse('new $def', Context.currentPos())]), pos:Context.currentPos() };
   }
 }

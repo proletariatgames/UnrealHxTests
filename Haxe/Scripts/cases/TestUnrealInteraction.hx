@@ -5,7 +5,7 @@ using buddy.Should;
 import NonUObject;
 
 class TestUnrealInteraction extends buddy.BuddySuite {
-  public function new() {
+  public function new(worldCtx:AActor) {
     describe('haxe: blueprint interaction', {
       it('should be able to interact with blueprint', {
         var cls:UClass = getObjectClass("/Game/Blueprints/BlueprintHaxeClass");
@@ -23,6 +23,24 @@ class TestUnrealInteraction extends buddy.BuddySuite {
         out2.get().should.be(44 - 3);
         ret2.toString().should.be('BP 42 returned');
       });
+      it('should be able to interact with a c++-base blueprint', {
+        var staticExtern:ACppStaticExtern = cast UObject.StaticFindObjectFast(ACppStaticExtern.StaticClass(), worldCtx.GetOuter(), "TheStaticCpp", false, false, 0);
+        staticExtern.runBlueprints("Hey").should.be(43 * 3);
+        staticExtern.theString = "theString";
+        var ret:FString = "";
+        staticExtern.runBlueprints2(ret).should.be(43);
+        ret.toString().should.be('theString');
+      });
+#if (pass >= 2)
+      it('should be able to interact with a c++-base blueprint through cppia', {
+        var staticExtern:ACppDynamicExtern = cast UObject.StaticFindObjectFast(ACppDynamicExtern.StaticClass(), worldCtx.GetOuter(), "TheDynamicCpp", false, false, 0);
+        staticExtern.runBlueprints("Hey").should.be(42 * 3);
+        staticExtern.theString = "theString";
+        var ret:FString = "";
+        staticExtern.runBlueprints2(ret).should.be(42);
+        ret.toString().should.be('theString');
+      });
+#end
     });
   }
 
