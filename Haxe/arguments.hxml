@@ -7,3 +7,4 @@
 -D UE4_POINTER_TESTING
 
 -D wrapper_debug
+-D dump-dependencies
