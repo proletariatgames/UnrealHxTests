@@ -56,13 +56,13 @@ class ATestEntryPoint extends unreal.AActor {
 #if WITH_EDITOR
         if (GetWorld().IsPlayInEditor()) {
           if (!success) {
-            trace('Error', 'Test failed. Exiting');
+            trace('Fatal', 'Test failed. Exiting');
             // the only way to make sure that UE exits with a non-0 code is to actually exit ourselves
             Sys.exit(curPass == null ? 10 : curPass);
           }
 
           if (curPass == 4) {
-            unreal.FPlatformMisc.RequestExit(true);
+            unreal.FPlatformMisc.RequestExitWithStatus(true, 0);
           } else {
             var pc = UGameplayStatics.GetPlayerController(GetWorld(), 0);
             if (pc != null) {
@@ -91,7 +91,12 @@ class ATestEntryPoint extends unreal.AActor {
             Sys.exit(cmd);
           }
         } else {
-          Sys.exit(success ? 0 : 2);
+          if (success) {
+            unreal.FPlatformMisc.RequestExitWithStatus(true, 0);
+          } else {
+            trace('Fatal', 'Tests failed');
+            Sys.exit(2);
+          }
         }
       }
     });

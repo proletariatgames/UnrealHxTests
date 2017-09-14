@@ -21,7 +21,7 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
     }
     if (Sys.getEnv("CI_RUNNING") == "1") {
       this.addHaxeCommand(function() {
-        unreal.FPlatformMisc.RequestExit(true);
+        unreal.FPlatformMisc.RequestExitWithStatus(true, 0);
         return true;
       });
     }
@@ -84,7 +84,7 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
           });
         }
         if (cmd != 0) {
-          trace('Error', 'Error while compiling pass $nextPass');
+          trace('Fatal', 'Error while compiling pass $nextPass');
           Sys.exit(cmd);
         }
         pass = nextPass;

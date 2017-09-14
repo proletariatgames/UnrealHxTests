@@ -48,7 +48,7 @@ class HotReloadAutomation extends unreal.automation.AutomationTest {
         var cmd = Sys.command(FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/CI/bin/$name', ['pass$nextPass']);
         didCall = true;
         if (cmd != 0) {
-          trace('Error', 'Error while compiling pass $nextPass');
+          trace('Fatal', 'Error while compiling pass $nextPass');
           Sys.exit(cmd);
         }
         pass = nextPass;
