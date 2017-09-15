@@ -57,7 +57,7 @@ class RunCi {
         { name:'SERVICE', desc:'This is called under a service and an intermediate caller must be made for GUI applications' },
       ];
       var avTargets = [
-        { name:'all', desc:'A shorthand for `build cmd run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build','cmd','run','pass2','run','pass3','run-hotreload','run-cserver'])},
+        { name:'all', desc:'A shorthand for `build cmd run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build','pass0','cmd','run','pass2','run','pass3','run-hotreload','run-cserver'])},
         { name:'build', desc:'Performs a full editor build', fn:doBuild },
         { name:'cmd', desc:'Runs a test commandlet', fn:doCmd },
         { name:'run', desc:'Runs the main unit tests', fn:doRun },
@@ -111,15 +111,17 @@ class RunCi {
   static function doCmd() {
     var stamp = Date.now().toString();
     Sys.putEnv('CUSTOM_STAMP', stamp);
-    runUE(['$workspace/HaxeUnitTests.uproject', '-run=HaxeUnitTests.UpdateAsset', stamp, '-AllowStdOutLogVerbosity']);
+    runUE(['$workspace/HaxeUnitTests.uproject', '-run=HaxeUnitTests.UpdateAsset', stamp, '-AllowStdOutLogVerbosity'], true, false);
   }
 
   static function doRun() {
-    runUE(['$workspace/HaxeUnitTests.uproject', '-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity']);
+    runUE(['$workspace/HaxeUnitTests.uproject', '-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity'], true, false);
   }
 
   static function doPass(n:Int) {
-    if (haxeServer == null) {
+    if (n == 0) {
+      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml']);
+    } else if (haxeServer == null) {
       runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'pass=$n']);
     } else {
       PassExpand.run('$workspace/Haxe/Scripts', n);
@@ -160,7 +162,7 @@ class RunCi {
     callOrDebug('$workspace/bin/$name', args);
   }
 
-  static function runUE(args:Array<String>, throwOnError=true) {
+  static function runUE(args:Array<String>, throwOnError=true, gui=true) {
     if (headless) {
       args.push('-nullrhi');
       args.push('-unattended');
@@ -169,11 +171,11 @@ class RunCi {
     Sys.setCwd(ue4);
     var ret = switch(systemName) {
       case 'Mac':
-        callOrDebug('./Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor', args, throwOnError);
+        callOrDebug('./Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor', args, throwOnError, gui);
       case 'Linux':
-        callOrDebug('./Engine/Binaries/Linux/UE4Editor', args, throwOnError);
+        callOrDebug('./Engine/Binaries/Linux/UE4Editor', args, throwOnError, gui);
       case _:
-        callOrDebug('./Engine/Binaries/Win64/UE4Editor.exe', args, throwOnError);
+        callOrDebug('./Engine/Binaries/Win64/UE4Editor.exe', args, throwOnError, gui);
     };
     Sys.setCwd(old);
     return ret;

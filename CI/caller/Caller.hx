@@ -6,6 +6,6 @@ class Caller {
 
     args = [for (arg in args) arg.replace("\\","\\\\").replace("\"","\\\"")];
 
-    Sys.exit(murrayju.processextensions.ProcessExtensions.StartProcessAsCurrentUser(null, '"${args.join('" "')}"', null, true));
+    Sys.exit(murrayju.processextensions.ProcessExtensions.StartProcessAsCurrentUser(null, '"${args.join('" "')}"', null, false));
   }
 }
