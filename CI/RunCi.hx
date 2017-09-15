@@ -12,6 +12,7 @@ class RunCi {
   static var verbose = Sys.getEnv("VERBOSE") == "1";
   static var config = Sys.getEnv('BUILD_CONFIG') == null ? 'Development' : Sys.getEnv('BUILD_CONFIG');
   static var platform:String = Sys.getEnv('BUILD_PLATFORM');
+  static var headless:Bool = Sys.getEnv('HEADLESS') == "1";
   static var setServer = false;
 
   public static function main() {
@@ -153,6 +154,10 @@ class RunCi {
   }
 
   static function runUE(args:Array<String>, throwOnError=true) {
+    if (headless) {
+      args.push('-nullrhi');
+      args.push('-unattended');
+    }
     var old = Sys.getCwd();
     Sys.setCwd(ue4);
     var ret = switch(systemName) {
