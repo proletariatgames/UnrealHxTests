@@ -150,7 +150,12 @@ class RunCi {
     }
     // var old = Sys.getCwd();
     // Sys.setCwd('$workspace/bin');
-    callOrDebug('$workspace/bin/$name', ['-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity']);
+    var args = ['-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity'];
+    if (headless) {
+      args.push('-nullrhi');
+      args.push('-unattended');
+    }
+    callOrDebug('$workspace/bin/$name', args);
   }
 
   static function runUE(args:Array<String>, throwOnError=true) {
