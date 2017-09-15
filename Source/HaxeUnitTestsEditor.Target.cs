@@ -1,16 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class HaxeUnitTestsEditorTarget : BaseTargetRules
+public class HaxeUnitTestsEditorTarget : TargetRules
 {
-  public HaxeUnitTestsEditorTarget(TargetInfo Target) : base(Target)
-  {
+  public HaxeUnitTestsEditorTarget(TargetInfo target) : base(target) {
     Type = TargetType.Editor;
-  }
-
-  override protected void setupBinaries(List<string> moduleNames) {
-    moduleNames.Add("HaxeUnitTests");
+    ExtraModuleNames.Add("HaxeUnitTests");
   }
 }

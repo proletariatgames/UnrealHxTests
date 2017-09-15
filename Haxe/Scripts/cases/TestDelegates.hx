@@ -52,42 +52,42 @@ typedef FDelTest4 = unreal.Delegate<FDelTest4, Const<PRef<TWeakObjectPtr<UHaxeDe
 typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
 
 @:uclass class UUsesDelegate extends unreal.UObject {
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test0:FDelHaxe0;
-  // @:uproperty(BlueprintAssignable, Category=Game)
+  // @:uproperty(EditAnywhere, Category=Game)
   // public var test1:DelIntInt;
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test2:FDelHaxe2;
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test3:FDelHaxe3;
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test4:FDelHaxe4;
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test5:FDelHaxe5;
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test6:FDelHaxe6;
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test7:FDelHaxe7;
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var test8:FDelHaxe8;
 
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var delUFun3:FDelHaxeUFun3;
 
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var delUFun3_RV:FDelHaxeUFun3_RV;
 
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var delUFun4:FDelHaxeUFun4;
 
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var delUFun4_RV:FDelHaxeUFun4_RV;
 
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var delUFun5:FDelHaxeUFun5;
 
 #if (pass >= 2)
-  @:uproperty(BlueprintAssignable, Category=Game)
+  @:uproperty(EditAnywhere, Category=Game)
   public var delUFun5_pass2:FDelHaxeUFun5_Pass2;
 #end
 

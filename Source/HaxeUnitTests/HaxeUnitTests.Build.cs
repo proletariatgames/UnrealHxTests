@@ -8,16 +8,4 @@ public class HaxeUnitTests : HaxeModuleRules {
   public HaxeUnitTests(ReadOnlyTargetRules target) : base(target) {
   }
 #endif
-
-  override protected void init() {
-    this.PrivateDependencyModuleNames.Add("SlateCore");
-
-    this.PrivateDependencyModuleNames.Add("NetworkReplayStreaming");
-    this.PrivateDependencyModuleNames.Add("Kismet");
-    this.PrivateDependencyModuleNames.Add("InputCore");
-    this.PrivateDependencyModuleNames.Add("OnlineSubsystem");
-    this.PrivateDependencyModuleNames.Add("ClothingSystemRuntimeInterface");
-    this.PrivateDependencyModuleNames.Add("BlueprintGraph");
-    this.PrivateDependencyModuleNames.Add("UnrealEd");
-  }
 }

@@ -9,6 +9,7 @@ class RunCi {
   static var systemName = Sys.systemName();
   static var workspace:String;
   static var debug = Sys.getEnv("DEBUG") == "1";
+  static var verbose = Sys.getEnv("VERBOSE") == "1";
   static var config = Sys.getEnv('BUILD_CONFIG') == null ? 'Development' : Sys.getEnv('BUILD_CONFIG');
   static var platform:String = Sys.getEnv('BUILD_PLATFORM');
   static var setServer = false;
@@ -50,9 +51,10 @@ class RunCi {
         { name:'DEBUG', desc:'Call the target with a debugger attached' },
         { name:'BUILD_CONFIG', desc:'Build configuration. Defaults to Development' },
         { name:'BUILD_PLATFORM', desc:'Build platform. Defaults to current platform' },
+        { name:'VERBOSE', desc:'Build with verbose flag' },
       ];
       var avTargets = [
-        { name:'all', desc:'A shorthand for `build cmd run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build','cmd','run','pass2','run','pass3','run-hotreload','run-cserver','restore'])},
+        { name:'all', desc:'A shorthand for `build cmd run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build','cmd','run','pass2','run','pass3','run-hotreload','run-cserver'])},
         { name:'build', desc:'Performs a full editor build', fn:doBuild },
         { name:'cmd', desc:'Runs a test commandlet', fn:doCmd },
         { name:'run', desc:'Runs the main unit tests', fn:doRun },
@@ -136,7 +138,18 @@ class RunCi {
   }
 
   static function doRunCooked() {
-    throw 'TODO';
+    var name = switch(systemName) {
+      case 'Windows':
+        'WindowsNoEditor/HaxeUnitTests/Binaries/Win64/HaxeUnitTests.exe';
+      case 'Mac':
+        'MacNoEditor/HaxeUnitTests/Binaries/Mac/HaxeUnitTests';
+      case 'Linux':
+        'LinuxNoEditor/HaxeUnitTests/Binaries/Linux/HaxeUnitTests';
+      case _: throw 'Invalid Platform';
+    }
+    // var old = Sys.getCwd();
+    // Sys.setCwd('$workspace/bin');
+    callOrDebug('$workspace/bin/$name', ['-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity']);
   }
 
   static function runUE(args:Array<String>, throwOnError=true) {
@@ -188,6 +201,10 @@ class RunCi {
         FileSystem.deleteFile('$workspace/uhxconfig-local.json');
       }
     }
+    if (verbose) {
+      args.push('-verbose');
+    }
+
     var old = Sys.getCwd();
     Sys.setCwd(ue4);
     var ret = switch(systemName) {

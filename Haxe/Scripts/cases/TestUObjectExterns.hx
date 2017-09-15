@@ -65,6 +65,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           basic.doubleNonProp.should.be(10.2);
         });
 
+#if WITH_EDITOR // because of DCE
         it('should be able to be accessed through reflection (basic)', {
           var i64:Int64 = 0;
           var basicDyn:Dynamic = basic;
@@ -101,6 +102,7 @@ class TestUObjectExterns extends buddy.BuddySuite {
           (Reflect.getProperty(basicDyn,"floatNonProp") : Float).should.beCloseTo(99.1);
           (Reflect.getProperty(basicDyn,"doubleNonProp") : Float).should.be(100.2);
         });
+#end
         it('should be able to be created as null', {
           UBasicTypesUObject.isNull(null).should.be(true);
           UBasicTypesUObject.getNull().should.be(null);

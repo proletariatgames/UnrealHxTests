@@ -1,14 +1,10 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class HaxeUnitTestsTarget : BaseTargetRules
+public class HaxeUnitTestsTarget : TargetRules
 {
-  public HaxeUnitTestsTarget(TargetInfo Target) : base(Target)
-  {
+  public HaxeUnitTestsTarget(TargetInfo target) : base(target) {
     Type = TargetType.Game;
-  }
-
-  override protected void setupBinaries(List<string> moduleNames) {
-    moduleNames.Add("HaxeUnitTests");
+    ExtraModuleNames.Add("HaxeUnitTests");
   }
 }

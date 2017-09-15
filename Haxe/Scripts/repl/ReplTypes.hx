@@ -170,7 +170,7 @@ typedef AReplicationTest = ADynamicReplicationTest;
   public var fn_onServerCall:TArray<FPODStruct>->Void;
   public var fn_onClientCalled:String->String->Void;
 
-  @:ufunction(Server,Reliable)
+  @:ufunction(Server,Reliable,WithValidation)
   public function clientReady();
   function clientReady_Implementation() {
     var mode = this.GetWorld().GetAuthGameMode().as(AReplGameMode);
@@ -183,15 +183,18 @@ typedef AReplicationTest = ADynamicReplicationTest;
       mode.onPlayerReady(this);
     }
   }
+  function clientReady_Validate() {
+    return true;
+  }
 
   @:ufunction(Server, Reliable, WithValidation)
-  public function Server_Reliable_WithValidation(arr:TArray<FPODStruct>);
+  public function Server_Reliable_WithValidation(arr:Const<PRef<TArray<FPODStruct>>>);
 
-  function Server_Reliable_WithValidation_Implementation(arr:TArray<FPODStruct>) {
+  function Server_Reliable_WithValidation_Implementation(arr:Const<PRef<TArray<FPODStruct>>>) {
     this.fn_onServerCall(arr);
   }
 
-  function Server_Reliable_WithValidation_Validate(arr:TArray<FPODStruct>) {
+  function Server_Reliable_WithValidation_Validate(arr:Const<PRef<TArray<FPODStruct>>>) {
     this.validateCalled = true;
     return canCallServerFn && (arr.length == 0 || arr[0].i32 != 0xf00);
   }

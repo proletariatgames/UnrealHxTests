@@ -5,7 +5,9 @@ import haxe.macro.Context;
 using StringTools;
 using haxe.macro.ExprTools;
 #else
+#if WITH_EDITOR
 import unreal.editor.UFactory;
+#end
 import buddy.*;
 import unreal.*;
 
@@ -21,9 +23,8 @@ class ATestEntryPoint extends unreal.AActor {
   // we define this as live so we can load a new cppia version on the third pass
   @:live override public function Tick(deltaTime:Float32) {
     if (!didTick) didTick = true; else return;
+
     var reporter = new buddy.reporting.TraceReporter();
-
-
     var runner = new buddy.SuitesRunner(ImportAll.getDefs(
       cases.TestUObjectExterns,
       cases.TestStructs,
