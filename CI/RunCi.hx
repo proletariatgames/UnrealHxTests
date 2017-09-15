@@ -13,6 +13,7 @@ class RunCi {
   static var config = Sys.getEnv('BUILD_CONFIG') == null ? 'Development' : Sys.getEnv('BUILD_CONFIG');
   static var platform:String = Sys.getEnv('BUILD_PLATFORM');
   static var headless:Bool = Sys.getEnv('HEADLESS') == "1";
+  static var service:Bool = Sys.getEnv('SERVICE') == "1";
   static var setServer = false;
 
   public static function main() {
@@ -53,6 +54,7 @@ class RunCi {
         { name:'BUILD_CONFIG', desc:'Build configuration. Defaults to Development' },
         { name:'BUILD_PLATFORM', desc:'Build platform. Defaults to current platform' },
         { name:'VERBOSE', desc:'Build with verbose flag' },
+        { name:'SERVICE', desc:'This is called under a service and an intermediate caller must be made for GUI applications' },
       ];
       var avTargets = [
         { name:'all', desc:'A shorthand for `build cmd run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build','cmd','run','pass2','run','pass3','run-hotreload','run-cserver'])},
@@ -229,7 +231,7 @@ class RunCi {
     return ret;
   }
 
-  static function callOrDebug(cmd:String, args:Array<String>, throwOnError=true) {
+  static function callOrDebug(cmd:String, args:Array<String>, throwOnError=true, gui=true) {
     if (debug) {
       switch(systemName) {
       case 'Linux':
@@ -249,14 +251,19 @@ class RunCi {
         }
         args.unshift(cmd);
         args.unshift('/DebugExe');
-        return call('$tools/../IDE/devenv.exe', args, throwOnError);
+        return call('$tools/../IDE/devenv.exe', args, throwOnError, gui);
       }
     }
     return call(cmd, args, throwOnError);
   }
 
-  static function call(cmd:String, args:Array<String>, throwOnError=true) {
+  static function call(cmd:String, args:Array<String>, throwOnError=true, gui:Bool=false) {
     Sys.println('calling "$cmd" "${args.join('" "')}"');
+    if (gui && service) {
+      Sys.println('Service calling through Caller.exe');
+      args.unshift(cmd);
+      cmd = '$workspace/CI/caller/bin/bin/Caller.exe';
+    }
     var ret = Sys.command(cmd, args);
     if (throwOnError && ret != 0) {
       throw 'Command failed';
