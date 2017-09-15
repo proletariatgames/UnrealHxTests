@@ -237,7 +237,7 @@ class RunCi {
       case 'Linux':
         args.unshift(cmd);
         args.unshift('--args');
-        return call('gdb', args, throwOnError);
+        return call('gdb', args, throwOnError, gui);
       case 'Windows':
         var tools = Sys.getEnv('VS140COMNTOOLS');
         if (tools == null) {
@@ -254,7 +254,7 @@ class RunCi {
         return call('$tools/../IDE/devenv.exe', args, throwOnError, gui);
       }
     }
-    return call(cmd, args, throwOnError);
+    return call(cmd, args, throwOnError, gui);
   }
 
   static function call(cmd:String, args:Array<String>, throwOnError=true, gui:Bool=false) {
