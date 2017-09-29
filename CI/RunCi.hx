@@ -115,7 +115,7 @@ class RunCi {
   }
 
   static function doRun() {
-    runUE(['$workspace/HaxeUnitTests.uproject', '-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity'], true, false);
+    runUE(['$workspace/HaxeUnitTests.uproject', '-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity'], true, true);
   }
 
   static function doPass(n:Int) {
