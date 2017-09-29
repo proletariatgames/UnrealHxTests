@@ -268,7 +268,7 @@ class RunCi {
     }
     var ret = Sys.command(cmd, args);
     if (throwOnError && ret != 0) {
-      throw 'Command failed';
+      throw 'Command failed with code $ret';
     }
     Sys.println(' -> $cmd returned with code $ret');
     return ret;
