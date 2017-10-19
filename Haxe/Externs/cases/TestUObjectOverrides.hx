@@ -52,6 +52,7 @@ package cases;
 @:haxeGenerated
 @:glueCppIncludes("HaxeDerived3.h")
 @:uextern @:uclass extern class UHaxeDerived3 extends cases.TestUObjectOverrides.UHaxeDerived2 {
+  @:ufunction public function exposedFunction(someActor : unreal.AActor) : Void;
   
 }
 

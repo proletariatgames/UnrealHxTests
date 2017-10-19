@@ -527,6 +527,9 @@ class UHaxeDerived3 extends UHaxeDerived2 {
   @:uexpose
   public static var someObj:TWeakObjectPtr<UHaxeDerived3>;
 
+  @:uexpose @:ufunction public function exposedFunction(someActor:AActor) {
+  }
+
   @:ufunction
   public static function testStatic() : Void {
   }
