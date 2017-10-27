@@ -19,7 +19,8 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
         this.addHaxeCommand(buildNextPass());
       }
     }
-    if (Sys.getEnv("CI_RUNNING") == "1") {
+    var ciRunning = Sys.getEnv('CI_RUNNING') == '1' || Sys.args().indexOf('-DEBUGGING') >= 0;
+    if (ciRunning) {
       this.addHaxeCommand(function() {
         unreal.FPlatformMisc.RequestExitWithStatus(true, 0);
         return true;

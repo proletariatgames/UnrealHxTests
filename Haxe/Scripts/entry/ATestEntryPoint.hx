@@ -53,7 +53,8 @@ class ATestEntryPoint extends unreal.AActor {
       var success = !runner.failed();
       trace('tests success=$success');
 
-      if (Sys.getEnv("CI_RUNNING") == "1") {
+      var ciRunning = Sys.getEnv('CI_RUNNING') == '1' || Sys.args().indexOf('-DEBUGGING') >= 0;
+      if (ciRunning) {
 #if WITH_EDITOR
         if (GetWorld().IsPlayInEditor()) {
           if (!success) {

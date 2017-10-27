@@ -5,6 +5,7 @@ import SomeEnum;
 import haxeunittests.EMyCppEnum;
 import haxeunittests.EMyEnum;
 import haxeunittests.*;
+import statics.StaticEnums.SomeEnumTest;
 using buddy.Should;
 
 @:uenum(BlueprintType) @:class(uint8) enum ETestHxEnumClass {
@@ -25,6 +26,9 @@ using buddy.Should;
 
   @:uproperty
   public var test4:EMyNamespacedEnum;
+
+  @:uproperty
+  public var test5:statics.StaticEnums.SomeEnumTest;
 
   @:ufunction
   public function setTest(val:ETestHxEnumClass) {
@@ -75,6 +79,13 @@ class TestUEnum extends buddy.BuddySuite {
         obj.test1.should.equal(E_2nd);
         obj.test1 = E_3rd;
         obj.test1.should.equal(E_3rd);
+
+        obj.test5 = One;
+        obj.test5.should.equal(One);
+        obj.test5 = Two;
+        obj.test5.should.equal(Two);
+        obj.test5 = Three;
+        obj.test5.should.equal(Three);
       });
       it('should be able to pass enums back and forth to C++', {
         var obj = UObject.NewObject(new TypeParam<UTestUseEnum>(), UObject.GetTransientPackage(), UTestUseEnum.StaticClass());

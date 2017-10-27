@@ -235,6 +235,7 @@ class RunCi {
 
   static function callOrDebug(cmd:String, args:Array<String>, throwOnError=true, gui=true) {
     if (debug) {
+      args.push('-DEBUGGING');
       switch(systemName) {
       case 'Linux':
         args.unshift(cmd);
