@@ -120,12 +120,12 @@ class RunCi {
 
   static function doPass(n:Int) {
     if (n == 0) {
-      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml']);
+      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
     } else if (haxeServer == null) {
-      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'pass=$n']);
+      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors', '-D', 'pass=$n']);
     } else {
       PassExpand.run('$workspace/Haxe/Scripts', n);
-      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml']);
+      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
     }
   }
 
