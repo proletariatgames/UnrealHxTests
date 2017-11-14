@@ -12,11 +12,15 @@
  * It only includes UPROPERTYs and UFUNCTIONs. Do not modify it!
  * In order to add more definitions, create or edit a type with the same name/package, but with an `_Extra` suffix
 **/
-package cases;
+package haxeunittests;
 
-@:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("BPTest.h")
-@:uextern @:uclass extern class UBPTest extends unreal.UObject {
+/**
+  @param name
+  @param ReturnValue
   
-}
+**/
+@:glueCppIncludes("Public/BasicTypesSub.h")
+@:uParamName("name")
+@:uParamName("ReturnValue")
+@:umodule("HaxeUnitTests")
+typedef FDynIntInt = unreal.DynamicDelegate<FDynIntInt, unreal.Int32->unreal.Int32>;

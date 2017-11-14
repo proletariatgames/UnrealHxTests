@@ -1,9 +1,9 @@
 package cases;
 import unreal.*;
 import NonUObject;
-import SomeEnum;
 import haxeunittests.EMyCppEnum;
 import haxeunittests.EMyEnum;
+import haxeunittests.EMyNamespacedEnum;
 import haxeunittests.*;
 import statics.StaticEnums.SomeEnumTest;
 using buddy.Should;
@@ -79,6 +79,20 @@ class TestUEnum extends buddy.BuddySuite {
         obj.test1.should.equal(E_2nd);
         obj.test1 = E_3rd;
         obj.test1.should.equal(E_3rd);
+
+        obj.test2 = SomeEnum1;
+        obj.test2.should.equal(SomeEnum1);
+        obj.test2 = SomeEnum2;
+        obj.test2.should.equal(SomeEnum2);
+        obj.test2 = SomeEnum3;
+        obj.test2.should.equal(SomeEnum3);
+
+        obj.test3 = CppEnum1;
+        obj.test3.should.equal(CppEnum1);
+        obj.test3 = CppEnum2;
+        obj.test3.should.equal(CppEnum2);
+        obj.test3 = CppEnum3;
+        obj.test3.should.equal(CppEnum3);
 
         obj.test5 = One;
         obj.test5.should.equal(One);

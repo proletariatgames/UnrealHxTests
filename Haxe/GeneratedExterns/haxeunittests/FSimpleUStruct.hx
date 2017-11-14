@@ -12,27 +12,10 @@
  * It only includes UPROPERTYs and UFUNCTIONs. Do not modify it!
  * In order to add more definitions, create or edit a type with the same name/package, but with an `_Extra` suffix
 **/
-package repl;
+package haxeunittests;
 
 @:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("ReplGameMode.h")
-@:uextern @:uclass extern class AReplGameMode extends unreal.AGameMode {
-  
-}
-
-
-@:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("ReplicationTest.h")
-@:uextern @:uclass extern class AReplicationTest extends unreal.AActor {
-  
-}
-
-
-@:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("ReplPlayerController.h")
-@:uextern @:uclass extern class AReplPlayerController extends unreal.APlayerController {
+@:glueCppIncludes("Public/NonUObject.h")
+@:uextern @:ustruct extern class FSimpleUStruct {
   
 }

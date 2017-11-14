@@ -12,12 +12,14 @@
  * It only includes UPROPERTYs and UFUNCTIONs. Do not modify it!
  * In order to add more definitions, create or edit a type with the same name/package, but with an `_Extra` suffix
 **/
-package cases;
+package haxeunittests;
 
-@:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("StaticClass.h")
-@:uextern @:uclass extern class UStaticClass extends unreal.UObject {
-  @:ufunction public function doSomething(str : unreal.FString) : unreal.FString;
+/**
+  @param argument
   
-}
+**/
+@:glueCppIncludes("Public/Playground.h")
+@:uParamName("argument")
+@:umodule("HaxeUnitTests")
+@:uname("AReplicationTests.FInnerDelTest")
+typedef FInnerDelTest = unreal.DynamicMulticastDelegate<FInnerDelTest, unreal.Int32->Void>;

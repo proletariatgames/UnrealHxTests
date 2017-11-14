@@ -1,8 +1,13 @@
 package cases;
 import unreal.*;
+import cases.TestUEnum;
+import cases.TestUObjectOverrides;
 import NonUObject;
 import helpers.TestHelper;
 import cases.TestUObjectOverrides;
+import haxeunittests.EMyCppEnum;
+import haxeunittests.EMyEnum;
+import haxeunittests.EMyNamespacedEnum;
 import haxeunittests.*;
 
 using buddy.Should;
@@ -140,7 +145,7 @@ class TestTArray extends buddy.BuddySuite {
       });
       it('should be able to use TArray as member of extern uclass types');
       it('should be able to use TArray as member of declared uclass types (UPROPERTY)', {
-        var str = null;
+        var str:FString;
         function run() {
           var obj = UObject.NewObject(new TypeParam<UTestTArray>(), UObject.GetTransientPackage(), UTestTArray.StaticClass());
           obj.array.Push("Hello from Haxe!");
@@ -148,10 +153,130 @@ class TestTArray extends buddy.BuddySuite {
           obj.array[0].toString().should.be("Hello from Haxe!");
           obj.array.indexOf("Hello from Haxe!").should.be(0);
           obj.array.indexOf("").should.be(-1);
-          // str = obj.array.Pop(false);
-          // obj.array.length.should.be(0);
-          // obj.array.Push("Test");
-          // obj.array.length.should.be(1);
+          str = obj.array.Pop(false);
+          obj.array.length.should.be(0);
+          obj.array.Push("Test");
+          obj.array.length.should.be(1);
+
+          var obj = UObject.NewObject(new TypeParam<UTestTArray2>(), UObject.GetTransientPackage(), UTestTArray2.StaticClass());
+          obj.enumArray1.push(CppEnum2);
+          obj.enumArray1[0].should.be(CppEnum2);
+          obj.enumArray1.push(CppEnum3);
+          obj.enumArray1[0].should.be(CppEnum2);
+          obj.enumArray1[1].should.be(CppEnum3);
+          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum1);
+          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum3);
+          obj.enumArray1[2].should.be(CppEnum1);
+          obj.enumArray1[3].should.be(CppEnum3);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 0).should.be(CppEnum2);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 1).should.be(CppEnum3);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 2).should.be(CppEnum1);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 3).should.be(CppEnum3);
+          obj.enumArray1.pop().should.be(CppEnum3);
+          obj.enumArray1.pop().should.be(CppEnum1);
+
+          obj.enumArray2.push(E_2nd);
+          obj.enumArray2[0].should.be(E_2nd);
+          obj.enumArray2.push(E_3rd);
+          obj.enumArray2[0].should.be(E_2nd);
+          obj.enumArray2[1].should.be(E_3rd);
+          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_1st);
+          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_3rd);
+          obj.enumArray2[2].should.be(E_1st);
+          obj.enumArray2[3].should.be(E_3rd);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 0).should.be(E_2nd);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 1).should.be(E_3rd);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 2).should.be(E_1st);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 3).should.be(E_3rd);
+          obj.enumArray2.pop().should.be(E_3rd);
+          obj.enumArray2.pop().should.be(E_1st);
+
+          var basicType =  UBasicTypesUObject.CreateFromCpp();
+          obj.objArray1.push(basicType);
+          Std.is(obj.objArray1[0], UBasicTypesUObject).should.be(true);
+          (obj.objArray1[0].getSelf() == basicType).should.be(true);
+          obj.objArray1[0].getSomeNumber().should.be(42);
+
+          var sub1 = UBasicTypesSub1.CreateFromCpp();
+          obj.objArray1.push(sub1);
+          Std.is(obj.objArray1[1], UBasicTypesSub1).should.be(true);
+          (obj.objArray1[1].getSelf() == sub1).should.be(true);
+          obj.objArray1[1].getSomeNumber().should.be(43);
+
+          var derived = UHaxeDerived1.create();
+          obj.objArray1.push(derived);
+          (obj.objArray1[2].getSelf() == derived).should.be(true);
+          obj.objArray1[2].i32Prop = 22;
+          obj.objArray1[2].getSomeNumber().should.be(220);
+          obj.objArray1.pop().getSomeNumber().should.be(220);
+          derived.getSomeNumber().should.be(220);
+
+          var derived = UHaxeDerived1.create();
+          obj.objArray2.push(derived);
+          (obj.objArray2[0].getSelf() == derived).should.be(true);
+          obj.objArray2[0].i32Prop = 23;
+          obj.objArray2[0].getSomeNumber().should.be(230);
+          obj.objArray2.pop().getSomeNumber().should.be(230);
+
+          #if (pass >= 2)
+          var obj = UObject.NewObject(new TypeParam<UTestScriptTArray2>(), UObject.GetTransientPackage(), UTestScriptTArray2.StaticClass());
+          obj.enumArray1.push(CppEnum2);
+          obj.enumArray1[0].should.be(CppEnum2);
+          obj.enumArray1.push(CppEnum3);
+          obj.enumArray1[0].should.be(CppEnum2);
+          obj.enumArray1[1].should.be(CppEnum3);
+          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum1);
+          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum3);
+          obj.enumArray1[2].should.be(CppEnum1);
+          obj.enumArray1[3].should.be(CppEnum3);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 0).should.be(CppEnum2);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 1).should.be(CppEnum3);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 2).should.be(CppEnum1);
+          UTestTArray2.getArrayInCpp(obj.enumArray1, 3).should.be(CppEnum3);
+          obj.enumArray1.pop().should.be(CppEnum3);
+          obj.enumArray1.pop().should.be(CppEnum1);
+
+          obj.enumArray2.push(E_2nd);
+          obj.enumArray2[0].should.be(E_2nd);
+          obj.enumArray2.push(E_3rd);
+          obj.enumArray2[0].should.be(E_2nd);
+          obj.enumArray2[1].should.be(E_3rd);
+          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_1st);
+          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_3rd);
+          obj.enumArray2[2].should.be(E_1st);
+          obj.enumArray2[3].should.be(E_3rd);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 0).should.be(E_2nd);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 1).should.be(E_3rd);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 2).should.be(E_1st);
+          UTestTArray2.getArrayInCpp2(obj.enumArray2, 3).should.be(E_3rd);
+          obj.enumArray2.pop().should.be(E_3rd);
+          obj.enumArray2.pop().should.be(E_1st);
+
+          var basicType =  UBasicTypesUObject.CreateFromCpp();
+          obj.objArray1.push(basicType);
+          Std.is(obj.objArray1[0], UBasicTypesUObject).should.be(true);
+          (obj.objArray1[0].getSelf() == basicType).should.be(true);
+          obj.objArray1[0].getSomeNumber().should.be(42);
+
+          var sub1 = UBasicTypesSub1.CreateFromCpp();
+          obj.objArray1.push(sub1);
+          Std.is(obj.objArray1[1], UBasicTypesSub1).should.be(true);
+          (obj.objArray1[1].getSelf() == sub1).should.be(true);
+          obj.objArray1[1].getSomeNumber().should.be(43);
+
+          var derived = UHaxeDerived1.create();
+          obj.objArray1.push(derived);
+          (obj.objArray1[2].getSelf() == derived).should.be(true);
+          obj.objArray1[2].i32Prop = 22;
+          obj.objArray1[2].getSomeNumber().should.be(220);
+          derived.getSomeNumber().should.be(220);
+
+          obj.objArray2.push(derived);
+          (obj.objArray2[0].getSelf() == derived).should.be(true);
+          obj.objArray2[0].i32Prop = 23;
+          obj.objArray2[0].getSomeNumber().should.be(230);
+          obj.objArray2.pop().getSomeNumber().should.be(230);
+          #end
         }
         run();
 
@@ -196,3 +321,47 @@ class UTestTArray extends UObject {
   @:uproperty
   public var array:TArray<FString>;
 }
+
+@:uclass class UTestTArray2 extends UObject {
+  @:uproperty
+  public var enumArray1:TArray<EMyCppEnum>;
+  @:uproperty
+  public var enumArray2:TArray<ETestHxEnumClass>;
+
+  @:uexpose public static function setArrayInCpp(arr:TArray<EMyCppEnum>, val:EMyCppEnum) {
+    arr.push(val);
+  }
+
+  @:uexpose public static function getArrayInCpp(arr:TArray<EMyCppEnum>, idx:Int):EMyCppEnum {
+    return arr[idx];
+  }
+
+  @:uexpose public static function setArrayInCpp2(arr:TArray<ETestHxEnumClass>, val:ETestHxEnumClass) {
+    arr.Push(val);
+  }
+
+  @:uexpose public static function getArrayInCpp2(arr:TArray<ETestHxEnumClass>, idx:Int):ETestHxEnumClass {
+    return arr[idx];
+  }
+
+  @:uproperty
+  public var objArray1:TArray<UBasicTypesUObject>;
+
+  @:uproperty
+  public var objArray2:TArray<UHaxeDerived1>;
+}
+
+#if (pass >= 2)
+@:uclass class UTestScriptTArray2 extends UObject {
+  @:uproperty
+  public var enumArray1:TArray<EMyCppEnum>;
+  @:uproperty
+  public var enumArray2:TArray<ETestHxEnumClass>;
+
+  @:uproperty
+  public var objArray1:TArray<UBasicTypesUObject>;
+
+  @:uproperty
+  public var objArray2:TArray<UHaxeDerived1>;
+}
+#end

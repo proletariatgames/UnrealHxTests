@@ -51,7 +51,7 @@ import haxeunittests.*;
   public var fname:FName;
   public var myEnum:EMyEnum;
   public var myCppEnum:EMyCppEnum;
-  public var myNamespacedEnum:SomeEnum.EMyNamespacedEnum;
+  public var myNamespacedEnum:EMyNamespacedEnum;
 
   @:uname('.ctor') public static function create():FHasStructMember1;
   @:uname('new') public static function createNew():POwnedPtr<FHasStructMember1>;

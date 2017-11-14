@@ -1,6 +1,5 @@
 package cases;
 import cases.TestUObjectOverrides;
-import SomeEnum;
 import NonUObject;
 import unreal.*;
 import haxeunittests.*;

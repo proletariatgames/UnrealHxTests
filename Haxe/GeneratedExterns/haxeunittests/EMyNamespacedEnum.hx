@@ -12,11 +12,14 @@
  * It only includes UPROPERTYs and UFUNCTIONs. Do not modify it!
  * In order to add more definitions, create or edit a type with the same name/package, but with an `_Extra` suffix
 **/
-package entry;
+package haxeunittests;
 
 @:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("TestEntryPoint.h")
-@:uextern @:uclass extern class ATestEntryPoint extends unreal.AActor {
+@:glueCppIncludes("Public/SomeEnum.h")
+@:uname("EMyNamespacedEnum.Value")
+@:uextern @:uenum extern enum EMyNamespacedEnum {
+  NSEnum1;
+  NSEnum2;
+  NSEnum3;
   
 }

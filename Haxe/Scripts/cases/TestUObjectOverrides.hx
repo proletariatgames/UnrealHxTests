@@ -1,7 +1,6 @@
 package cases;
 import haxeunittests.*;
 import NonUObject;
-import SomeEnum;
 import unreal.*;
 // import unreal.movieplayer.IGameMoviePlayer;
 using buddy.Should;

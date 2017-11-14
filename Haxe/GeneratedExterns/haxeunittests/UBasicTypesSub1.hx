@@ -12,11 +12,13 @@
  * It only includes UPROPERTYs and UFUNCTIONs. Do not modify it!
  * In order to add more definitions, create or edit a type with the same name/package, but with an `_Extra` suffix
 **/
-package assets;
+package haxeunittests;
 
 @:umodule("HaxeUnitTests")
-@:haxeGenerated
-@:glueCppIncludes("HaxeAssetFactory.h")
-@:uextern @:uclass extern class UHaxeAssetFactory extends unreal.editor.UFactory {
+@:glueCppIncludes("BasicTypesSub.h")
+@:uextern @:uclass extern class UBasicTypesSub1 extends haxeunittests.UBasicTypesUObject {
+  @:ufunction(BlueprintImplementableEvent) public function bpImplementableEvent(s : unreal.FString) : unreal.Int32;
+  @:ufunction(BlueprintNativeEvent) public function bpNativeEvent(s : unreal.PRef<unreal.FString>) : unreal.Int32;
+  @:uproperty public var someDelegate : haxeunittests.FDynIntInt;
   
 }

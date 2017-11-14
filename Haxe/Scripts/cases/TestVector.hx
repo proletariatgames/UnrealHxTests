@@ -13,6 +13,3 @@ class TestVector extends buddy.BuddySuite {
     });
   }
 }
-
-
-

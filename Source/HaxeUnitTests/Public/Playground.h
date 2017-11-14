@@ -54,7 +54,7 @@ public:
 };
 
 UCLASS(Blueprintable, Category="Cppia")
-class UCppBPTest : public UObject {
+class HAXEUNITTESTS_API UCppBPTest : public UObject {
   GENERATED_BODY()
 
 public:

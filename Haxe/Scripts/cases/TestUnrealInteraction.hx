@@ -41,6 +41,14 @@ class TestUnrealInteraction extends buddy.BuddySuite {
         ret.toString().should.be('theString');
       });
 #end
+    //   it('should be able to override C++ blueprint functions', {
+    //     var staticExtern:ACppStaticExtern = UObject.NewObject(null, UObject.GetTransientPackage(), ABPOverrideTest.StaticClass());
+    //     staticExtern.runBlueprints("Hey").should.be(43 * 3);
+    //     staticExtern.theString = "theString";
+    //     var ret:FString = "";
+    //     staticExtern.runBlueprints2(ret).should.be(43);
+    //     ret.toString().should.be('theString');
+    //   });
     });
   }
 
@@ -74,6 +82,21 @@ class TestUnrealInteraction extends buddy.BuddySuite {
     return obj.GeneratedClass;
   }
 }
+
+// @:uclass(Blueprintable, Category="Cppia")
+// class ABPOverrideTest extends ACppStaticExtern {
+// // #if (pass > 3)
+//   override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
+//     return this.runCppFunction(43, str);
+//   }
+
+//   override public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32 {
+//     str.assign(this.theString);
+//     return 43;
+//   }
+// // #end
+// }
+
 
 @:uclass(Blueprintable, Category="Cppia")
 class UBPTest extends UObject {
