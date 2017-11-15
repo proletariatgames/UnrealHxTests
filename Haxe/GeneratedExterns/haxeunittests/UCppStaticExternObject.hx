@@ -16,12 +16,15 @@ package haxeunittests;
 
 @:umodule("HaxeUnitTests")
 @:glueCppIncludes("StaticExtern.h")
-@:uextern @:uclass extern class ACppStaticExtern extends unreal.AActor {
+@:uextern @:uclass extern class UCppStaticExternObject extends unreal.UObject {
   @:uproperty public var theString : unreal.FString;
   @:ufunction(BlueprintImplementableEvent) public function runBlueprints(str : unreal.FString) : unreal.Int32;
+  @:ufunction @:final public function run_runBlueprints(str : unreal.FString) : unreal.Int32;
   @:ufunction(BlueprintCallable) @:final public function runCppFunction(i : unreal.Int32, str : unreal.FString) : unreal.Int32;
   @:ufunction(BlueprintImplementableEvent) public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32;
+  @:ufunction @:final public function run_runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32;
   @:ufunction(BlueprintCallable) @:final public function testOut(str : unreal.PRef<unreal.FString>) : Void;
   @:ufunction(BlueprintNativeEvent) public function runBlueprints3(str : unreal.PRef<unreal.FString>) : unreal.Int32;
+  @:ufunction @:final public function run_runBlueprints3(str : unreal.PRef<unreal.FString>) : unreal.Int32;
   
 }

@@ -41,14 +41,80 @@ class TestUnrealInteraction extends buddy.BuddySuite {
         ret.toString().should.be('theString');
       });
 #end
-    //   it('should be able to override C++ blueprint functions', {
-    //     var staticExtern:ACppStaticExtern = UObject.NewObject(null, UObject.GetTransientPackage(), ABPOverrideTest.StaticClass());
-    //     staticExtern.runBlueprints("Hey").should.be(43 * 3);
-    //     staticExtern.theString = "theString";
-    //     var ret:FString = "";
-    //     staticExtern.runBlueprints2(ret).should.be(43);
-    //     ret.toString().should.be('theString');
-    //   });
+      it('should be able to override C++ blueprint functions', {
+        var staticExtern:UCppStaticExternObject = UObject.NewObject(null, UObject.GetTransientPackage(), types.UBPOverrideTest.StaticClass());
+        staticExtern.run_runBlueprints("Hey").should.be(43 * 3);
+        staticExtern.theString = "theString";
+        var ret:FString = "";
+        staticExtern.run_runBlueprints2(ret).should.be(43);
+        ret.toString().should.be('theString');
+        var ret:FString = "";
+        staticExtern.run_runBlueprints3(ret).should.be(staticExtern.theString.length + 10);
+        ret.toString().should.be('theString_Implementation from Haxe');
+        var staticExtern:UCppStaticExternObject = UObject.NewObject(null, UObject.GetTransientPackage(), types.UBPOverrideTest.UBPOverrideTest_Child.StaticClass());
+        staticExtern.run_runBlueprints("Hey").should.be(43 * 3);
+        staticExtern.theString = "theString";
+        var ret:FString = "";
+        staticExtern.run_runBlueprints2(ret).should.be(43);
+        ret.toString().should.be('theString');
+        var ret:FString = "";
+        staticExtern.run_runBlueprints3(ret).should.be(staticExtern.theString.length + 25);
+        ret.toString().should.be('theString_Implementation from Haxe from Haxe');
+        var staticExtern:UCppStaticExternObject = UObject.NewObject(null, UObject.GetTransientPackage(), UBPOverrideTest2.StaticClass());
+        staticExtern.run_runBlueprints("Hey").should.be(43 * 3);
+        staticExtern.theString = "theString";
+        var ret:FString = "";
+        staticExtern.run_runBlueprints2(ret).should.be(43);
+        ret.toString().should.be('theString');
+        var ret:FString = "";
+        staticExtern.run_runBlueprints3(ret).should.be(staticExtern.theString.length + 10);
+        ret.toString().should.be('theString_Implementation from Haxe');
+        var staticExtern:UCppStaticExternObject = UObject.NewObject(null, UObject.GetTransientPackage(), UBPOverrideTest2_Child.StaticClass());
+        staticExtern.run_runBlueprints("Hey").should.be(43 * 3);
+        staticExtern.theString = "theString";
+        var ret:FString = "";
+        staticExtern.run_runBlueprints2(ret).should.be(43);
+        ret.toString().should.be('theString');
+        var ret:FString = "";
+        staticExtern.run_runBlueprints3(ret).should.be(staticExtern.theString.length + 25);
+        ret.toString().should.be('theString_Implementation from Haxe from Haxe');
+        var staticExtern:UBPTest = UObject.NewObject(null, UObject.GetTransientPackage(), UBPOverrideTest4.StaticClass());
+        staticExtern.runBlueprints("Hey").should.be(4300);
+        staticExtern.theString = "theString";
+        var out1:FText = new FText("");
+        var out2:Ref<Int> = Ref.createStack();
+        staticExtern.runBlueprints2(out1,out2).toString().should.be("43");
+        out1.toString().should.be('theString');
+        var ret:FString = "";
+        staticExtern.runBlueprints3(ret).should.be(staticExtern.theString.length + 10);
+        ret.toString().should.be('theString_Implementation from Haxe');
+        var ret:FString = "";
+        ( ReflectAPI.callMethod(staticExtern, 'runBlueprints3', [ret]) : Int).should.be(staticExtern.theString.length + 10);
+        ret.toString().should.be('theString_Implementation from Haxe');
+        var staticExtern:UBPTest = UObject.NewObject(null, UObject.GetTransientPackage(), UBPOverrideTest4_Child.StaticClass());
+        staticExtern.runBlueprints("Hey").should.be(4300);
+        staticExtern.theString = "theString";
+        var out1:FText = new FText("");
+        staticExtern.runBlueprints2(out1,out2).toString().should.be("43");
+        out1.toString().should.be('theString');
+        var ret:FString = "";
+        staticExtern.runBlueprints3(ret).should.be(staticExtern.theString.length + 25);
+        ret.toString().should.be('theString_Implementation from Haxe from Haxe');
+        var ret:FString = "";
+        ( ReflectAPI.callMethod(staticExtern, 'runBlueprints3', [ret]) : Int).should.be(staticExtern.theString.length + 25);
+        ret.toString().should.be('theString_Implementation from Haxe from Haxe');
+        #if (pass >= 3)
+        var staticExtern:UCppStaticExternObject = UObject.NewObject(null, UObject.GetTransientPackage(), UBPOverrideTest3.StaticClass());
+        staticExtern.run_runBlueprints("Hey").should.be(43 * 3);
+        staticExtern.theString = "theString";
+        var ret:FString = "";
+        staticExtern.run_runBlueprints2(ret).should.be(43);
+        ret.toString().should.be('theString');
+        var ret:FString = "";
+        staticExtern.run_runBlueprints3(ret).should.be(220);
+        ret.toString().should.be('from Haxe');
+        #end
+      });
     });
   }
 
@@ -83,20 +149,109 @@ class TestUnrealInteraction extends buddy.BuddySuite {
   }
 }
 
-// @:uclass(Blueprintable, Category="Cppia")
-// class ABPOverrideTest extends ACppStaticExtern {
-// // #if (pass > 3)
-//   override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
-//     return this.runCppFunction(43, str);
-//   }
+@:uclass(Blueprintable, Category="Cppia")
+class UBPOverrideTest2 extends UCppStaticExternObject {
+  override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
+    trace('runBlueprints');
+    return this.runCppFunction(43, str);
+  }
 
-//   override public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32 {
-//     str.assign(this.theString);
-//     return 43;
-//   }
-// // #end
-// }
+  override public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32 {
+    trace('runBlueprints2');
+    str.assign(this.theString);
+    return 43;
+  }
 
+  override public function runBlueprints3(str : unreal.PRef<unreal.FString>) : Int {
+    trace('runBlueprints3');
+    var ret = super.runBlueprints3(str);
+    str.assign(new FString(str.toString() + ' from Haxe'));
+    return ret + 10;
+  }
+}
+
+@:uclass(Blueprintable, Category="Cppia")
+class UBPOverrideTest2_Child extends UBPOverrideTest2 {
+  override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
+    trace('runBlueprints');
+    return this.runCppFunction(43, str);
+  }
+
+  override public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32 {
+    trace('runBlueprints2');
+    str.assign(this.theString);
+    return 43;
+  }
+
+  override public function runBlueprints3(str : unreal.PRef<unreal.FString>) : Int {
+    trace('runBlueprints3');
+    var ret = super.runBlueprints3(str);
+    str.assign(new FString(str.toString() + ' from Haxe'));
+    return ret + 15;
+  }
+}
+
+@:uclass(Blueprintable, Category="Cppia")
+class UBPOverrideTest3 extends UCppStaticExternObject {
+#if (pass >= 2)
+  override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
+    return this.runCppFunction(43, str);
+  }
+
+  override public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32 {
+    str.assign(this.theString);
+    return 43;
+  }
+
+  override public function runBlueprints3(str : unreal.PRef<unreal.FString>) : Int {
+    str.assign(new FString('from Haxe'));
+    return 220;
+  }
+#end
+}
+
+@:uclass(Blueprintable, Category="Cppia")
+class UBPOverrideTest4 extends UBPTest {
+  override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
+    trace('runBlueprints');
+    return this.runHaxeFunction(43, str);
+  }
+
+  override public function runBlueprints2(str : unreal.PRef<unreal.FText>, i:Ref<Int>) : FString {
+    trace('runBlueprints2');
+    trace( (str : unreal.VariantPtr) );
+    str.assign(FText.FromString(this.theString));
+    return "43";
+  }
+
+  override public function runBlueprints3_Implementation(str : unreal.PRef<unreal.FString>) : Int {
+    trace('runBlueprints3');
+    var ret = super.runBlueprints3_Implementation(str);
+    str.assign(new FString(str.toString() + ' from Haxe'));
+    return ret + 10;
+  }
+}
+
+@:uclass(Blueprintable, Category="Cppia")
+class UBPOverrideTest4_Child extends UBPOverrideTest4 {
+  override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
+    trace('runBlueprints');
+    return this.runHaxeFunction(43, str);
+  }
+
+  override public function runBlueprints2(str : unreal.PRef<unreal.FText>, i:Ref<Int>) : FString {
+    trace('runBlueprints2');
+    str.assign(FText.FromString(this.theString));
+    return "43";
+  }
+
+  override public function runBlueprints3_Implementation(str : unreal.PRef<unreal.FString>) : Int {
+    trace('runBlueprints3');
+    var ret = super.runBlueprints3_Implementation(str);
+    str.assign(new FString(str.toString() + ' from Haxe'));
+    return ret + 15;
+  }
+}
 
 @:uclass(Blueprintable, Category="Cppia")
 class UBPTest extends UObject {
@@ -127,6 +282,15 @@ class UBPTest extends UObject {
     trace('assigning i to ${arr[1].i32}');
     i.set(arr[1].i32);
     return arr.length;
+  }
+
+  @:ufunction(BlueprintNativeEvent, Category="Cppia")
+  public function runBlueprints3(str:PRef<FString>):Int;
+
+  function runBlueprints3_Implementation(str:PRef<FString>):Int {
+    var len = theString.length;
+    str.assign(new FString(theString.toString() + "_Implementation"));
+    return len;
   }
 
 #if (UE_VER >= 4.17)
