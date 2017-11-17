@@ -27,7 +27,7 @@ import unreal.*;
     didTick = true;
 
     buddy.BuddySuite.useDefaultTrace = true;
-#if (pass >= 7)
+#if (pass >= 8)
     var found:AReplicationTest = null;
     if (GetNetMode() == NM_DedicatedServer) {
       var params = FActorSpawnParameters.create();

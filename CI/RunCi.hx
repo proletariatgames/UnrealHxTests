@@ -67,6 +67,8 @@ class RunCi {
         { name:'cooked-test', desc:'A shorthand for `build-cooked run-cooked', fn:doTargets.bind(['build-cooked','run-cooked']) },
         { name:'build-cooked', desc:'Builds a cooked game', fn:doBuildCooked },
         { name:'run-cooked', desc:'Runs a cooked game', fn:doRunCooked },
+        { name:'build-program', desc:'Builds a program (only works with dev engines)', fn:doBuildProgram },
+        { name:'run-program', desc:'Runs the program', fn:doRunProgram },
       ];
       if (targets == null || targets.length == 0) {
         // help
@@ -160,6 +162,13 @@ class RunCi {
       args.push('-unattended');
     }
     callOrDebug('$workspace/bin/$name', args);
+  }
+
+  static function doBuildProgram() {
+    runUBT([platform, 'Shipping', 'HaxeProgramTest', '-project=$workspace/HaxeUnitTests.uproject']);
+  }
+
+  static function doRunProgram() {
   }
 
   static function runUE(args:Array<String>, throwOnError=true, gui=true) {

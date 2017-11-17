@@ -11,6 +11,8 @@ import unreal.editor.UFactory;
 import buddy.*;
 import unreal.*;
 
+using unreal.CoreAPI;
+
 @:uclass
 class ATestEntryPoint extends unreal.AActor {
   private var didTick = false;

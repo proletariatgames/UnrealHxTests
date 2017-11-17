@@ -152,18 +152,15 @@ class TestUnrealInteraction extends buddy.BuddySuite {
 @:uclass(Blueprintable, Category="Cppia")
 class UBPOverrideTest2 extends UCppStaticExternObject {
   override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
-    trace('runBlueprints');
     return this.runCppFunction(43, str);
   }
 
   override public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32 {
-    trace('runBlueprints2');
     str.assign(this.theString);
     return 43;
   }
 
   override public function runBlueprints3(str : unreal.PRef<unreal.FString>) : Int {
-    trace('runBlueprints3');
     var ret = super.runBlueprints3(str);
     str.assign(new FString(str.toString() + ' from Haxe'));
     return ret + 10;
@@ -173,18 +170,15 @@ class UBPOverrideTest2 extends UCppStaticExternObject {
 @:uclass(Blueprintable, Category="Cppia")
 class UBPOverrideTest2_Child extends UBPOverrideTest2 {
   override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
-    trace('runBlueprints');
     return this.runCppFunction(43, str);
   }
 
   override public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32 {
-    trace('runBlueprints2');
     str.assign(this.theString);
     return 43;
   }
 
   override public function runBlueprints3(str : unreal.PRef<unreal.FString>) : Int {
-    trace('runBlueprints3');
     var ret = super.runBlueprints3(str);
     str.assign(new FString(str.toString() + ' from Haxe'));
     return ret + 15;
@@ -213,19 +207,15 @@ class UBPOverrideTest3 extends UCppStaticExternObject {
 @:uclass(Blueprintable, Category="Cppia")
 class UBPOverrideTest4 extends UBPTest {
   override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
-    trace('runBlueprints');
     return this.runHaxeFunction(43, str);
   }
 
   override public function runBlueprints2(str : unreal.PRef<unreal.FText>, i:Ref<Int>) : FString {
-    trace('runBlueprints2');
-    trace( (str : unreal.VariantPtr) );
     str.assign(FText.FromString(this.theString));
     return "43";
   }
 
   override public function runBlueprints3_Implementation(str : unreal.PRef<unreal.FString>) : Int {
-    trace('runBlueprints3');
     var ret = super.runBlueprints3_Implementation(str);
     str.assign(new FString(str.toString() + ' from Haxe'));
     return ret + 10;
@@ -235,18 +225,15 @@ class UBPOverrideTest4 extends UBPTest {
 @:uclass(Blueprintable, Category="Cppia")
 class UBPOverrideTest4_Child extends UBPOverrideTest4 {
   override public function runBlueprints(str : unreal.FString) : unreal.Int32 {
-    trace('runBlueprints');
     return this.runHaxeFunction(43, str);
   }
 
   override public function runBlueprints2(str : unreal.PRef<unreal.FText>, i:Ref<Int>) : FString {
-    trace('runBlueprints2');
     str.assign(FText.FromString(this.theString));
     return "43";
   }
 
   override public function runBlueprints3_Implementation(str : unreal.PRef<unreal.FString>) : Int {
-    trace('runBlueprints3');
     var ret = super.runBlueprints3_Implementation(str);
     str.assign(new FString(str.toString() + ' from Haxe'));
     return ret + 15;
@@ -277,9 +264,7 @@ class UBPTest extends UObject {
 
   @:ufunction(BlueprintCallable, Category="Cppia")
   public function runHaxeFunction2(str:PRef<FText>, i:Ref<Int>, arr:Const<PRef<TArray<FPODStruct>>>):Int {
-    trace('assigning $str to ${arr[0].i32}');
     str.assign(new FText(arr[0].i32 + ''));
-    trace('assigning i to ${arr[1].i32}');
     i.set(arr[1].i32);
     return arr.length;
   }

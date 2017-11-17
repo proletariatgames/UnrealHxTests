@@ -5,7 +5,7 @@ import NonUObject;
 
 using unreal.CoreAPI;
 
-#if (pass >= 7)
+#if (pass >= 8)
 typedef AReplicationTest = ADynamicReplicationTest;
 
 // force this replication
@@ -33,6 +33,9 @@ typedef AReplicationTest = ADynamicReplicationTest;
 
   @:uproperty @:ureplicate
   public var ustruct:FPODStruct;
+
+  @:uproperty @:ureplicate
+  public var hotReloadOnRep:Int32;
 
 #if (pass <= 5)
   @:uproperty @:ureplicate
@@ -78,6 +81,12 @@ typedef AReplicationTest = ADynamicReplicationTest;
       this.ftextInitialOnly = "FText Initial Property";
     }
   }
+
+  #if (pass >= 7)
+  @:ufunction
+  dynamic public function onRep_hotReloadOnRep() : Void {
+  }
+  #end
 
   @:ufunction
   dynamic public function onRep_initialOnRep() : Void {

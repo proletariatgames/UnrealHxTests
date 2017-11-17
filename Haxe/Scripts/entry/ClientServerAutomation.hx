@@ -9,13 +9,13 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
   inline public static var NUM_PLAYERS = 2;
   static var pass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
   override private function RunTest(Parameters:unreal.FString):Bool {
-    var times = pass < 7 ? 4 : 1;
+    var times = pass < 8 ? 5 : 1;
     for (i in 0...times) {
       this.addHaxeCommand(loadPIE("/Game/Maps/ClientServerEntryPoint"));
       this.addHaxeCommand(EngineLatentCommands.waitForMapToLoadCommand());
       this.addHaxeCommand(waitUntilTestFinishes());
       this.addHaxeCommand(EngineLatentCommands.exitGame());
-      if (i <= 2 && pass < 7) {
+      if (i <= 2 && pass < 8) {
         this.addHaxeCommand(buildNextPass());
       }
     }
@@ -74,13 +74,12 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
         unreal.CoreAPI.onCppiaReload(function() {
           cppiaReloaded = true;
         });
-        trace('Building haxe pass $nextPass');
         var name = Sys.systemName() == 'Windows' ? 'RunCi.exe' : 'RunCi';
         var cmd = Sys.command(FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/CI/bin/$name', ['pass$nextPass']);
         didCall = true;
         pass = nextPass;
         if (pass >= 7) {
-          unreal.Timer.delay(2.5, function() {
+          unreal.Timer.delay(5.5, function() {
             cppiaReloaded = true;
           });
         }

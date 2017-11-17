@@ -15,7 +15,7 @@ class TestReplication extends buddy.BuddySuite {
       it('should have a replication actor in scene', {
         repl.should.not.be(null);
       });
-#if (pass < 7)
+#if (pass < 8)
       it('should propagate initialOnly properties', function(done) {
         var nChecks = 0;
         if (repl.initialOnRep != 0xD0D0D0D0) {
@@ -188,6 +188,22 @@ class TestReplication extends buddy.BuddySuite {
           } else {
             repl.fn_hotReload1 = function() {
               repl.hotReload1.should.be(Int64Helpers.make(0xF00B45,0xF00));
+              done();
+            };
+          }
+        }, done);
+      });
+#end
+
+#if (pass >= 7)
+      it('should call onRep functions when replicating (5 - hot reload)', function(done) {
+        sync(function(done) {
+          if (repl.Role == ROLE_Authority) {
+            repl.hotReloadOnRep = 0xf0f0f0;
+            done();
+          } else {
+            repl.onRep_hotReloadOnRep = function() {
+              repl.hotReloadOnRep.should.be(0xf0f0f0);
               done();
             };
           }
