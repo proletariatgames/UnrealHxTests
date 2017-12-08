@@ -22,5 +22,6 @@ package haxeunittests;
   @:ufunction(BlueprintCallable) @:final public function runCppFunction(i : unreal.Int32, str : unreal.FString) : unreal.Int32;
   @:ufunction(BlueprintImplementableEvent) public function runBlueprints2(str : unreal.PRef<unreal.FString>) : unreal.Int32;
   @:ufunction(BlueprintCallable) @:final public function testOut(str : unreal.PRef<unreal.FString>) : Void;
+  @:ufunction static public function getStringSize(str : unreal.FString) : unreal.Int32;
   
 }

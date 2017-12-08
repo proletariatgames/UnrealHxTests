@@ -39,6 +39,7 @@ class TestUnrealInteraction extends buddy.BuddySuite {
         var ret:FString = "";
         staticExtern.runBlueprints2(ret).should.be(42);
         ret.toString().should.be('theString');
+        ACppDynamicExtern.getStringSize(ret).should.be('theString'.length);
       });
 #end
       it('should be able to override C++ blueprint functions', {

@@ -27,4 +27,8 @@ public:
     str = TEXT("called");
   }
 
+  UFUNCTION()
+  static int32 getStringSize(const FString& str) {
+    return str.Len();
+  }
 };
