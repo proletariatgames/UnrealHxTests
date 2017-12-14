@@ -134,6 +134,14 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
     return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
   }
 
+
+  public var lastFailure:ETravelFailure;
+  public var lastString:String;
+  @:ufunction public function travelFailureTest(world:UWorld, failure:ETravelFailure, message:Const<PRef<FString>>):Void {
+    this.lastFailure = failure;
+    this.lastString = "someString";
+  }
+
 #if (pass >= 4)
   @:ufunction public function ufun6(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32, b:Bool):FSimpleUStruct {
     numCallbacks += 1;
@@ -520,7 +528,23 @@ class TestDelegates extends buddy.BuddySuite {
         didRun.should.be(true);
         didRun = false;
       });
+
+      // this is an actual unreal issue
+      // it('should be able to call "TravelFailure" delegates without failure', {
+      //   var obj = UObject.NewObject(new TypeParam<USomeTests>(), UObject.GetTransientPackage(), USomeTests.StaticClass());
+      //   var onTravelFailure:FOnTravelFailure = FOnTravelFailure.create();
+      //   onTravelFailure.AddUFunction(obj.test);
+      //   onTravelFailure.Broadcast(null, ETravelFailure.InvalidURL, "Some test");
+      //   obj.testMsg.toString().should.be('Some Test');
+      //   // var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
+      //   // var onTravelFailure:FOnTravelFailure = FOnTravelFailure.create();
+      //   // onTravelFailure.AddUFunction(obj.travelFailureTest);
+      //   // onTravelFailure.Broadcast(null, ETravelFailure.InvalidURL, "Some test");
+      //   // obj.lastFailure.should.be(ETravelFailure.InvalidURL);
+      //   // obj.lastString.toString().should.be('Some Test');
+      // });
     });
+
   }
 }
 

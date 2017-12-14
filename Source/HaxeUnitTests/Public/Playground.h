@@ -85,3 +85,19 @@ public:
   }
 
 };
+
+
+UCLASS()
+class HAXEUNITTESTS_API USomeTests : public UObject {
+  GENERATED_BODY()
+
+public:
+
+  UFUNCTION()
+  void test(UWorld *world, ETravelFailure::Type failure, const FString& msg) {
+    testMsg = msg;
+  }
+
+  UPROPERTY()
+  FString testMsg;
+};
