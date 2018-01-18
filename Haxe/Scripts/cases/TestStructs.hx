@@ -491,6 +491,8 @@ class TestStructs extends buddy.BuddySuite {
         var s = FHaxeStruct2.create();
         s.embedded.fname = FName.fromString("foo"); // haxe issue #5226
         s.embedded.fname.toString().should.be("foo");
+        var s2 = s.copy();
+        s2.embedded.fname.toString().should.be("foo");
 
         var s2 = s.embedded;
         s2.fname.toString().should.be("foo");

@@ -41,8 +41,11 @@ package haxeunittests;
   @:ufunction @:final public function getI64Prop() : unreal.Int64;
   @:ufunction @:final public function getFloatProp() : unreal.Float32;
   @:ufunction @:final public function getDoubleProp() : unreal.Float64;
+  @:ufunction public function getSomeResult(someString : unreal.Const<unreal.PRef<unreal.FText>>) : unreal.Int32;
   @:ufunction @:final public function setBool_String_UI8_I8(b : Bool, str : unreal.FString, ui8 : unreal.UInt8, i8 : unreal.Int8) : haxeunittests.UBasicTypesUObject;
   @:ufunction public function setText(text : unreal.FText) : unreal.Int64;
+  @:ufunction public function setString(text : unreal.FString) : unreal.Int64;
+  @:ufunction public function setString2(text : unreal.FString) : unreal.Int64;
   @:ufunction private function setBool_String_UI8_I8_protected(b : Bool, str : unreal.FString, ui8 : unreal.UInt8, i8 : unreal.Int8) : haxeunittests.UBasicTypesUObject;
   
 }

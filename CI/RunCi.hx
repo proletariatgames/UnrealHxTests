@@ -57,7 +57,9 @@ class RunCi {
         { name:'SERVICE', desc:'This is called under a service and an intermediate caller must be made for GUI applications' },
       ];
       var avTargets = [
-        { name:'all', desc:'A shorthand for `build cmd run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build','pass0','cmd','run','pass2','run','pass3','run-hotreload','run-cserver'])},
+        { name:'all', desc:'A shorthand for `build-initial build pass0 cmd run pass1 pass1 run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build-initial','build','pass0','cmd','run','pass1','pass1','run','pass2','run','pass3','run-hotreload','run-cserver'])},
+        { name:'fast', desc:'A shorthand for `build pass0 pass1 run pass2 run pass3`', fn:doTargets.bind(['build', 'pass0', 'pass1', 'run', 'pass2', 'run', 'pass3'])},
+        { name:'build-initial', desc:'Performs a full editor (initial) build', fn:doInitialBuild },
         { name:'build', desc:'Performs a full editor build', fn:doBuild },
         { name:'cmd', desc:'Runs a test commandlet', fn:doCmd },
         { name:'run', desc:'Runs the main unit tests', fn:doRun },
@@ -99,14 +101,32 @@ class RunCi {
           fn = spec.fn;
         }
 
-        Sys.println('Running $target');
+        Sys.println('\n#############################################');
+        Sys.println('###### Running $target');
+        Sys.println('#############################################\n');
         fn();
       }
     }
     doTargets(Sys.args());
   }
 
+  static function doInitialBuild() {
+    for (file in files.keys()) {
+      trace('saving $file');
+      sys.io.File.saveContent(workspace + '/' + file, files[file]);
+    }
+
+    runUBT([platform, config, 'HaxeUnitTestsEditor', '-project=$workspace/HaxeUnitTests.uproject']);
+  }
+
   static function doBuild() {
+    for (file in files.keys()) {
+      var file = workspace + '/' + file;
+      if (FileSystem.exists(file)) {
+        FileSystem.deleteFile(file);
+      }
+    }
+
     runUBT([platform, config, 'HaxeUnitTestsEditor', '-project=$workspace/HaxeUnitTests.uproject']);
   }
 
@@ -124,7 +144,13 @@ class RunCi {
     if (n == 0) {
       runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
     } else if (haxeServer == null) {
-      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors', '-D', 'pass=$n']);
+      if (n == 1) {
+        Sys.putEnv("UHX_INTERNAL_ARGS", "-D pass=1");
+        doBuild();
+        Sys.putEnv("UHX_INTERNAL_ARGS", '');
+      } else {
+        runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors', '-D', 'pass=$n']);
+      }
     } else {
       PassExpand.run('$workspace/Haxe/Scripts', n);
       runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
@@ -283,4 +309,34 @@ class RunCi {
     Sys.println(' -> $cmd returned with code $ret');
     return ret;
   }
+
+
+  static var files = [
+    "Source/HaxeUnitTests/Public/GeneratedFile.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedFile.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API UGeneratedClassOne : public UObject {
+  GENERATED_BODY()
+};
+',
+    "Haxe/GeneratedExterns/haxeunittests/UGeneratedClassOne.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedFile.h")
+@:uextern extern class UGeneratedClassOne extends unreal.UObject {
+}
+',
+    "Haxe/Scripts/helpers/TestGeneratedFile.hx" =>
+'
+package helpers;
+
+@:uclass class UGeneratedClassTwo extends haxeunittests.UGeneratedClassOne {
+  @:uexpose public static function doSomething():Void {
+  }
+}
+',
+  ];
 }

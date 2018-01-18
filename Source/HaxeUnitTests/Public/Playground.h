@@ -19,6 +19,10 @@ public:
   void OnRep_something() {
   }
 
+  UFUNCTION(BlueprintCallable, Category="Test")
+  void TestDefault(float f = 0.1f) {
+  }
+
 
   DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInnerDelTest, int32, argument);
   UPROPERTY()

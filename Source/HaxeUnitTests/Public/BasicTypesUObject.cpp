@@ -55,6 +55,10 @@ double UBasicTypesUObject::getDoubleProp() {
   return this->doubleProp;
 }
 
+int32 UBasicTypesUObject::getSomeResult(const FText& someString) {
+  return someString.ToString().Len();
+}
+
 
 UBasicTypesUObject *UBasicTypesUObject::setBool_String_UI8_I8(bool b, FString str, uint8 ui8, int8 i8) {
   this->boolProp = b;
@@ -84,6 +88,14 @@ bool UBasicTypesUObject::setUI64_I64_Float_Double(uint64 ui64, int64 i64, float 
 int64 UBasicTypesUObject::setText(FText txt) {
   this->textNonProp = txt;
 
+  return 0xDEADBEEF8BADF00DLL;
+}
+
+int64 UBasicTypesUObject::setString(const FString& txt) {
+  return 0xDEADBEEF8BADF00DLL;
+}
+
+int64 UBasicTypesUObject::setString2(FString txt) {
   return 0xDEADBEEF8BADF00DLL;
 }
 

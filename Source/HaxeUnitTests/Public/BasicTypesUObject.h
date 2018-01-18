@@ -84,6 +84,9 @@ public:
   double getDoubleProp();
 
   UFUNCTION()
+  virtual int32 getSomeResult(const FText& someString);
+
+  UFUNCTION()
   UBasicTypesUObject *setBool_String_UI8_I8(bool b, FString str, uint8 ui8, int8 i8);
 
   void setUI16_I16_UI32_I32(uint16 ui16, int16 i16, uint32 ui32, int32 i32);
@@ -92,6 +95,12 @@ public:
 
   UFUNCTION()
   virtual int64 setText(FText text);
+
+  UFUNCTION()
+  virtual int64 setString(const FString& text);
+
+  UFUNCTION()
+  virtual int64 setString2(FString text);
 
   virtual int32 getSomeNumber() const {
     return 42;

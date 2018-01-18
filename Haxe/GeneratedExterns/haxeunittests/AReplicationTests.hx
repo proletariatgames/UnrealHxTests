@@ -21,6 +21,7 @@ package haxeunittests;
   @:uproperty public var something : unreal.Int32;
   @:uproperty public var intArray : unreal.TArray<unreal.FakeUInt32>;
   @:ufunction @:final public function OnRep_something() : Void;
+  @:ufunction(BlueprintCallable) @:final public function TestDefault(f : unreal.Float32 = 0.100000) : Void;
   @:ufunction(NetMulticast) public function doSomething(str : unreal.FString) : Void;
   @:ufunction(NetMulticast) public function doSomething2(str : unreal.FString) : Void;
   @:ufunction(Server) public function Server_WithValidation_Reliable(str : unreal.FString) : Void;

@@ -145,6 +145,11 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         obj5.getSubName().toString().should.be('HaxeDerived5');
         obj5.textProp.toString().should.be('test3()');
 #end
+#if (pass >= 1)
+        obj2.getSomeResult("helloOoO").should.be(8);
+#else
+        obj2.getSomeResult("helloOoO").should.be(80);
+#end
       }); // check if native side sees it as well
       it('should be able to check physical equality', {
         var derived =  UHaxeDerived1.create();
@@ -514,6 +519,13 @@ class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements 
   override public function uFunction4_Implementation() {
     this.otherInt = 25;
   }
+
+  #if (pass >= 1)
+  #else
+  override public function getSomeResult(someString:Const<PRef<FText>>):Int {
+    return someString.toString().length * 10;
+  }
+  #end
 }
 
 @:uclass(BlueprintType)
