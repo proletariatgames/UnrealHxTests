@@ -46,6 +46,16 @@ class RunCi {
       }
     }
 
+    for (test in detectionTests) {
+      if (test.files != null) {
+        for (file in test.files.keys()) {
+          if (FileSystem.exists(file)) {
+            FileSystem.deleteFile(file);
+          }
+        }
+      }
+    }
+
     function doTargets(targets:Array<String>) {
       var envs = [
         { name:'UE4', desc:'The path to the UE4 install dir' },
@@ -816,6 +826,267 @@ typedef FGTestStruct = unreal.UnrealStruct<FGTestStruct, [{
   @:uproperty var test:Int;
 }
 '
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.UGeneratedClassTwo = null;
+    x.propOne = "hey";
+  }
+}
+',
+        "Source/HaxeUnitTests/GeneratedExtern.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedExtern.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API UGeneratedClassTwo : public UObject {
+  GENERATED_BODY()
+  public:
+
+  FString propOne;
+};
+',
+      "Haxe/GeneratedExterns/haxeunittests/UGeneratedClassTwo.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedExtern.h")
+@:uextern extern class UGeneratedClassTwo extends unreal.UObject {
+}
+',
+      "Haxe/Externs/haxeunittests/UGeneratedClassTwo_Extra.hx" =>
+'package haxeunittests;
+import unreal.*;
+
+extern class UGeneratedClassTwo_Extra {
+  public var propOne:FString;
+}
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.UGeneratedClassTwo = null;
+    x.propOne = "hey";
+    x.propOne = "test";
+  }
+}
+',
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.UGeneratedClassTwo = null;
+    x.propOne = "hey";
+    x.propTwo = 10;
+  }
+}
+',
+        "Source/HaxeUnitTests/GeneratedExtern.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedExtern.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API UGeneratedClassTwo : public UObject {
+  GENERATED_BODY()
+  public:
+
+  FString propOne;
+  int propTwo;
+};
+',
+      "Haxe/GeneratedExterns/haxeunittests/UGeneratedClassTwo.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedExtern.h")
+@:uextern extern class UGeneratedClassTwo extends unreal.UObject {
+}
+',
+      "Haxe/Externs/haxeunittests/UGeneratedClassTwo_Extra.hx" =>
+'package haxeunittests;
+import unreal.*;
+
+extern class UGeneratedClassTwo_Extra {
+  public var propOne:FString;
+  public var propTwo:Int;
+}
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: null,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: false, // special case for reflective-only externs
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.UGeneratedClassThree = null;
+    x.propOne = "hey";
+  }
+}
+',
+        "Source/HaxeUnitTests/GeneratedExtern2.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedExtern2.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API UGeneratedClassThree : public UObject {
+  GENERATED_BODY()
+  public:
+
+  UPROPERTY()
+  FString propOne;
+};
+',
+      "Haxe/GeneratedExterns/haxeunittests/UGeneratedClassThree.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedExtern2.h")
+@:uextern extern class UGeneratedClassThree extends unreal.UObject {
+  @:uproperty public var propOne:FString;
+}
+',
+      "Haxe/Externs/haxeunittests/UGeneratedClassThree_Extra.hx" =>
+'package haxeunittests;
+import unreal.*;
+
+extern class UGeneratedClassThree_Extra {
+}
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.UGeneratedClassThree = null;
+    x.propOne = "hey";
+    x.propOne = "test";
+  }
+}
+',
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.UGeneratedClassThree = null;
+    x.propOne = "hey";
+    x.propTwo = 10;
+  }
+}
+',
+        "Source/HaxeUnitTests/GeneratedExtern2.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedExtern2.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API UGeneratedClassThree : public UObject {
+  GENERATED_BODY()
+  public:
+
+  UPROPERTY()
+  FString propOne;
+  int propTwo;
+};
+',
+      "Haxe/GeneratedExterns/haxeunittests/UGeneratedClassThree.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedExtern2.h")
+@:uextern extern class UGeneratedClassThree extends unreal.UObject {
+  @:uproperty public var propOne:FString;
+}
+',
+      "Haxe/Externs/haxeunittests/UGeneratedClassThree_Extra.hx" =>
+'package haxeunittests;
+import unreal.*;
+
+extern class UGeneratedClassThree_Extra {
+  public var propTwo:Int;
+}
+',
       ]
     },
   ];
