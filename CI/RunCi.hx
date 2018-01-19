@@ -57,8 +57,10 @@ class RunCi {
         { name:'SERVICE', desc:'This is called under a service and an intermediate caller must be made for GUI applications' },
       ];
       var avTargets = [
-        { name:'all', desc:'A shorthand for `build-initial build pass0 cmd run pass1 pass1 run pass2 run pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build-initial','build','pass0','cmd','run','pass1','pass1','run','pass2','run','pass3','run-hotreload','run-cserver'])},
+        { name:'all', desc:'A shorthand for `build-initial build compile-detection main pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build-initial','build','compile-detection','main','pass3','run-hotreload','run-cserver'])},
         { name:'fast', desc:'A shorthand for `build pass0 pass1 run pass2 run pass3`', fn:doTargets.bind(['build', 'pass0', 'pass1', 'run', 'pass2', 'run', 'pass3'])},
+        { name:'main', desc:'The main build check - shorthand for `build pass0 cmd run pass1 pass1 run pass2 run', fn:doTargets.bind(['build','pass0','cmd','run','pass1','pass1-noBuild','run','pass2','run'])},
+        { name:'compile-detection', desc:'Performs some static compilation tests', fn:null },
         { name:'build-initial', desc:'Performs a full editor (initial) build', fn:doInitialBuild },
         { name:'build', desc:'Performs a full editor build', fn:doBuild },
         { name:'cmd', desc:'Runs a test commandlet', fn:doCmd },
@@ -90,10 +92,16 @@ class RunCi {
       for (target in targets) {
         var spec = avTargets.find(function(t) return t.name == target);
         var fn = null;
-        if (spec == null) {
+        if (spec == null || spec.fn == null) {
           if (target.startsWith('pass')) {
             var pass = Std.parseInt(target.substr('pass'.length));
-            fn = doPass.bind(pass);
+            fn = doPass.bind(pass, target.endsWith('-noBuild'));
+          } else if (target.startsWith('compile-detection')) {
+            var start = Std.parseInt(target.substr('compile-detection'.length + 1));
+            if (start == null) {
+              start = 0;
+            }
+            fn = doCompileDetection.bind(start);
           } else {
             throw 'Cannot find target $target';
           }
@@ -108,6 +116,79 @@ class RunCi {
       }
     }
     doTargets(Sys.args());
+  }
+
+  static function doCompileDetection(start:Int) {
+    if (!FileSystem.exists('$workspace/Haxe/Scripts/generated')) {
+      FileSystem.createDirectory('$workspace/Haxe/Scripts/generated');
+    }
+    Sys.putEnv('UHXBUILD_ASSERT_CPPIA_CHANGE', '');
+    Sys.putEnv('UHXBUILD_ASSERT_STATIC_CHANGE', '');
+    // simple build first
+    for (test in detectionTests) {
+      if (test.files != null) {
+        for (file in test.files.keys()) {
+          if (FileSystem.exists(file)) {
+            FileSystem.deleteFile(file);
+          }
+        }
+      }
+    }
+    doBuild();
+
+    var i = 0;
+    for (test in detectionTests) {
+      if (i < start) {
+        i++;
+        continue;
+      }
+      if (test.files != null) {
+        for (file in test.files.keys()) {
+          sys.io.File.saveContent(workspace + '/' + file, test.files[file]);
+        }
+      }
+
+      if (i != start || i == 0) {
+        Sys.putEnv('UHXBUILD_ASSERT_CPPIA_CHANGE', test.needsCppia ? '1':'0');
+        if (test.needsStatic == null) {
+          Sys.putEnv('UHXBUILD_ASSERT_STATIC_CHANGE', '');
+        } else {
+          Sys.putEnv('UHXBUILD_ASSERT_STATIC_CHANGE', test.needsStatic ? '1':'0');
+        }
+      }
+
+      Sys.println('\n#############################################');
+      Sys.println('###### Running compile detection #$i: needsCppia ${test.needsCppia} needsStatic ${test.needsStatic}');
+      Sys.println('#############################################\n');
+
+      try {
+        if (test.needsCppia && test.needsStatic && Sys.getEnv("CPPIA_COMPILE_TEST") == "1") {
+          var passed = false;
+          try {
+            runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml']);
+          }
+          catch(e:Dynamic) {
+            passed = true;
+          }
+          if (!passed) {
+            throw 'Cppia-only build should have failed, but has not';
+          }
+        }
+        doBuild();
+      }
+      catch(e:Dynamic) {
+        if (test.files != null) test.files.toString();
+        trace('failed at $i');
+        trace('previous: ${detectionTests[i-1]}');
+        trace('needsCppia ${test.needsCppia} needsStatic ${test.needsStatic}');
+        trace('Error: ${test.files}');
+        throw e;
+      }
+      i++;
+    }
+
+    Sys.putEnv('UHXBUILD_ASSERT_CPPIA_CHANGE', '');
+    Sys.putEnv('UHXBUILD_ASSERT_STATIC_CHANGE', '');
   }
 
   static function doInitialBuild() {
@@ -140,7 +221,12 @@ class RunCi {
     runUE(['$workspace/HaxeUnitTests.uproject', '-server', '/Game/Maps/HaxeTestEntryPoint', '-stdout', '-AllowStdOutLogVerbosity'], true, true);
   }
 
-  static function doPass(n:Int) {
+  static function doPass(n:Int, ensureNoBuild:Bool) {
+    if (ensureNoBuild) {
+      Sys.putEnv('UHXBUILD_ASSERT_CPPIA_CHANGE', '0');
+      Sys.putEnv('UHXBUILD_ASSERT_STATIC_CHANGE', '0');
+    }
+
     if (n == 0) {
       runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
     } else if (haxeServer == null) {
@@ -154,6 +240,11 @@ class RunCi {
     } else {
       PassExpand.run('$workspace/Haxe/Scripts', n);
       runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
+    }
+
+    if (ensureNoBuild) {
+      Sys.putEnv('UHXBUILD_ASSERT_CPPIA_CHANGE', '');
+      Sys.putEnv('UHXBUILD_ASSERT_STATIC_CHANGE', '');
     }
   }
 
@@ -338,5 +429,394 @@ package helpers;
   }
 }
 ',
+  ];
+
+  static var detectionTests = [
+    {
+      needsCppia: true,
+      needsStatic: (false : Null<Bool>),
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'
+package generated;
+
+class UGTest {
+}
+'
+      ],
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends unreal.UObject {
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return 42;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uenum enum EGTestEnum {
+  First;
+  Second;
+  Third;
+}
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uenum enum EGTestEnum {
+  First;
+  Second;
+  Third;
+}
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+
+  @:ufunction public function getMeTheEnum():EGTestEnum {
+    return First;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+typedef FGTestStruct = unreal.UnrealStruct<FGTestStruct, [{
+  @:uproperty var test:unreal.FString;
+}]>;
+
+@:uenum enum EGTestEnum {
+  First;
+  Second;
+  Third;
+  Fourth;
+}
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+
+  @:ufunction public function getMeTheEnum():EGTestEnum {
+    return First;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+typedef FGTestStruct = unreal.UnrealStruct<FGTestStruct, [{
+  @:uproperty var test:unreal.FString;
+  @:uproperty var test2:Int;
+}]>;
+
+@:uenum enum EGTestEnum {
+  First;
+  Second;
+  Third;
+  Fourth;
+}
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+
+  @:ufunction public function getMeTheEnum():EGTestEnum {
+    return First;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uenum enum EGTestEnum {
+  First;
+  Second;
+  Third;
+  Fourth;
+}
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+
+  @:ufunction public function getMeTheEnum():EGTestEnum {
+    return First;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: null,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return 42;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+}
+'
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose @:uproperty var test:Int;
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+}
+'
+      ]
+    },
   ];
 }
