@@ -79,7 +79,7 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
         var cmd = Sys.command(FPaths.ConvertRelativePathToFull(FPaths.GameDir()) + '/CI/bin/$name', ['pass$nextPass']);
         didCall = true;
         pass = nextPass;
-        if (pass >= 7) {
+        if (pass >= 6) {
           unreal.Timer.delay(5.5, function() {
             cppiaReloaded = true;
           });
