@@ -8,4 +8,10 @@ public class HaxeUnitTests : HaxeModuleRules {
   public HaxeUnitTests(ReadOnlyTargetRules target) : base(target) {
   }
 #endif
+
+  protected override void init() {
+    if (Target.Type == TargetType.Editor) {
+      this.PrivateDependencyModuleNames.Add("SessionFrontend");
+    }
+  }
 }

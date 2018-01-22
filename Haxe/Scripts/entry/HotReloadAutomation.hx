@@ -8,6 +8,7 @@ import unreal.*;
 class HotReloadAutomation extends unreal.automation.AutomationTest {
   static var pass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
   override private function RunTest(Parameters:unreal.FString):Bool {
+    haxeunittests.UTestTools.openAutomationFrontend();
     var times = pass == 3 ? 2 : 1;
     for (i in 0...times) {
       this.addHaxeCommand(loadPIE("/Game/Maps/HaxeTestEntryPoint"));

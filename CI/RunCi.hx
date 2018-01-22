@@ -67,10 +67,10 @@ class RunCi {
         { name:'SERVICE', desc:'This is called under a service and an intermediate caller must be made for GUI applications' },
       ];
       var avTargets = [
-        { name:'all', desc:'A shorthand for `build-initial build compile-detection main pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build-initial','build','compile-detection','main','pass3','run-hotreload','run-cserver'])},
+        { name:'all', desc:'A shorthand for `build-initial build main pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build-initial','build','main','pass3','run-hotreload','run-cserver'])},
         { name:'fast', desc:'A shorthand for `build pass0 pass1 run pass2 run pass3`', fn:doTargets.bind(['build', 'pass0', 'pass1', 'run', 'pass2', 'run', 'pass3'])},
-        { name:'main', desc:'The main build check - shorthand for `build pass0 cmd run pass1 pass1 run pass2 run', fn:doTargets.bind(['build','pass0','cmd','run','pass1','pass1-noBuild','run','pass2','run'])},
-        { name:'compile-detection', desc:'Performs some static compilation tests', fn:null },
+        { name:'main', desc:'The main build check - shorthand for `build pass0 cmd run pass1 run pass2 run', fn:doTargets.bind(['build','pass0','cmd','run','pass1','run','pass2','run'])},
+        { name:'compile-detection[-n]', desc:'Performs some static compilation tests', fn:null },
         { name:'build-initial', desc:'Performs a full editor (initial) build', fn:doInitialBuild },
         { name:'build', desc:'Performs a full editor build', fn:doBuild },
         { name:'cmd', desc:'Runs a test commandlet', fn:doCmd },
@@ -119,9 +119,9 @@ class RunCi {
           fn = spec.fn;
         }
 
-        Sys.println('\n#############################################');
+        Sys.println('\n\n\n\n#########################################################');
         Sys.println('###### Running $target');
-        Sys.println('#############################################\n');
+        Sys.println('#########################################################\n');
         fn();
       }
     }
@@ -696,6 +696,40 @@ typedef FGTestStruct = unreal.UnrealStruct<FGTestStruct, [{
         "Haxe/Scripts/generated/UGTest.hx" =>
 'package generated;
 
+typedef FGTestStruct = unreal.UnrealStruct<FGTestStruct, [{
+  @:uproperty var test:unreal.FString;
+}]>;
+
+@:uenum enum EGTestEnum {
+  First;
+  Second;
+  Third;
+  Fourth;
+}
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+
+  @:ufunction public function getMeTheEnum():EGTestEnum {
+    return First;
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
 @:uenum enum EGTestEnum {
   First;
   Second;
@@ -866,7 +900,7 @@ class HAXEUNITTESTS_API UGeneratedClassTwo : public UObject {
 'package haxeunittests;
 
 @:glueCppIncludes("GeneratedExtern.h")
-@:uextern extern class UGeneratedClassTwo extends unreal.UObject {
+@:uclass @:uextern extern class UGeneratedClassTwo extends unreal.UObject {
 }
 ',
       "Haxe/Externs/haxeunittests/UGeneratedClassTwo_Extra.hx" =>
@@ -938,7 +972,7 @@ class HAXEUNITTESTS_API UGeneratedClassTwo : public UObject {
 'package haxeunittests;
 
 @:glueCppIncludes("GeneratedExtern.h")
-@:uextern extern class UGeneratedClassTwo extends unreal.UObject {
+@:uclass @:uextern extern class UGeneratedClassTwo extends unreal.UObject {
 }
 ',
       "Haxe/Externs/haxeunittests/UGeneratedClassTwo_Extra.hx" =>
@@ -1002,7 +1036,7 @@ class HAXEUNITTESTS_API UGeneratedClassThree : public UObject {
 'package haxeunittests;
 
 @:glueCppIncludes("GeneratedExtern2.h")
-@:uextern extern class UGeneratedClassThree extends unreal.UObject {
+@:uclass @:uextern extern class UGeneratedClassThree extends unreal.UObject {
   @:uproperty public var propOne:FString;
 }
 ',
@@ -1075,7 +1109,7 @@ class HAXEUNITTESTS_API UGeneratedClassThree : public UObject {
 'package haxeunittests;
 
 @:glueCppIncludes("GeneratedExtern2.h")
-@:uextern extern class UGeneratedClassThree extends unreal.UObject {
+@:uclass @:uextern extern class UGeneratedClassThree extends unreal.UObject {
   @:uproperty public var propOne:FString;
 }
 ',

@@ -9,6 +9,7 @@ class ClientServerAutomation extends unreal.automation.AutomationTest {
   inline public static var NUM_PLAYERS = 2;
   static var pass:Null<Int> = Std.parseInt(haxe.macro.Compiler.getDefine("pass"));
   override private function RunTest(Parameters:unreal.FString):Bool {
+    haxeunittests.UTestTools.openAutomationFrontend();
     var times = pass < 8 ? 5 : 1;
     for (i in 0...times) {
       this.addHaxeCommand(loadPIE("/Game/Maps/ClientServerEntryPoint"));
