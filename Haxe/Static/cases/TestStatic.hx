@@ -29,4 +29,9 @@ class UStaticClass extends UObject {
   @:ufunction public function doSomething(str:Const<PRef<FString>>):FString {
     return str.toString() + ' called by Static';
   }
+
+  @:ufunction(BlueprintNativeEvent) public function test():Void;
+  @:ufunction(BlueprintImplementableEvent) public function test2():Void;
+  private function test_Implementation():Void {
+  }
 }
