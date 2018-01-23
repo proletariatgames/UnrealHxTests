@@ -64,6 +64,13 @@ class TestMisc extends buddy.BuddySuite {
         createTimer(.4);
         createTimer(.05);
       });
+      it('should not modify const math vectors', {
+        var vec = FVector.ZeroVector;
+        vec.X.should.be(0);
+        vec.X = 100;
+        var vec2 = FVector.ZeroVector;
+        vec2.X.should.be(0);
+      });
     });
   }
 }

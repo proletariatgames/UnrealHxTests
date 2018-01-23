@@ -334,10 +334,6 @@ class RunCi {
   }
 
   static function runHaxe(args:Array<String>, throwOnError=true) {
-    if (haxeServer != null) {
-      args.push('--connect');
-      args.push('$haxeServer');
-    }
     return call('haxe', args, throwOnError);
   }
 
