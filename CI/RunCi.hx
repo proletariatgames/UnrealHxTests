@@ -249,7 +249,11 @@ class RunCi {
       }
     } else {
       PassExpand.run('$workspace/Haxe/Scripts', n);
-      runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
+      if (n == 1) {
+        doBuild();
+      } else {
+        runHaxe(['--cwd', '$workspace/Haxe', 'gen-build-script.hxml', '-D', 'ignoreStaticErrors']);
+      }
     }
 
     if (ensureNoBuild) {
@@ -904,7 +908,7 @@ class HAXEUNITTESTS_API UGeneratedClassTwo : public UObject {
 import unreal.*;
 
 extern class UGeneratedClassTwo_Extra {
-  public var propOne:FString;
+  public var propOne:unreal.FString;
 }
 ',
       ]
@@ -976,7 +980,7 @@ class HAXEUNITTESTS_API UGeneratedClassTwo : public UObject {
 import unreal.*;
 
 extern class UGeneratedClassTwo_Extra {
-  public var propOne:FString;
+  public var propOne:unreal.FString;
   public var propTwo:Int;
 }
 ',
@@ -1033,7 +1037,7 @@ class HAXEUNITTESTS_API UGeneratedClassThree : public UObject {
 
 @:glueCppIncludes("GeneratedExtern2.h")
 @:uclass @:uextern extern class UGeneratedClassThree extends unreal.UObject {
-  @:uproperty public var propOne:FString;
+  @:uproperty public var propOne:unreal.FString;
 }
 ',
       "Haxe/Externs/haxeunittests/UGeneratedClassThree_Extra.hx" =>
@@ -1106,7 +1110,7 @@ class HAXEUNITTESTS_API UGeneratedClassThree : public UObject {
 
 @:glueCppIncludes("GeneratedExtern2.h")
 @:uclass @:uextern extern class UGeneratedClassThree extends unreal.UObject {
-  @:uproperty public var propOne:FString;
+  @:uproperty public var propOne:unreal.FString;
 }
 ',
       "Haxe/Externs/haxeunittests/UGeneratedClassThree_Extra.hx" =>
