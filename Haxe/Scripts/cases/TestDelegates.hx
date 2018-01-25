@@ -126,12 +126,23 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
   @:ufunction public function ufun4_ret(someStruct:Const<PRef<FSimpleUStruct>>):UUsesDelegate {
     numCallbacks += 1;
     this.lastSimpleStruct = someStruct.copy();
+    trace(someStruct.f1);
+    trace(this.lastSimpleStruct.f1);
     return this;
   }
 
   @:ufunction public function ufun5(f1:Float32, d1:Float64, i32:Int32, ui32:UInt32):FSimpleUStruct {
     numCallbacks += 1;
+    #if (pass >= 5)
+    var ret = new FSimpleUStruct();
+    ret.f1 = f1;
+    ret.d1 = d1;
+    ret.i32 = i32;
+    ret.ui32 = ui32;
+    return ret;
+    #else
     return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
+    #end
   }
 
 
@@ -149,7 +160,16 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
       i32 = ui32;
       d1 = f1;
     }
+    #if (pass >= 5)
+    var ret = new FSimpleUStruct();
+    ret.f1 = f1;
+    ret.d1 = d1;
+    ret.i32 = i32;
+    ret.ui32 = ui32;
+    return ret;
+    #else
     return FSimpleUStruct.createWithArgs(f1, d1, i32, ui32);
+    #end
   }
 #end
 }
@@ -229,7 +249,11 @@ class TestDelegates extends buddy.BuddySuite {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
           obj.numCallbacks.should.be(0);
           obj.delUFun3.AddDynamic(obj.ufun3);
+          #if (pass >= 3)
+          var simple = new FSimpleUStruct();
+          #else
           var simple = FSimpleUStruct.create();
+          #end
           simple.f1 = 10;
           simple.d1.should.be(0);
           obj.delUFun3.Broadcast(simple);
@@ -250,7 +274,11 @@ class TestDelegates extends buddy.BuddySuite {
           var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
           obj.numCallbacks.should.be(0);
           obj.delUFun3_RV.BindDynamic(obj.ufun3_ret);
+          #if (pass >= 3)
+          var simple = new FSimpleUStruct();
+          #else
           var simple = FSimpleUStruct.create();
+          #end
           simple.f1 = 22.2;
           simple.i32 = 100;
           simple.d1.should.be(0);
@@ -269,7 +297,11 @@ class TestDelegates extends buddy.BuddySuite {
         function run() {
           obj.numCallbacks.should.be(0);
           obj.delUFun4.AddDynamic(obj.ufun4);
+          #if (pass >= 3)
+          var simple = new FSimpleUStruct();
+          #else
           var simple = FSimpleUStruct.create();
+          #end
           simple.f1 = 30;
           simple.d1 = 40;
           simple.i32 = 50;
@@ -304,7 +336,11 @@ class TestDelegates extends buddy.BuddySuite {
         function run() {
           obj.numCallbacks.should.be(0);
           obj.delUFun4_RV.BindDynamic(obj.ufun4_ret);
+          #if (pass >= 3)
+          var simple = new FSimpleUStruct();
+          #else
           var simple = FSimpleUStruct.create();
+          #end
           simple.f1 = 22.2;
           simple.i32 = 100;
           simple.d1.should.be(0);

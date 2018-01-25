@@ -1,6 +1,7 @@
 package haxeunittests;
 import unreal.*;
 
+@:noCopy
 extern class FSimpleUStruct_Extra {
   var f1:Float32;
   var d1:Float;

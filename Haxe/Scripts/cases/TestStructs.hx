@@ -396,6 +396,28 @@ class TestStructs extends buddy.BuddySuite {
           checkValues(copy2, 14, true);
           checkValues(rawCopy, 13, true);
           checkValues(FSimpleStruct.getRef(), 12, true);
+
+#if (pass >= 3)
+          var v = new FSimpleUStruct();
+#else
+          var v = FSimpleUStruct.create();
+#end
+          v.f1 = 10;
+          v.d1 = 11;
+          v.i32 = 12;
+          v.ui32 = 13;
+          var v2 = v.copy();
+
+          v.f1.should.be(10);
+          v.d1.should.be(11);
+          v.i32.should.be(12);
+          v.ui32.should.be(13);
+          v.f1 = 1000;
+          v.d1 = 1000;
+          v2.f1.should.be(10);
+          v2.d1.should.be(11);
+          v2.i32.should.be(12);
+          v2.ui32.should.be(13);
         }
         run();
         // run twice to make sure that the finalizers run
