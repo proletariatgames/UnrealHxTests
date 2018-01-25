@@ -7,13 +7,13 @@
 
 DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(int32, FDynIntInt, int32, name);
 /**
- * 
+ *
  */
 UCLASS()
 class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
 {
   GENERATED_BODY()
-    
+
   public:
   bool isSub1 = true;
 
@@ -25,6 +25,11 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
 
   UFUNCTION(BlueprintNativeEvent)
   int32 bpNativeEvent(FString& s);
+
+  UFUNCTION()
+  static void GetPathName() {
+    // testing extern generator name collision
+  }
 
   UPROPERTY()
   FDynIntInt someDelegate;
@@ -55,7 +60,7 @@ class HAXEUNITTESTS_API UBasicTypesSub2 : public UBasicTypesUObject, public IBas
 
   public:
   bool isSub2 = true;
-    
+
   static UBasicTypesSub2 *CreateFromCpp() {
     return NewObject<UBasicTypesSub2>();
   }
@@ -81,7 +86,7 @@ UCLASS()
 class HAXEUNITTESTS_API UBasicTypesSub3 : public UBasicTypesSub2
 {
   GENERATED_BODY()
-    
+
   public:
   bool isSub3 = true;
   virtual bool setUI64_I64_Float_Double(uint64 ui64, int64 i64, float f, double d) override;

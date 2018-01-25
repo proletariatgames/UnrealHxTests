@@ -19,6 +19,7 @@ package haxeunittests;
 @:uextern @:uclass extern class UBasicTypesSub1 extends haxeunittests.UBasicTypesUObject {
   @:ufunction(BlueprintImplementableEvent) public function bpImplementableEvent(s : unreal.FString) : unreal.Int32;
   @:ufunction(BlueprintNativeEvent) public function bpNativeEvent(s : unreal.PRef<unreal.FString>) : unreal.Int32;
+  @:ufunction static public function GetPathName() : Void;
   @:uproperty public var someDelegate : haxeunittests.FDynIntInt;
   
 }

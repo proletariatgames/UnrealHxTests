@@ -105,3 +105,14 @@ public:
   UPROPERTY()
   FString testMsg;
 };
+
+UCLASS()
+class HAXEUNITTESTS_API USomeTestsChild : public USomeTests {
+  GENERATED_BODY()
+
+public:
+
+  UFUNCTION()
+  static void testMsg() {
+  }
+};

@@ -243,7 +243,7 @@ class HAXEUNITTESTS_API FHasStructMember3 {
       nConstructorCalled++;
     }
 
-    FHasStructMember3(const FHasStructMember3& inRHS) : 
+    FHasStructMember3(const FHasStructMember3& inRHS) :
       ref( inRHS.usedDefaultConstructor ? simple : inRHS.ref ),
       simple( inRHS.simple ),
       usedDefaultConstructor( inRHS.usedDefaultConstructor ) {}
