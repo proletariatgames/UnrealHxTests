@@ -622,6 +622,40 @@ class UGTest {
     },
     {
       needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest.hx" =>
+'package generated;
+
+@:uenum enum EGTestEnum {
+  First;
+  Second;
+  Third;
+}
+
+@:uclass class UGTest extends haxeunittests.UBasicTypesSub3 {
+  @:uexpose public function doAnythingReally():unreal.FString {
+    return "hey";
+  }
+
+  override public function getSomeInt() : unreal.Int32 {
+    return super.getSomeInt() + 42;
+  }
+
+  @:ufunction public function getMeTheEnum():EGTestEnum {
+    return First;
+  }
+
+  @:ufunction(NetMulticast) public function getMeTheEnum2():Void;
+
+  function getMeTheEnum2_Implementation():Void {
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
       needsStatic: true,
       files: [
         "Haxe/Scripts/generated/UGTest.hx" =>
