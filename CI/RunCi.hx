@@ -14,6 +14,7 @@ class RunCi {
   static var platform:String = Sys.getEnv('BUILD_PLATFORM');
   static var headless:Bool = Sys.getEnv('HEADLESS') == "1";
   static var service:Bool = Sys.getEnv('SERVICE') == "1";
+  static var interactive:Bool = Sys.getEnv("INTERACTIVE") == "1";
   static var setServer = false;
 
   public static function main() {
@@ -65,6 +66,7 @@ class RunCi {
         { name:'BUILD_PLATFORM', desc:'Build platform. Defaults to current platform' },
         { name:'VERBOSE', desc:'Build with verbose flag' },
         { name:'SERVICE', desc:'This is called under a service and an intermediate caller must be made for GUI applications' },
+        { name:'INTERACTIVE', desc:'This is set if compile-detection should run in interactive mode' },
       ];
       var avTargets = [
         { name:'all', desc:'A shorthand for `build-initial build main pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build-initial','build','main','pass3','run-hotreload','run-cserver'])},
@@ -146,11 +148,29 @@ class RunCi {
     }
     doBuild();
 
+    var isInteractive = interactive;
     var i = 0;
     for (test in detectionTests) {
       if (i < start) {
         i++;
         continue;
+      }
+      if (isInteractive) {
+        Sys.println('\n#############################################');
+        Sys.println('###### Interactive compile detection #$i: needsCppia ${test.needsCppia} needsStatic ${test.needsStatic}');
+        Sys.println('#############################################\n');
+        Sys.println('\nfiles:\n\n' + test.files);
+        Sys.println('\n\nShould run?(y/n)');
+        var ln = null;
+        while (( ln = Sys.stdin().readLine().trim().toLowerCase() ) != 'y' && ln != 'n' ) {
+          // keep looping
+          Sys.println('(y/n)');
+        }
+        if (ln == 'n') {
+          continue;
+        } else {
+          isInteractive = false;
+        }
       }
       if (test.files != null) {
         for (file in test.files.keys()) {
@@ -1153,6 +1173,274 @@ import unreal.*;
 
 extern class UGeneratedClassThree_Extra {
   public var propTwo:Int;
+}
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: null,
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+  }
+}
+'
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: false, // special case for reflective-only externs
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.AGeneratedClassFour = null;
+    x.propOne = "hey";
+  }
+}
+',
+        "Source/HaxeUnitTests/GeneratedExtern4.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedExtern4.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API AGeneratedClassFour : public AActor {
+  GENERATED_BODY()
+  public:
+
+  UPROPERTY()
+  FString propOne;
+};
+',
+      "Haxe/GeneratedExterns/haxeunittests/AGeneratedClassFour.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedExtern4.h")
+@:uclass @:uextern extern class AGeneratedClassFour extends unreal.AActor {
+  @:uproperty public var propOne:unreal.FString;
+}
+',
+      "Haxe/Externs/haxeunittests/AGeneratedClassFour_Extra.hx" =>
+'package haxeunittests;
+import unreal.*;
+
+extern class AGeneratedClassFour_Extra {
+}
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.AGeneratedClassFour = null;
+    x.propOne = "hey";
+    x.propOne = "test";
+  }
+}
+',
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: null,
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.AGeneratedClassFour = null;
+    x.propOne = "hey";
+    x.someFunc();
+  }
+}
+',
+        "Source/HaxeUnitTests/GeneratedExtern4.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedExtern4.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API AGeneratedClassFour : public AActor {
+  GENERATED_BODY()
+  public:
+
+  UPROPERTY()
+  FString propOne;
+
+  UFUNCTION()
+  void someFunc() {
+  }
+};
+',
+      "Haxe/GeneratedExterns/haxeunittests/AGeneratedClassFour.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedExtern4.h")
+@:uclass @:uextern extern class AGeneratedClassFour extends unreal.AActor {
+  @:uproperty public var propOne:unreal.FString;
+  @:ufunction public function someFunc():Void;
+}
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.AGeneratedClassFour = null;
+    x.propOne = "hey";
+    x.someFunc();
+    x.nonUFunc();
+  }
+}
+',
+        "Source/HaxeUnitTests/GeneratedExtern4.h" =>
+'#pragma once
+#include "Engine.h"
+#include "GeneratedExtern4.generated.h"
+
+UCLASS()
+class HAXEUNITTESTS_API AGeneratedClassFour : public AActor {
+  GENERATED_BODY()
+  public:
+
+  UPROPERTY()
+  FString propOne;
+
+  UFUNCTION()
+  void someFunc() {
+  }
+
+  void nonUFunc() {
+  }
+};
+',
+      "Haxe/GeneratedExterns/haxeunittests/AGeneratedClassFour.hx" =>
+'package haxeunittests;
+
+@:glueCppIncludes("GeneratedExtern4.h")
+@:uclass @:uextern extern class AGeneratedClassFour extends unreal.AActor {
+  @:uproperty public var propOne:unreal.FString;
+  @:ufunction public function someFunc():Void;
+}
+',
+      "Haxe/Externs/haxeunittests/AGeneratedClassFour_Extra.hx" =>
+'package haxeunittests;
+import unreal.*;
+
+extern class AGeneratedClassFour_Extra {
+  function nonUFunc():Void;
+}
+',
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: false,
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+import unreal.*;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.AGeneratedClassFour = UObject.NewObject(UObject.GetTransientPackage(), haxeunittests.AGeneratedClassFour.StaticClass());
+    x.propOne = "hey";
+    x.someFunc();
+    x.nonUFunc();
+  }
+}
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+import unreal.*;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    var x:haxeunittests.AGeneratedClassFour = UObject.NewObjectTemplate(new TypeParam<haxeunittests.AGeneratedClassFour>());
+    x.propOne = "hey";
+    x.someFunc();
+    x.nonUFunc();
+  }
+}
+',
+      ]
+    },
+    {
+      needsCppia: false,
+      needsStatic: false,
+      files: null
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/UGTest2.hx" =>
+'package generated;
+import unreal.*;
+
+@:uclass class UGTest2 extends haxeunittests.UBasicTypesSub3 {
+  @:uproperty var test:Int;
+
+  public function func() {
+    TActorIterator.iterate(new TypeParam<haxeunittests.AGeneratedClassFour>(), this.GetWorld(), function(x:haxeunittests.AGeneratedClassFour) {
+      x.propOne = "hey";
+      return true;
+    });
+    var x:haxeunittests.AGeneratedClassFour = UObject.NewObjectTemplate(new TypeParam<haxeunittests.AGeneratedClassFour>());
+    x.propOne = "hey";
+    x.someFunc();
+    x.nonUFunc();
+  }
 }
 ',
       ]
