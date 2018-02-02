@@ -14,7 +14,7 @@ using buddy.Should;
 
 class TestTArray extends buddy.BuddySuite {
   public function new() {
-    describe('Haxe - TArray', {
+    describe('Haxe - TArray / TMap / TSet', {
       it('should be able to use TArray of basic types',{
         var arr:TArray<Int32> = TArrayImpl.create();
         for (i in 0...10) {
@@ -164,14 +164,14 @@ class TestTArray extends buddy.BuddySuite {
           obj.enumArray1.push(CppEnum3);
           obj.enumArray1[0].should.be(CppEnum2);
           obj.enumArray1[1].should.be(CppEnum3);
-          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum1);
-          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum3);
+          UTestTArray2.setArray(obj.enumArray1, CppEnum1);
+          UTestTArray2.setArray(obj.enumArray1, CppEnum3);
           obj.enumArray1[2].should.be(CppEnum1);
           obj.enumArray1[3].should.be(CppEnum3);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 0).should.be(CppEnum2);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 1).should.be(CppEnum3);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 2).should.be(CppEnum1);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 3).should.be(CppEnum3);
+          UTestTArray2.getArray(obj.enumArray1, 0).should.be(CppEnum2);
+          UTestTArray2.getArray(obj.enumArray1, 1).should.be(CppEnum3);
+          UTestTArray2.getArray(obj.enumArray1, 2).should.be(CppEnum1);
+          UTestTArray2.getArray(obj.enumArray1, 3).should.be(CppEnum3);
           obj.enumArray1.pop().should.be(CppEnum3);
           obj.enumArray1.pop().should.be(CppEnum1);
 
@@ -180,14 +180,14 @@ class TestTArray extends buddy.BuddySuite {
           obj.enumArray2.push(E_3rd);
           obj.enumArray2[0].should.be(E_2nd);
           obj.enumArray2[1].should.be(E_3rd);
-          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_1st);
-          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_3rd);
+          UTestTArray2.setArray2(obj.enumArray2, E_1st);
+          UTestTArray2.setArray2(obj.enumArray2, E_3rd);
           obj.enumArray2[2].should.be(E_1st);
           obj.enumArray2[3].should.be(E_3rd);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 0).should.be(E_2nd);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 1).should.be(E_3rd);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 2).should.be(E_1st);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 3).should.be(E_3rd);
+          UTestTArray2.getArray2(obj.enumArray2, 0).should.be(E_2nd);
+          UTestTArray2.getArray2(obj.enumArray2, 1).should.be(E_3rd);
+          UTestTArray2.getArray2(obj.enumArray2, 2).should.be(E_1st);
+          UTestTArray2.getArray2(obj.enumArray2, 3).should.be(E_3rd);
           obj.enumArray2.pop().should.be(E_3rd);
           obj.enumArray2.pop().should.be(E_1st);
 
@@ -225,14 +225,14 @@ class TestTArray extends buddy.BuddySuite {
           obj.enumArray1.push(CppEnum3);
           obj.enumArray1[0].should.be(CppEnum2);
           obj.enumArray1[1].should.be(CppEnum3);
-          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum1);
-          UTestTArray2.setArrayInCpp(obj.enumArray1, CppEnum3);
+          UTestTArray2.setArray(obj.enumArray1, CppEnum1);
+          UTestTArray2.setArray(obj.enumArray1, CppEnum3);
           obj.enumArray1[2].should.be(CppEnum1);
           obj.enumArray1[3].should.be(CppEnum3);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 0).should.be(CppEnum2);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 1).should.be(CppEnum3);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 2).should.be(CppEnum1);
-          UTestTArray2.getArrayInCpp(obj.enumArray1, 3).should.be(CppEnum3);
+          UTestTArray2.getArray(obj.enumArray1, 0).should.be(CppEnum2);
+          UTestTArray2.getArray(obj.enumArray1, 1).should.be(CppEnum3);
+          UTestTArray2.getArray(obj.enumArray1, 2).should.be(CppEnum1);
+          UTestTArray2.getArray(obj.enumArray1, 3).should.be(CppEnum3);
           obj.enumArray1.pop().should.be(CppEnum3);
           obj.enumArray1.pop().should.be(CppEnum1);
 
@@ -241,14 +241,14 @@ class TestTArray extends buddy.BuddySuite {
           obj.enumArray2.push(E_3rd);
           obj.enumArray2[0].should.be(E_2nd);
           obj.enumArray2[1].should.be(E_3rd);
-          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_1st);
-          UTestTArray2.setArrayInCpp2(obj.enumArray2, E_3rd);
+          UTestTArray2.setArray2(obj.enumArray2, E_1st);
+          UTestTArray2.setArray2(obj.enumArray2, E_3rd);
           obj.enumArray2[2].should.be(E_1st);
           obj.enumArray2[3].should.be(E_3rd);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 0).should.be(E_2nd);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 1).should.be(E_3rd);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 2).should.be(E_1st);
-          UTestTArray2.getArrayInCpp2(obj.enumArray2, 3).should.be(E_3rd);
+          UTestTArray2.getArray2(obj.enumArray2, 0).should.be(E_2nd);
+          UTestTArray2.getArray2(obj.enumArray2, 1).should.be(E_3rd);
+          UTestTArray2.getArray2(obj.enumArray2, 2).should.be(E_1st);
+          UTestTArray2.getArray2(obj.enumArray2, 3).should.be(E_3rd);
           obj.enumArray2.pop().should.be(E_3rd);
           obj.enumArray2.pop().should.be(E_1st);
 
@@ -284,7 +284,7 @@ class TestTArray extends buddy.BuddySuite {
         cpp.vm.Gc.run(true);
         // str.toString().should.be("Hello from Haxe!");
       });
-      it('should be able to use indexOf structs', {
+      it('should be able to use sort and indexOf in structs', {
         var basic = UBasicTypesUObject.CreateFromCpp();
         var arr = TArray.create(new TypeParam<FString>());
         // fstring has == defined
@@ -312,56 +312,799 @@ class TestTArray extends buddy.BuddySuite {
         arr.indexOf(42).should.be(1);
       });
       it('should be able to use TArray on structs');
+      it('should be able to access TSet types', {
+        var obj = UObject.NewObject(new TypeParam<UTestTArray>(), UObject.GetTransientPackage(), UTestTArray.StaticClass());
+#if (pass >= 2)
+        var obj2 = UObject.NewObject(new TypeParam<UTestScriptTArray2>(), UObject.GetTransientPackage(), UTestScriptTArray2.StaticClass());
+#else
+        var obj2 = UObject.NewObject(new TypeParam<UTestTArray>(), UObject.GetTransientPackage(), UTestTArray.StaticClass());
+#end
+        for (s in [obj.set, ReflectAPI.callMethod(obj, "ufuncGet_set", []), obj2.set, ReflectAPI.callMethod(obj2, "ufuncGet_set", []), TSet.create(new TypeParam<FString>())]) {
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+          var t1 = s.Add("Test");
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(false);
+          var scpy = s.copy();
+          var t2 = s.Add("Test2");
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(true);
+          s.Remove(t1);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(true);
+          s.Remove(t2);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+
+          scpy.Contains("Test").should.be(true);
+          scpy.Contains("Test2").should.be(false);
+          s.assign(scpy);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(false);
+        }
+        for (s in [obj.set2, ReflectAPI.callMethod(obj, "ufuncGet_set2", []), obj2.set2, ReflectAPI.callMethod(obj2, "ufuncGet_set2", []), TSet.create(new TypeParam<Int>())]) {
+          s.Contains(42).should.be(false);
+          s.Contains(101).should.be(false);
+          var t1 = s.Add(42);
+          s.Contains(42).should.be(true);
+          s.Contains(101).should.be(false);
+          var scpy = s.copy();
+          var t2 = s.Add(101);
+          s.Contains(42).should.be(true);
+          s.Contains(101).should.be(true);
+          s.Remove(t1);
+          s.Contains(42).should.be(false);
+          s.Contains(101).should.be(true);
+          s.Remove(t2);
+          s.Contains(42).should.be(false);
+          s.Contains(101).should.be(false);
+
+          scpy.Contains(42).should.be(true);
+          scpy.Contains(101).should.be(false);
+          s.assign(scpy);
+          s.Contains(42).should.be(true);
+          s.Contains(101).should.be(false);
+        }
+
+        var obj = UObject.NewObject(new TypeParam<UTestTArray2>(), UObject.GetTransientPackage(), UTestTArray2.StaticClass());
+#if (pass >= 2)
+        var obj2 = UObject.NewObject(new TypeParam<UTestScriptTArray2>(), UObject.GetTransientPackage(), UTestScriptTArray2.StaticClass());
+#else
+        var obj2 = UObject.NewObject(new TypeParam<UTestTArray2>(), UObject.GetTransientPackage(), UTestTArray2.StaticClass());
+#end
+
+       var i = 0;
+       for (s in [obj.enumSet1, ReflectAPI.callMethod(obj, "ufuncGet_enumSet1", []), obj2.enumSet1, ReflectAPI.callMethod(obj2, "ufuncGet_enumSet1", []), TSet.create(new TypeParam<EMyCppEnum>())]) {
+          trace(i++);
+          s.Contains(CppEnum2).should.be(false);
+          s.Contains(CppEnum3).should.be(false);
+          var t1 = s.Add(CppEnum2);
+          s.Contains(CppEnum2).should.be(true);
+          s.Contains(CppEnum3).should.be(false);
+          var scpy = s.copy();
+          var t2 = s.Add(CppEnum3);
+          s.Contains(CppEnum2).should.be(true);
+          s.Contains(CppEnum3).should.be(true);
+          s.Remove(t1);
+          s.Contains(CppEnum2).should.be(false);
+          s.Contains(CppEnum3).should.be(true);
+          s.Remove(t2);
+          var t3 = s.Add(CppEnum1);
+          s.Contains(CppEnum2).should.be(false);
+          s.Contains(CppEnum3).should.be(false);
+          s.Contains(CppEnum1).should.be(true);
+          s.Remove(t3);
+          s.Contains(CppEnum2).should.be(false);
+          s.Contains(CppEnum3).should.be(false);
+          s.Contains(CppEnum1).should.be(false);
+
+          scpy.Contains(CppEnum2).should.be(true);
+          scpy.Contains(CppEnum3).should.be(false);
+          s.assign(scpy);
+          s.Contains(CppEnum2).should.be(true);
+          s.Contains(CppEnum3).should.be(false);
+       }
+
+       for (s in [obj.enumSet2, ReflectAPI.callMethod(obj, "ufuncGet_enumSet2", []), obj2.enumSet2, ReflectAPI.callMethod(obj2, "ufuncGet_enumSet2", []), TSet.create(new TypeParam<ETestHxEnumClass>())]) {
+          s.Contains(E_1st).should.be(false);
+          s.Contains(E_3rd).should.be(false);
+          var t1 = s.Add(E_1st);
+          s.Contains(E_1st).should.be(true);
+          s.Contains(E_3rd).should.be(false);
+          var scpy = s.copy();
+          var t2 = s.Add(E_3rd);
+          s.Contains(E_1st).should.be(true);
+          s.Contains(E_3rd).should.be(true);
+          s.Remove(t1);
+          s.Contains(E_1st).should.be(false);
+          s.Contains(E_3rd).should.be(true);
+          s.Remove(t2);
+          var t3 = s.Add(E_2nd);
+          s.Contains(E_1st).should.be(false);
+          s.Contains(E_3rd).should.be(false);
+          s.Contains(E_2nd).should.be(true);
+          s.Remove(t3);
+          s.Contains(E_1st).should.be(false);
+          s.Contains(E_3rd).should.be(false);
+          s.Contains(E_2nd).should.be(false);
+
+          scpy.Contains(E_1st).should.be(true);
+          scpy.Contains(E_3rd).should.be(false);
+          s.assign(scpy);
+          s.Contains(E_1st).should.be(true);
+          s.Contains(E_3rd).should.be(false);
+       }
+
+       for (s in [obj.objSet1, ReflectAPI.callMethod(obj, "ufuncGet_objSet1", []), obj2.objSet1, ReflectAPI.callMethod(obj2, "ufuncGet_objSet1", []), TSet.create(new TypeParam<UBasicTypesUObject>())]) {
+          var obj1 = UObject.NewObject(new TypeParam<UBasicTypesUObject>(), UObject.GetTransientPackage(), UBasicTypesUObject.StaticClass());
+          var obj2 = UObject.NewObject(new TypeParam<UBasicTypesUObject>(), UObject.GetTransientPackage(), UBasicTypesUObject.StaticClass());
+          var obj3 = UObject.NewObject(new TypeParam<UBasicTypesUObject>(), UObject.GetTransientPackage(), UBasicTypesUObject.StaticClass());
+
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(false);
+          var t1 = s.Add(obj1);
+          s.Contains(obj1).should.be(true);
+          s.Contains(obj2).should.be(false);
+          var scpy = s.copy();
+          var t2 = s.Add(obj2);
+          s.Contains(obj1).should.be(true);
+          s.Contains(obj2).should.be(true);
+          s.Remove(t1);
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(true);
+          s.Remove(t2);
+          var t3 = s.Add(obj3);
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(false);
+          s.Contains(obj3).should.be(true);
+          s.Remove(t3);
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(false);
+          s.Contains(obj3).should.be(false);
+
+          scpy.Contains(obj1).should.be(true);
+          scpy.Contains(obj2).should.be(false);
+          s.assign(scpy);
+          s.Contains(obj1).should.be(true);
+          s.Contains(obj2).should.be(false);
+       }
+
+       for (s in [obj.objSet2, ReflectAPI.callMethod(obj, "ufuncGet_objSet2", []), obj2.objSet2, ReflectAPI.callMethod(obj2, "ufuncGet_objSet2", []), TSet.create(new TypeParam<UHaxeDerived1>())]) {
+          var obj1 = UObject.NewObject(new TypeParam<UHaxeDerived1>(), UObject.GetTransientPackage(), UHaxeDerived1.StaticClass());
+          var obj2 = UObject.NewObject(new TypeParam<UHaxeDerived1>(), UObject.GetTransientPackage(), UHaxeDerived1.StaticClass());
+          var obj3 = UObject.NewObject(new TypeParam<UHaxeDerived1>(), UObject.GetTransientPackage(), UHaxeDerived1.StaticClass());
+
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(false);
+          var t1 = s.Add(obj1);
+          s.Contains(obj1).should.be(true);
+          s.Contains(obj2).should.be(false);
+          var scpy = s.copy();
+          var t2 = s.Add(obj2);
+          s.Contains(obj1).should.be(true);
+          s.Contains(obj2).should.be(true);
+          s.Remove(t1);
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(true);
+          s.Remove(t2);
+          var t3 = s.Add(obj3);
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(false);
+          s.Contains(obj3).should.be(true);
+          s.Remove(t3);
+          s.Contains(obj1).should.be(false);
+          s.Contains(obj2).should.be(false);
+          s.Contains(obj3).should.be(false);
+
+          scpy.Contains(obj1).should.be(true);
+          scpy.Contains(obj2).should.be(false);
+          s.assign(scpy);
+          s.Contains(obj1).should.be(true);
+          s.Contains(obj2).should.be(false);
+       }
+      });
+      it('should be able to access TMap types', {
+        var obj = UObject.NewObject(new TypeParam<UTestTArray>(), UObject.GetTransientPackage(), UTestTArray.StaticClass());
+#if (pass >= 2)
+        var obj2 = UObject.NewObject(new TypeParam<UTestScriptTArray2>(), UObject.GetTransientPackage(), UTestScriptTArray2.StaticClass());
+#else
+        var obj2 = UObject.NewObject(new TypeParam<UTestTArray>(), UObject.GetTransientPackage(), UTestTArray.StaticClass());
+#end
+        for (s in [obj.map, ReflectAPI.callMethod(obj, "ufuncGet_map", []), obj2.map, ReflectAPI.callMethod(obj2, "ufuncGet_map", []), TMap.create(new TypeParam<FString>(), new TypeParam<FString>())]) {
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+          s.Add("Test", "10");
+          s.Contains("Test").should.be(true);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains("Test2").should.be(false);
+          s["Test"].toString().should.be("10");
+          var scpy = s.copy();
+          // trace([ for (key in scpy.GenerateKeyArray()) key.toString() ]);
+          s.Add("Test2", '3');
+          trace([ for (key in scpy.GenerateKeyArray()) key.toString() ]);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10", "3"]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(true);
+          s["Test"] = "22";
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["22", "3"]);
+          [ for (key in s.GenerateKeyArray()) s[key].toString() ].should.containExactly(["22", "3"]);
+          s.Remove("Test");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test2"]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["3"]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(true);
+          s.Remove("Test2");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+
+          [ for (key in scpy.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in scpy.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          scpy.Contains("Test").should.be(true);
+          scpy.Contains("Test2").should.be(false);
+          s.assign(scpy);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(false);
+        }
+
+        for (s in [obj.map2, ReflectAPI.callMethod(obj, "ufuncGet_map2", []), obj2.map2, ReflectAPI.callMethod(obj2, "ufuncGet_map2", []), TMap.create(new TypeParam<Int>(), new TypeParam<FString>())]) {
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains(25).should.be(false);
+          s.Contains(5).should.be(false);
+          s.Add(25, "10");
+          s.Contains(25).should.be(true);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([25]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains(5).should.be(false);
+          s[25].toString().should.be("10");
+          var scpy = s.copy();
+          s.Add(5, '3');
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([25, 5]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10", "3"]);
+          s.Contains(25).should.be(true);
+          s.Contains(5).should.be(true);
+          s[25] = "22";
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([25, 5]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["22", "3"]);
+          [ for (key in s.GenerateKeyArray()) s[key].toString() ].should.containExactly(["22", "3"]);
+          s.Remove(25);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([5]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["3"]);
+          s.Contains(25).should.be(false);
+          s.Contains(5).should.be(true);
+          s.Remove(5);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains(25).should.be(false);
+          s.Contains(5).should.be(false);
+
+          [ for (key in scpy.GenerateKeyArray()) key ].should.containExactly([25]);
+          [ for (val in scpy.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          scpy.Contains(25).should.be(true);
+          scpy.Contains(5).should.be(false);
+          s.assign(scpy);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([25]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains(25).should.be(true);
+          s.Contains(5).should.be(false);
+        }
+
+        for (s in [obj.map3, ReflectAPI.callMethod(obj, "ufuncGet_map3", []), obj2.map3, ReflectAPI.callMethod(obj2, "ufuncGet_map3", []), TMap.create(new TypeParam<FString>(), new TypeParam<Int>())]) {
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+          s.Add("Test", 10);
+          s.Contains("Test").should.be(true);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([10]);
+          s.Contains("Test2").should.be(false);
+          s["Test"].should.be(10);
+          var scpy = s.copy();
+          s.Add("Test2", 3);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([10, 3]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(true);
+          s["Test"] = 22;
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([22, 3]);
+          [ for (key in s.GenerateKeyArray()) s[key] ].should.containExactly([22, 3]);
+          s.Remove("Test");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([3]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(true);
+          s.Remove("Test2");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+
+          [ for (key in scpy.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in scpy.GenerateValueArray()) val ].should.containExactly([10]);
+          scpy.Contains("Test").should.be(true);
+          scpy.Contains("Test2").should.be(false);
+          s.assign(scpy);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([10]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(false);
+        }
+
+        var obj = UObject.NewObject(new TypeParam<UTestTArray2>(), UObject.GetTransientPackage(), UTestTArray2.StaticClass());
+#if (pass >= 2)
+        var obj2 = UObject.NewObject(new TypeParam<UTestScriptTArray2>(), UObject.GetTransientPackage(), UTestScriptTArray2.StaticClass());
+#else
+        var obj2 = UObject.NewObject(new TypeParam<UTestTArray2>(), UObject.GetTransientPackage(), UTestTArray2.StaticClass());
+#end
+
+       for (s in [obj.enumMap, ReflectAPI.callMethod(obj, "ufuncGet_enumMap", []), obj2.enumMap, ReflectAPI.callMethod(obj2, "ufuncGet_enumMap", []), TMap.create(new TypeParam<EMyCppEnum>(), new TypeParam<FString>())]) {
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains(CppEnum2).should.be(false);
+          s.Contains(CppEnum1).should.be(false);
+          s.Add(CppEnum2, "10");
+          s.Contains(CppEnum2).should.be(true);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([CppEnum2]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains(CppEnum1).should.be(false);
+          s[CppEnum2].toString().should.be("10");
+          var scpy = s.copy();
+          s.Add(CppEnum1, '3');
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([CppEnum2, CppEnum1]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10", "3"]);
+          s.Contains(CppEnum2).should.be(true);
+          s.Contains(CppEnum1).should.be(true);
+          s[CppEnum2] = "22";
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([CppEnum2, CppEnum1]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["22", "3"]);
+          [ for (key in s.GenerateKeyArray()) s[key].toString() ].should.containExactly(["22", "3"]);
+          s.Remove(CppEnum2);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([CppEnum1]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["3"]);
+          s.Contains(CppEnum2).should.be(false);
+          s.Contains(CppEnum1).should.be(true);
+          s.Remove(CppEnum1);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains(CppEnum2).should.be(false);
+          s.Contains(CppEnum1).should.be(false);
+
+          [ for (key in scpy.GenerateKeyArray()) key ].should.containExactly([CppEnum2]);
+          [ for (val in scpy.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          scpy.Contains(CppEnum2).should.be(true);
+          scpy.Contains(CppEnum1).should.be(false);
+          s.assign(scpy);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([CppEnum2]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains(CppEnum2).should.be(true);
+          s.Contains(CppEnum1).should.be(false);
+       }
+
+       for (s in [obj.enumMap2, ReflectAPI.callMethod(obj, "ufuncGet_enumMap2", []), obj2.enumMap2, ReflectAPI.callMethod(obj2, "ufuncGet_enumMap2", []), TMap.create(new TypeParam<FString>(), new TypeParam<ETestHxEnumClass>())]) {
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+          s.Add("Test", E_2nd);
+          s.Contains("Test").should.be(true);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([E_2nd]);
+          s.Contains("Test2").should.be(false);
+          s["Test"].should.be(E_2nd);
+          var scpy = s.copy();
+          s.Add("Test2", E_1st);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([E_2nd, E_1st]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(true);
+          s["Test"] = E_3rd;
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([E_3rd, E_1st]);
+          [ for (key in s.GenerateKeyArray()) s[key] ].should.containExactly([E_3rd, E_1st]);
+          s.Remove("Test");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([E_1st]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(true);
+          s.Remove("Test2");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+
+          [ for (key in scpy.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in scpy.GenerateValueArray()) val ].should.containExactly([E_2nd]);
+          scpy.Contains("Test").should.be(true);
+          scpy.Contains("Test2").should.be(false);
+          s.assign(scpy);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([E_2nd]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(false);
+       }
+
+       for (s in [obj.objMap, ReflectAPI.callMethod(obj, "ufuncGet_objMap", []), obj2.objMap, ReflectAPI.callMethod(obj2, "ufuncGet_objMap", []), TMap.create(new TypeParam<UBasicTypesUObject>(), new TypeParam<FString>())]) {
+          var obj1 = UObject.NewObject(new TypeParam<UBasicTypesUObject>(), UObject.GetTransientPackage(), UBasicTypesUObject.StaticClass());
+          var obj2 = UObject.NewObject(new TypeParam<UBasicTypesUObject>(), UObject.GetTransientPackage(), UBasicTypesUObject.StaticClass());
+          var obj3 = UObject.NewObject(new TypeParam<UBasicTypesUObject>(), UObject.GetTransientPackage(), UBasicTypesUObject.StaticClass());
+
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains(obj2).should.be(false);
+          s.Contains(obj1).should.be(false);
+          s.Add(obj2, "10");
+          s.Contains(obj2).should.be(true);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([obj2]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains(obj1).should.be(false);
+          s[obj2].toString().should.be("10");
+          var scpy = s.copy();
+          s.Add(obj1, '3');
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([obj2, obj1]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10", "3"]);
+          s.Contains(obj2).should.be(true);
+          s.Contains(obj1).should.be(true);
+          s[obj2] = "22";
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([obj2, obj1]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["22", "3"]);
+          [ for (key in s.GenerateKeyArray()) s[key].toString() ].should.containExactly(["22", "3"]);
+          s.Remove(obj2);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([obj1]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["3"]);
+          s.Contains(obj2).should.be(false);
+          s.Contains(obj1).should.be(true);
+          s.Remove(obj1);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
+          s.Contains(obj2).should.be(false);
+          s.Contains(obj1).should.be(false);
+
+          [ for (key in scpy.GenerateKeyArray()) key ].should.containExactly([obj2]);
+          [ for (val in scpy.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          scpy.Contains(obj2).should.be(true);
+          scpy.Contains(obj1).should.be(false);
+          s.assign(scpy);
+          [ for (key in s.GenerateKeyArray()) key ].should.containExactly([obj2]);
+          [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10"]);
+          s.Contains(obj2).should.be(true);
+          s.Contains(obj1).should.be(false);
+       }
+
+       for (s in [obj.objMap2, ReflectAPI.callMethod(obj, "ufuncGet_objMap2", []), obj2.objMap2, ReflectAPI.callMethod(obj2, "ufuncGet_objMap2", []), TMap.create(new TypeParam<FString>(), new TypeParam<UHaxeDerived1>())]) {
+          var obj1 = UObject.NewObject(new TypeParam<UHaxeDerived1>(), UObject.GetTransientPackage(), UHaxeDerived1.StaticClass());
+          var obj2 = UObject.NewObject(new TypeParam<UHaxeDerived1>(), UObject.GetTransientPackage(), UHaxeDerived1.StaticClass());
+          var obj3 = UObject.NewObject(new TypeParam<UHaxeDerived1>(), UObject.GetTransientPackage(), UHaxeDerived1.StaticClass());
+
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+          s.Add("Test", obj2);
+          s.Contains("Test").should.be(true);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([obj2]);
+          s.Contains("Test2").should.be(false);
+          s["Test"].should.be(obj2);
+          var scpy = s.copy();
+          s.Add("Test2", obj1);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([obj2, obj1]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(true);
+          s["Test"] = obj3;
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([obj3, obj1]);
+          [ for (key in s.GenerateKeyArray()) s[key] ].should.containExactly([obj3, obj1]);
+          s.Remove("Test");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test2"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([obj1]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(true);
+          s.Remove("Test2");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([]);
+          s.Contains("Test").should.be(false);
+          s.Contains("Test2").should.be(false);
+
+          [ for (key in scpy.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in scpy.GenerateValueArray()) val ].should.containExactly([obj2]);
+          scpy.Contains("Test").should.be(true);
+          scpy.Contains("Test2").should.be(false);
+          s.assign(scpy);
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
+          [ for (val in s.GenerateValueArray()) val ].should.containExactly([obj2]);
+          s.Contains("Test").should.be(true);
+          s.Contains("Test2").should.be(false);
+       }
+      });
     });
   }
 }
 
 @:uclass
 class UTestTArray extends UObject {
-  @:uproperty
+  @:uexpose @:uproperty
   public var array:TArray<FString>;
+
+  @:uproperty
+  public var set:TSet<FString>;
+
+  @:ufunction public function ufuncGet_set():TSet<FString> {
+    return  set;
+  }
+
+  @:uproperty
+  public var set2:TSet<Int>;
+
+  @:ufunction public function ufuncGet_set2():TSet<Int> {
+    return  set2;
+  }
+
+  @:uexpose @:uproperty
+  public var map:TMap<FString, FString>;
+
+  @:uexpose @:ufunction
+  public function ufuncGet_map():TMap<FString, FString> {
+    return this.map;
+  }
+
+  @:uexpose @:ufunction
+  public function ufuncGet_map2():TMap<Int, FString> {
+    return this.map2;
+  }
+
+  @:uexpose @:uproperty
+  public var map2:TMap<Int, FString>;
+
+  @:uexpose @:ufunction
+  public function ufuncGet_map3():TMap<FString, Int> {
+    return this.map3;
+  }
+
+  @:uexpose @:uproperty
+  public var map3:TMap<FString, Int>;
 }
 
 @:uclass class UTestTArray2 extends UObject {
-  @:uproperty
+  @:uexpose @:uproperty
   public var enumArray1:TArray<EMyCppEnum>;
-  @:uproperty
+  @:uexpose @:uproperty
   public var enumArray2:TArray<ETestHxEnumClass>;
 
-  @:uexpose public static function setArrayInCpp(arr:TArray<EMyCppEnum>, val:EMyCppEnum) {
+  public static function setArray(arr:TArray<EMyCppEnum>, val:EMyCppEnum) {
     arr.push(val);
   }
 
-  @:uexpose public static function getArrayInCpp(arr:TArray<EMyCppEnum>, idx:Int):EMyCppEnum {
+  public static function getArray(arr:TArray<EMyCppEnum>, idx:Int):EMyCppEnum {
     return arr[idx];
   }
 
-  @:uexpose public static function setArrayInCpp2(arr:TArray<ETestHxEnumClass>, val:ETestHxEnumClass) {
+  public static function setArray2(arr:TArray<ETestHxEnumClass>, val:ETestHxEnumClass) {
     arr.Push(val);
   }
 
-  @:uexpose public static function getArrayInCpp2(arr:TArray<ETestHxEnumClass>, idx:Int):ETestHxEnumClass {
+  public static function getArray2(arr:TArray<ETestHxEnumClass>, idx:Int):ETestHxEnumClass {
     return arr[idx];
   }
 
-  @:uproperty
+  @:uexpose @:ufunction
+  public function ufuncGet_enumArray1():TArray<EMyCppEnum> {
+    return enumArray1;
+  }
+
+  @:uexpose @:ufunction
+  public function ufuncGet_enumArray2():TArray<ETestHxEnumClass> {
+    return this.enumArray2;
+  }
+
+  @:uexpose @:uproperty
   public var objArray1:TArray<UBasicTypesUObject>;
 
-  @:uproperty
+  @:uexpose @:ufunction
+  public function ufuncGet_objArray1():TArray<UBasicTypesUObject> {
+    return objArray1;
+  }
+
+  @:uexpose @:uproperty
   public var objArray2:TArray<UHaxeDerived1>;
+
+  @:uexpose @:ufunction public function ufuncGet_objArray2():TArray<UHaxeDerived1> {
+    return objArray2;
+  }
+
+  @:uexpose @:uproperty
+  public var enumSet1:TSet<EMyCppEnum>;
+
+  @:uexpose @:ufunction public function ufuncGet_enumSet1():TSet<EMyCppEnum> {
+    return enumSet1;
+  }
+
+  @:uexpose @:uproperty
+  public var enumSet2:TSet<ETestHxEnumClass>;
+
+  @:uexpose @:ufunction public function ufuncGet_enumSet2():TSet<ETestHxEnumClass> {
+    return  enumSet2;
+  }
+
+  @:uexpose @:uproperty
+  public var objSet1:TSet<UBasicTypesUObject>;
+
+  @:uexpose @:ufunction public function ufuncGet_objSet1():TSet<UBasicTypesUObject> {
+    return  objSet1;
+  }
+
+  @:uexpose @:uproperty
+  public var objSet2:TSet<UHaxeDerived1>;
+
+  @:uexpose @:ufunction public function ufuncGet_objSet2():TSet<UHaxeDerived1> {
+    return  objSet2;
+  }
+
+  @:uexpose @:uproperty
+  public var enumMap:TMap<EMyCppEnum, FString>;
+
+  @:uexpose @:ufunction public function ufuncGet_enumMap():TMap<EMyCppEnum, FString> {
+    return  enumMap;
+  }
+
+  @:uexpose @:uproperty
+  public var enumMap2:TMap<FString, ETestHxEnumClass>;
+
+  @:uexpose @:ufunction public function ufuncGet_enumMap2():TMap<FString, ETestHxEnumClass> {
+    return enumMap2;
+  }
+
+  @:uexpose @:uproperty
+  public var objMap:TMap<UBasicTypesUObject, FString>;
+
+  @:uexpose @:ufunction public function ufuncGet_objMap():TMap<UBasicTypesUObject, FString> {
+    return objMap;
+  }
+
+  @:uexpose @:uproperty
+  public var objMap2:TMap<FString, UHaxeDerived1>;
+
+  @:uexpose @:ufunction public function ufuncGet_objMap2():TMap<FString, UHaxeDerived1> {
+    return objMap2;
+  }
 }
 
 #if (pass >= 2)
 @:uclass class UTestScriptTArray2 extends UObject {
   @:uproperty
+  public var set:TSet<FString>;
+
+  @:ufunction public function ufuncGet_set():TSet<FString> {
+    return  set;
+  }
+
+  @:uproperty
+  public var set2:TSet<Int>;
+
+  @:ufunction public function ufuncGet_set2():TSet<Int> {
+    return  set2;
+  }
+
+  @:uproperty
+  public var map:TMap<FString, FString>;
+
+  @:ufunction
+  public function ufuncGet_map():TMap<FString, FString> {
+    return this.map;
+  }
+
+  @:ufunction
+  public function ufuncGet_map2():TMap<Int, FString> {
+    return this.map2;
+  }
+
+  @:uproperty
+  public var map2:TMap<Int, FString>;
+
+  @:ufunction
+  public function ufuncGet_map3():TMap<FString, Int> {
+    return this.map3;
+  }
+
+  @:uproperty
+  public var map3:TMap<FString, Int>;
+
+  @:uproperty
   public var enumArray1:TArray<EMyCppEnum>;
+
+  @:ufunction
+  public function ufuncGet_enumArray1():TArray<EMyCppEnum> {
+    return enumArray1;
+  }
+
   @:uproperty
   public var enumArray2:TArray<ETestHxEnumClass>;
+
+  @:ufunction
+  public function ufuncGet_enumArray2():TArray<ETestHxEnumClass> {
+    return this.enumArray2;
+  }
 
   @:uproperty
   public var objArray1:TArray<UBasicTypesUObject>;
 
+  @:ufunction
+  public function ufuncGet_objArray1():TArray<UBasicTypesUObject> {
+    return objArray1;
+  }
+
   @:uproperty
   public var objArray2:TArray<UHaxeDerived1>;
+
+  @:ufunction public function ufuncGet_objArray2():TArray<UHaxeDerived1> {
+    return objArray2;
+  }
+
+  @:uproperty
+  public var enumSet1:TSet<EMyCppEnum>;
+
+  @:ufunction public function ufuncGet_enumSet1():TSet<EMyCppEnum> {
+    return enumSet1;
+  }
+
+  @:uproperty
+  public var enumSet2:TSet<ETestHxEnumClass>;
+
+  @:ufunction public function ufuncGet_enumSet2():TSet<ETestHxEnumClass> {
+    return  enumSet2;
+  }
+
+  @:uproperty
+  public var objSet1:TSet<UBasicTypesUObject>;
+
+  @:ufunction public function ufuncGet_objSet1():TSet<UBasicTypesUObject> {
+    return  objSet1;
+  }
+
+  @:uproperty
+  public var objSet2:TSet<UHaxeDerived1>;
+
+  @:ufunction public function ufuncGet_objSet2():TSet<UHaxeDerived1> {
+    return  objSet2;
+  }
+
+  @:uproperty
+  public var enumMap:TMap<EMyCppEnum, FString>;
+
+  @:ufunction public function ufuncGet_enumMap():TMap<EMyCppEnum, FString> {
+    return  enumMap;
+  }
+
+  @:uproperty
+  public var enumMap2:TMap<FString, ETestHxEnumClass>;
+
+  @:ufunction public function ufuncGet_enumMap2():TMap<FString, ETestHxEnumClass> {
+    return enumMap2;
+  }
+
+  @:uproperty
+  public var objMap:TMap<UBasicTypesUObject, FString>;
+
+  @:ufunction public function ufuncGet_objMap():TMap<UBasicTypesUObject, FString> {
+    return objMap;
+  }
+
+  @:uproperty
+  public var objMap2:TMap<FString, UHaxeDerived1>;
+
+  @:ufunction public function ufuncGet_objMap2():TMap<FString, UHaxeDerived1> {
+    return objMap2;
+  }
 }
 #end

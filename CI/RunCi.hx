@@ -327,6 +327,9 @@ class RunCi {
       args.push('-nullrhi');
       args.push('-unattended');
     }
+    if (config.toLowerCase() == 'debuggame') {
+      args.push('RunConfig=Debug');
+    }
     var old = Sys.getCwd();
     Sys.setCwd(ue4);
     var ret = switch(systemName) {
