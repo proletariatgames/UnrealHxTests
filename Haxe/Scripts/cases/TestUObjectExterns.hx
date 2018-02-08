@@ -272,6 +272,14 @@ class TestUObjectExterns extends buddy.BuddySuite {
         arr.get(2).should.be(42);
       });
 
+      it('should be able to call TEnumAsByte functions', {
+        var sub1 = UBasicTypesSub1.CreateFromCpp();
+        sub1.enumAsByteTest("hey", IE_Pressed).should.be(3);
+        @:privateAccess sub1.enumAsByteTestPrivate("hey", IE_Pressed).should.be(3);
+        sub1.enumAsByteTest2("hey", IE_Pressed).should.be(3);
+        @:privateAccess sub1.enumAsByteTestPrivate2("hey", IE_Pressed).should.be(3);
+      });
+
       it('should be able to tell whether it is valid', {
         var sub2 = UBasicTypesSub2.CreateFromCpp();
         // (GIsEditor ? RF_Native|RF_AsyncLoading|RF_Standalone|RF_Async : RF_Native|RF_AsyncLoading|RF_Async)
@@ -279,7 +287,6 @@ class TestUObjectExterns extends buddy.BuddySuite {
         UObject.CollectGarbage(flags, true);
         sub2.isValid().should.be(false);
       });
-
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
       it('should be able to be created by Haxe code');

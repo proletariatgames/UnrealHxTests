@@ -392,6 +392,8 @@ class RunCi {
     return ret;
   }
 
+  static var tools:String;
+
   static function callOrDebug(cmd:String, args:Array<String>, throwOnError=true, gui=true) {
     if (debug) {
       args.push('-DEBUGGING');
@@ -401,15 +403,25 @@ class RunCi {
         args.unshift('--args');
         return call('gdb', args, throwOnError, gui);
       case 'Windows':
-        var tools = Sys.getEnv('VS140COMNTOOLS');
         if (tools == null) {
-          tools = Sys.getEnv('VS130COMNTOOLS');
-        }
-        if (tools == null) {
-          tools = Sys.getEnv('VS120COMNTOOLS');
-        }
-        if (tools == null) {
-          throw 'Cannot find VSCOMNTOOLS to debug';
+          tools = Sys.getEnv('VS140COMNTOOLS');
+          if (tools == null) {
+            tools = Sys.getEnv('VS130COMNTOOLS');
+          }
+          if (tools == null) {
+            tools = Sys.getEnv('VS120COMNTOOLS');
+          }
+          if (tools == null) {
+            var pfiles = Sys.getEnv('ProgramFiles(x86)');
+            if (pfiles != null && FileSystem.exists('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe')) {
+              var cmd = new sys.io.Process('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe', ['-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64', '-property','installationPath']);
+              tools = cmd.stdout.readAll().toString().trim().split('\n')[0] + '/Common7/IDE';
+              cmd.exitCode();
+            }
+          }
+          if (tools == null) {
+            throw 'Cannot find VSCOMNTOOLS to debug';
+          }
         }
         args.unshift(cmd);
         args.unshift('/DebugExe');

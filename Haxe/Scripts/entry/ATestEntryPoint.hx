@@ -26,7 +26,6 @@ class ATestEntryPoint extends unreal.AActor {
   @:live override public function Tick(deltaTime:Float32) {
     if (!didTick) didTick = true; else return;
 
-    var reporter = new buddy.reporting.TraceReporter();
     var runner = new buddy.SuitesRunner(ImportAll.getDefs(
       cases.TestUObjectExterns,
       cases.TestStructs,

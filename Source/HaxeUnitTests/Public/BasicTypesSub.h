@@ -3,6 +3,8 @@
 #include "GameFramework/GameMode.h"
 #include "BasicTypesUObject.h"
 #include "BasicType2.h"
+#include "EnumAsByte.h"
+#include "UserWidget.h"
 #include "BasicTypesSub.generated.h"
 
 DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(int32, FDynIntInt, int32, name);
@@ -25,6 +27,16 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
 
   UFUNCTION(BlueprintNativeEvent)
   int32 bpNativeEvent(FString& s);
+
+  UFUNCTION()
+  int enumAsByteTest(FName actionName, TEnumAsByte< EInputEvent > EventType) {
+    return (int) EventType.GetValue() + actionName.ToString().Len();
+  }
+
+  UFUNCTION()
+  int enumAsByteTest2(FName actionName, EInputEvent EventType) {
+    return (int) EventType + actionName.ToString().Len();
+  }
 
   UFUNCTION()
   static void GetPathName() {
@@ -50,6 +62,17 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
 
   static UBasicTypesSub1 *CreateFromCpp() {
     return NewObject<UBasicTypesSub1>();
+  }
+
+protected:
+  UFUNCTION()
+  int enumAsByteTestPrivate(FName actionName, TEnumAsByte< EInputEvent > EventType) {
+    return (int) EventType.GetValue() + actionName.ToString().Len();
+  }
+
+  UFUNCTION()
+  int enumAsByteTestPrivate2(FName actionName, EInputEvent EventType) {
+    return (int) EventType + actionName.ToString().Len();
   }
 };
 

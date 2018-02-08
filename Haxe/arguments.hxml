@@ -1,7 +1,7 @@
 # put here your additional haxe arguments
 # please do not add a target (like -cpp) as they will be added automatically
 # (see build-scripts.hxml and build-static.hxml)
--lib buddy
+-lib buddy:2.6.0
 
 -D UE4_CHECK_POINTER
 -D UE4_POINTER_TESTING
