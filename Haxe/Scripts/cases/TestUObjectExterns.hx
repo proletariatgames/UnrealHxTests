@@ -279,7 +279,19 @@ class TestUObjectExterns extends buddy.BuddySuite {
         sub1.enumAsByteTest2("hey", IE_Pressed).should.be(3);
         @:privateAccess sub1.enumAsByteTestPrivate2("hey", IE_Pressed).should.be(3);
       });
-
+      it('should be able receive enums by reference', {
+        var sub1 = UBasicTypesSub1.CreateFromCpp();
+        var ref:Ref<EMyEnum> = unreal.Ref.createStack();
+        sub1.getSomeEnum(0, ref);
+        ref.get().should.be(EMyEnum.SomeEnum1);
+        sub1.getSomeEnum(1, ref);
+        ref.get().should.be(EMyEnum.SomeEnum3);
+        var ref:Ref<EMyCppEnum> = unreal.Ref.createStack();
+        sub1.getSomeCppEnum(0, ref);
+        ref.get().should.be(EMyCppEnum.CppEnum1);
+        sub1.getSomeCppEnum(1, ref);
+        ref.get().should.be(EMyCppEnum.CppEnum3);
+      });
       it('should be able to tell whether it is valid', {
         var sub2 = UBasicTypesSub2.CreateFromCpp();
         // (GIsEditor ? RF_Native|RF_AsyncLoading|RF_Standalone|RF_Async : RF_Native|RF_AsyncLoading|RF_Async)

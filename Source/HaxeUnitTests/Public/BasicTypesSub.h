@@ -4,6 +4,7 @@
 #include "BasicTypesUObject.h"
 #include "BasicType2.h"
 #include "EnumAsByte.h"
+#include "SomeEnum.h"
 #include "UserWidget.h"
 #include "BasicTypesSub.generated.h"
 
@@ -41,6 +42,22 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
   UFUNCTION()
   static void GetPathName() {
     // testing extern generator name collision
+  }
+
+  void getSomeEnum(int i, EMyEnum& out) {
+    if (i == 0) {
+      out = SomeEnum1;
+    } else {
+      out = SomeEnum3;
+    }
+  }
+
+  void getSomeCppEnum(int i, EMyCppEnum & out) {
+    if (i == 0) {
+      out = EMyCppEnum::CppEnum1;
+    } else {
+      out = EMyCppEnum::CppEnum3;
+    }
   }
 
   UPROPERTY()
