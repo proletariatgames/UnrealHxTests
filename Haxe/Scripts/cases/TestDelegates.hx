@@ -150,7 +150,7 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
   public var lastString:String;
   @:ufunction public function travelFailureTest(world:UWorld, failure:ETravelFailure, message:Const<PRef<FString>>):Void {
     this.lastFailure = failure;
-    this.lastString = "someString";
+    this.lastString = message.toString();
   }
 
 #if (pass >= 4)
@@ -225,7 +225,7 @@ class TestDelegates extends buddy.BuddySuite {
 
         var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
         obj.numCallbacks.should.be(0);
-        del.AddUFunction(obj.ufun);
+        del.AddDynamicUObject(obj.ufun);
         del.Broadcast();
         obj.numCallbacks.should.be(1);
 
@@ -566,19 +566,19 @@ class TestDelegates extends buddy.BuddySuite {
       });
 
       // this is an actual unreal issue
-      // it('should be able to call "TravelFailure" delegates without failure', {
-      //   var obj = UObject.NewObject(new TypeParam<USomeTests>(), UObject.GetTransientPackage(), USomeTests.StaticClass());
-      //   var onTravelFailure:FOnTravelFailure = FOnTravelFailure.create();
-      //   onTravelFailure.AddUFunction(obj.test);
-      //   onTravelFailure.Broadcast(null, ETravelFailure.InvalidURL, "Some test");
-      //   obj.testMsg.toString().should.be('Some Test');
-      //   // var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
-      //   // var onTravelFailure:FOnTravelFailure = FOnTravelFailure.create();
-      //   // onTravelFailure.AddUFunction(obj.travelFailureTest);
-      //   // onTravelFailure.Broadcast(null, ETravelFailure.InvalidURL, "Some test");
-      //   // obj.lastFailure.should.be(ETravelFailure.InvalidURL);
-      //   // obj.lastString.toString().should.be('Some Test');
-      // });
+      it('should be able to call "TravelFailure" delegates without failure', {
+        var obj = UObject.NewObject(new TypeParam<USomeTests>(), UObject.GetTransientPackage(), USomeTests.StaticClass());
+        var onTravelFailure:FOnTravelFailure = FOnTravelFailure.create();
+        onTravelFailure.AddDynamicUObject(obj.test);
+        onTravelFailure.Broadcast(null, ETravelFailure.InvalidURL, "Some Test");
+        obj.testMsg.toString().should.be('Some Test');
+        var obj = UObject.NewObject(new TypeParam<UUsesDelegate>(), UObject.GetTransientPackage(), UUsesDelegate.StaticClass());
+        var onTravelFailure:FOnTravelFailure = FOnTravelFailure.create();
+        onTravelFailure.AddDynamicUObject(obj.travelFailureTest);
+        onTravelFailure.Broadcast(null, ETravelFailure.InvalidURL, "Some Test");
+        obj.lastFailure.should.equal(ETravelFailure.InvalidURL);
+        obj.lastString.toString().should.be('Some Test');
+      });
     });
 
   }

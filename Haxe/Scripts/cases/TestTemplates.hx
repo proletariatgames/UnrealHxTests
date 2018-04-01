@@ -33,7 +33,7 @@ class TestTemplates extends buddy.BuddySuite {
       struct.ToString().toString().should.be('Simple Struct (${usedDefaultConstructor ? 1 : 0}) { ${Std.int(struct.f1)}, ${Std.int(struct.d1)}, ${struct.i32}, ${struct.ui32} }');
     }
 
-    before({
+    beforeEach({
       nConstructors = FSimpleStruct.nConstructorCalled;
       nDestructors = FSimpleStruct.nDestructorCalled;
     });

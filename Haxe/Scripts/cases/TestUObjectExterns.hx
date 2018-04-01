@@ -283,14 +283,14 @@ class TestUObjectExterns extends buddy.BuddySuite {
         var sub1 = UBasicTypesSub1.CreateFromCpp();
         var ref:Ref<EMyEnum> = unreal.Ref.createStack();
         sub1.getSomeEnum(0, ref);
-        ref.get().should.be(EMyEnum.SomeEnum1);
+        ref.get().should.equal(EMyEnum.SomeEnum1);
         sub1.getSomeEnum(1, ref);
-        ref.get().should.be(EMyEnum.SomeEnum3);
+        ref.get().should.equal(EMyEnum.SomeEnum3);
         var ref:Ref<EMyCppEnum> = unreal.Ref.createStack();
         sub1.getSomeCppEnum(0, ref);
-        ref.get().should.be(EMyCppEnum.CppEnum1);
+        ref.get().should.equal(EMyCppEnum.CppEnum1);
         sub1.getSomeCppEnum(1, ref);
-        ref.get().should.be(EMyCppEnum.CppEnum3);
+        ref.get().should.equal(EMyCppEnum.CppEnum3);
       });
       it('should be able to tell whether it is valid', {
         var sub2 = UBasicTypesSub2.CreateFromCpp();

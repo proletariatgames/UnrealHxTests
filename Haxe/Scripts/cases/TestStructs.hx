@@ -64,7 +64,7 @@ class TestStructs extends buddy.BuddySuite {
 
     cpp.vm.Gc.run(true);
     cpp.vm.Gc.run(true);
-    before({
+    beforeEach({
       nConstructors = FSimpleStruct.nConstructorCalled;
       nDestructors = FSimpleStruct.nDestructorCalled;
     });
