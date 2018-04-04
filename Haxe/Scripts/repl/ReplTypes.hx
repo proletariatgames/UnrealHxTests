@@ -89,7 +89,7 @@ typedef AReplicationTest = ADynamicReplicationTest;
   #end
 
   @:ufunction
-  dynamic public function onRep_initialOnRep() : Void {
+  dynamic public function OnRep_initialOnRep() : Void {
   }
 
   @:ufunction

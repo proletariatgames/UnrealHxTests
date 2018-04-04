@@ -594,7 +594,7 @@ class AHaxeTestActorReplication extends AActor
   }
 
   @:ufunction
-  function onRep_replicatedPropA() : Void {
+  function OnRep_replicatedPropA() : Void {
   }
 
   @:ufunction

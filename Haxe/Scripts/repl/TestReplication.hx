@@ -19,7 +19,7 @@ class TestReplication extends buddy.BuddySuite {
       it('should propagate initialOnly properties', function(done) {
         var nChecks = 0;
         if (repl.initialOnRep != 0xD0D0D0D0) {
-          repl.onRep_initialOnRep = function () {
+          repl.OnRep_initialOnRep = function () {
             if (repl.initialOnRep != 0xD0D0D0D0) {
               trace('Fatal', 'initialOnRep ${repl.initialOnRep} != ${0xD0D0D0D0}');
             }
@@ -257,7 +257,7 @@ class TestReplication extends buddy.BuddySuite {
             Timer.delay(.1, function() {
               for (controller in repl.GetWorld().GetControllerIterator()) {
                 var pc:AReplPlayerController = cast controller;
-                pc.Client_Reliable( pc.PlayerState.PlayerName, "someName" );
+                pc.Client_Reliable( pc.PlayerState.GetPlayerName(), "someName" );
               }
               done();
             });
@@ -268,8 +268,8 @@ class TestReplication extends buddy.BuddySuite {
               trace('Fatal', 'Could not find a suitable player controller: ${UEngine.GEngine.GetFirstLocalPlayerController(repl.GetWorld())}');
             }
             pc.fn_onClientCalled = function(str:String, name:String) {
-              if (str != pc.PlayerState.PlayerName.toString()) {
-                trace('Fatal', 'str ${str} != ${pc.PlayerState.PlayerName.toString()}');
+              if (str != pc.PlayerState.GetPlayerName().toString()) {
+                trace('Fatal', 'str ${str} != ${pc.PlayerState.GetPlayerName()}');
               }
               if (name != 'someName') {
                 trace('Fatal', 'str ${str} != someName');
