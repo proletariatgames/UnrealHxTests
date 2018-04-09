@@ -24,7 +24,7 @@ extern class UBasicTypesUObject_Extra {
   @:thisConst function getSomeNumber():Int;
 
   public static function isNull(obj:UBasicTypesUObject) : Bool;
-  public static function getNull() : PPtr<UBasicTypesUObject>;
+  public static function getNull() : UBasicTypesUObject;
 
   public function getSelf() : UBasicTypesUObject;
 
@@ -39,4 +39,9 @@ extern class UBasicTypesUObject_Extra {
   @:ufunction()
   @:thisConst
   private function testConstParam_protected(geo:unreal.Const<unreal.PRef<unreal.slatecore.FGeometry>>) : unreal.FString;
+
+  public function testRefInt(refInt:Ref<Int>):Void;
+  public function testRefEnum(refEnum:Ref<EMyCppEnum>):Void;
+  public function testRefObject(refObj:Ref<UBasicTypesUObject>):Int;
+  public function testRefVector(refVec:Ref<PPtr<FVector>>):Void;
 }

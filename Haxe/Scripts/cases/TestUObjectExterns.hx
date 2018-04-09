@@ -292,12 +292,41 @@ class TestUObjectExterns extends buddy.BuddySuite {
         sub1.getSomeCppEnum(1, ref);
         ref.get().should.equal(EMyCppEnum.CppEnum3);
       });
-      it('should be able to tell whether it is valid', {
+      it('should be able to call ref types', {
         var sub2 = UBasicTypesSub2.CreateFromCpp();
-        // (GIsEditor ? RF_Native|RF_AsyncLoading|RF_Standalone|RF_Async : RF_Native|RF_AsyncLoading|RF_Async)
-        var flags = EObjectFlags.RF_Native|EObjectFlags.RF_AsyncLoading|EObjectFlags.RF_Async;
-        UObject.CollectGarbage(flags, true);
-        sub2.isValid().should.be(false);
+        var i:Ref<Int> = Ref.createStack();
+        i.set(24);
+        i.get().should.be(24);
+        sub2.testRefInt(i);
+        i.get().should.be(240);
+
+        var e:Ref<EMyCppEnum> = Ref.createStack();
+        e.set(CppEnum1);
+        e.get().should.be(EMyCppEnum.CppEnum1);
+        sub2.testRefEnum(e);
+        e.get().should.be(EMyCppEnum.CppEnum3);
+
+        var obj = UBasicTypesSub1.CreateFromCpp();
+        var refObj:Ref<UBasicTypesUObject> = Ref.createStack();
+        refObj.get().should.be(null);
+        refObj.set(obj);
+        refObj.get().should.be(obj);
+        sub2.testRefObject(refObj).should.be(obj.getSomeNumber());
+        refObj.get().should.be(sub2);
+        refObj.set(null);
+        sub2.testRefObject(refObj).should.be(10);
+        refObj.get().should.be(sub2);
+
+        var vecRef:Ref<PPtr<FVector>> = Ref.createStack();
+        vecRef.get().should.be(null);
+        var vec = FVector.createWithValues(1,2,3);
+        vecRef.set(vec);
+        vecRef.get().X.should.be(1);
+        vecRef.get().Y.should.be(2);
+        vecRef.get().Z.should.be(3);
+        sub2.testRefVector(vecRef);
+        vec.X.should.be(30);
+        vecRef.get().should.be(null);
       });
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
@@ -309,6 +338,14 @@ class TestUObjectExterns extends buddy.BuddySuite {
       it('should be able to use structs');
       it('should be able to use pointers to structs');
       it('should be able to be referenced by weak pointer');
+      // Do NOT put any test code after this:
+      it('should be able to tell whether it is valid', {
+        var sub2 = UBasicTypesSub2.CreateFromCpp();
+        // (GIsEditor ? RF_Native|RF_AsyncLoading|RF_Standalone|RF_Async : RF_Native|RF_AsyncLoading|RF_Async)
+        var flags = EObjectFlags.RF_Native|EObjectFlags.RF_AsyncLoading|EObjectFlags.RF_Async;
+        UObject.CollectGarbage(flags, true);
+        sub2.isValid().should.be(false);
+      });
     });
   }
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameFramework/GameMode.h"
+#include "SomeEnum.h"
 #include "BasicTypesUObject.generated.h"
 
 /**
@@ -119,6 +120,29 @@ public:
   }
 
   virtual FString testConstParam(const FGeometry & geo) const;
+
+  virtual void testRefInt(int &refInt) {
+    refInt *= 10;
+  }
+
+  virtual void testRefEnum(EMyCppEnum &refEnum) {
+    if (refEnum == EMyCppEnum::CppEnum1) {
+      refEnum = EMyCppEnum::CppEnum3;
+    } else {
+      refEnum = EMyCppEnum::CppEnum1;
+    }
+  }
+
+  virtual int testRefObject(UBasicTypesUObject *&refObj) {
+    UBasicTypesUObject *obj = refObj;
+    refObj = this;
+    return obj ? obj->getSomeNumber() : 10;
+  }
+
+  virtual void testRefVector(FVector *&refVec) {
+    refVec->X = refVec->Z * 10;
+    refVec = nullptr;
+  }
 
   // protected member functions and data members for testing extern calls to them
 protected:
