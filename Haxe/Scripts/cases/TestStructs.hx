@@ -519,6 +519,12 @@ class TestStructs extends buddy.BuddySuite {
         var s2 = s.embedded;
         s2.fname.toString().should.be("foo");
       });
+      it('should be able to use FVector_NetQuantize objects', {
+        var X = FVector_NetQuantize.createFromVector(new FVector(1,2,3));
+        X.X.should.beCloseTo(1);
+        X.Y.should.beCloseTo(2);
+        X.Z.should.beCloseTo(3);
+      });
 #if (debug || UHX_CHECK_POINTER)
       it('should catch null references when running on debug mode / UE_CHECK_POINTER', {
         var fs:FSimpleStruct = getNullStruct();
