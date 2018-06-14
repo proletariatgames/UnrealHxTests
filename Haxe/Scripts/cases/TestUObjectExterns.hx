@@ -274,8 +274,8 @@ class TestUObjectExterns extends buddy.BuddySuite {
 
       it('should be able to call TEnumAsByte functions', {
         var sub1 = UBasicTypesSub1.CreateFromCpp();
-        sub1.enumAsByteTest("hey", IE_Pressed).should.be(3);
-        @:privateAccess sub1.enumAsByteTestPrivate("hey", IE_Pressed).should.be(3);
+        sub1.enumAsByteTest("hey", (IE_Pressed)).should.be(3);
+        @:privateAccess sub1.enumAsByteTestPrivate("hey", (IE_Pressed)).should.be(3);
         sub1.enumAsByteTest2("hey", IE_Pressed).should.be(3);
         @:privateAccess sub1.enumAsByteTestPrivate2("hey", IE_Pressed).should.be(3);
       });

@@ -30,6 +30,36 @@ using buddy.Should;
   @:uproperty
   public var test5:statics.StaticEnums.SomeEnumTest;
 
+  @:uproperty
+  public var test6:TArray<TEnumAsByte<EMyEnum>>;
+
+  @:uproperty
+  public var test7:TArray<EMyCppEnum>;
+
+  @:uproperty
+  public var test8:TArray<TEnumAsByte<EMyNamespacedEnum>>;
+
+  @:uproperty
+  public var test9:TArray<ETestHxEnumClass>;
+
+  @:uproperty
+  public var test10:TArray<statics.StaticEnums.SomeEnumTest>;
+
+  @:uextern @:uproperty
+  public var compiled_test6:TArray<TEnumAsByte<EMyEnum>>;
+
+  @:uextern @:uproperty
+  public var compiled_test7:TArray<EMyCppEnum>;
+
+  @:uextern @:uproperty
+  public var compiled_test8:TArray<TEnumAsByte<EMyNamespacedEnum>>;
+
+  @:uextern @:uproperty
+  public var compiled_test9:TArray<ETestHxEnumClass>;
+
+  @:uextern @:uproperty
+  public var compiled_test10:TArray<statics.StaticEnums.SomeEnumTest>;
+
   @:ufunction
   public function setTest(val:ETestHxEnumClass) {
     test1 = val;
@@ -100,6 +130,71 @@ class TestUEnum extends buddy.BuddySuite {
         obj.test5.should.equal(Two);
         obj.test5 = Three;
         obj.test5.should.equal(Three);
+      });
+      it('should be able to use TArray of uenums as uproperties', {
+        var obj = UObject.NewObject(new TypeParam<UTestUseEnum>(), UObject.GetTransientPackage(), UTestUseEnum.StaticClass());
+        var i = 0;
+        for (v in [E_2nd, E_1st, E_3rd])
+        {
+          obj.test9.push(v);
+          obj.test9[i++].should.be(v);
+        }
+
+        var i = 0;
+        for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
+        {
+          obj.test6.push((v));
+          obj.test6[i++].GetValue().should.be(v);
+        }
+        var test6:TArray<EMyEnum> = TArray.create();
+        var i = 0;
+        for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
+        {
+          test6.push(v);
+          test6[i++].should.be(v);
+        }
+
+        var i = 0;
+        for (v in [CppEnum3, CppEnum1, CppEnum2])
+        {
+          obj.test7.push(v);
+          obj.test7[i++].should.be(v);
+        }
+
+        var i = 0;
+        for (v in [One, Three, Two])
+        {
+          obj.test10.push(v);
+          obj.test10[i++].should.be(v);
+        }
+
+        var i = 0;
+        for (v in [E_2nd, E_1st, E_3rd])
+        {
+          obj.compiled_test9.push(v);
+          obj.compiled_test9[i++].should.be(v);
+        }
+
+        var i = 0;
+        for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
+        {
+          obj.compiled_test6.push((v));
+          obj.compiled_test6[i++].GetValue().should.be(v);
+        }
+
+        var i = 0;
+        for (v in [CppEnum3, CppEnum1, CppEnum2])
+        {
+          obj.compiled_test7.push(v);
+          obj.compiled_test7[i++].should.be(v);
+        }
+
+        var i = 0;
+        for (v in [One, Three, Two])
+        {
+          obj.compiled_test10.push(v);
+          obj.compiled_test10[i++].should.be(v);
+        }
       });
       it('should be able to pass enums back and forth to C++', {
         var obj = UObject.NewObject(new TypeParam<UTestUseEnum>(), UObject.GetTransientPackage(), UTestUseEnum.StaticClass());

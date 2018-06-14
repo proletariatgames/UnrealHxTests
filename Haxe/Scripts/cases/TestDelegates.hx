@@ -126,8 +126,6 @@ typedef FDelTest5 = unreal.Delegate<FDelTest5, TSubclassOf<UHaxeDerived1>->Int>;
   @:ufunction public function ufun4_ret(someStruct:Const<PRef<FSimpleUStruct>>):UUsesDelegate {
     numCallbacks += 1;
     this.lastSimpleStruct = someStruct.copy();
-    trace(someStruct.f1);
-    trace(this.lastSimpleStruct.f1);
     return this;
   }
 

@@ -375,7 +375,6 @@ class TestTArray extends buddy.BuddySuite {
 
        var i = 0;
        for (s in [obj.enumSet1, ReflectAPI.callMethod(obj, "ufuncGet_enumSet1", []), obj2.enumSet1, ReflectAPI.callMethod(obj2, "ufuncGet_enumSet1", []), TSet.create(new TypeParam<EMyCppEnum>())]) {
-          trace(i++);
           s.Contains(CppEnum2).should.be(false);
           s.Contains(CppEnum3).should.be(false);
           var t1 = s.Add(CppEnum2);
@@ -522,9 +521,7 @@ class TestTArray extends buddy.BuddySuite {
           s.Contains("Test2").should.be(false);
           s["Test"].toString().should.be("10");
           var scpy = s.copy();
-          // trace([ for (key in scpy.GenerateKeyArray()) key.toString() ]);
           s.Add("Test2", '3');
-          trace([ for (key in scpy.GenerateKeyArray()) key.toString() ]);
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test", "Test2"]);
           [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly(["10", "3"]);
           s.Contains("Test").should.be(true);
