@@ -4,7 +4,6 @@ import NonUObject;
 import haxeunittests.EMyCppEnum;
 import haxeunittests.EMyEnum;
 import haxeunittests.EMyNamespacedEnum;
-import haxeunittests.*;
 import statics.StaticEnums.SomeEnumTest;
 using buddy.Should;
 
@@ -137,63 +136,77 @@ class TestUEnum extends buddy.BuddySuite {
         for (v in [E_2nd, E_1st, E_3rd])
         {
           obj.test9.push(v);
-          obj.test9[i++].should.be(v);
+          obj.test9[i++].should.equal(v);
         }
 
         var i = 0;
         for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
         {
           obj.test6.push((v));
-          obj.test6[i++].GetValue().should.be(v);
+          obj.test6[i++].GetValue().should.equal(v);
         }
         var test6:TArray<EMyEnum> = TArray.create();
         var i = 0;
         for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
         {
           test6.push(v);
-          test6[i++].should.be(v);
+          test6[i++].should.equal(v);
         }
 
         var i = 0;
         for (v in [CppEnum3, CppEnum1, CppEnum2])
         {
           obj.test7.push(v);
-          obj.test7[i++].should.be(v);
+          obj.test7[i++].should.equal(v);
         }
 
         var i = 0;
         for (v in [One, Three, Two])
         {
           obj.test10.push(v);
-          obj.test10[i++].should.be(v);
+          obj.test10[i++].should.equal(v);
         }
 
         var i = 0;
         for (v in [E_2nd, E_1st, E_3rd])
         {
           obj.compiled_test9.push(v);
-          obj.compiled_test9[i++].should.be(v);
+          obj.compiled_test9[i++].should.equal(v);
         }
 
         var i = 0;
         for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
         {
           obj.compiled_test6.push((v));
-          obj.compiled_test6[i++].GetValue().should.be(v);
+          obj.compiled_test6[i++].GetValue().should.equal(v);
+        }
+        var compiled_test6:TArray<EMyEnum> = TArray.create();
+        var i = 0;
+        for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
+        {
+          compiled_test6.push((v));
+          compiled_test6[i++].should.equal(v);
+        }
+        var compiled_test6:TArray<TEnumAsByte<EMyEnum>> = TArray.create();
+        var i = 0;
+        for (v in [SomeEnum2, SomeEnum1, SomeEnum3])
+        {
+          compiled_test6.push((v));
+          compiled_test6[i++].should.equal(v);
         }
 
         var i = 0;
         for (v in [CppEnum3, CppEnum1, CppEnum2])
         {
           obj.compiled_test7.push(v);
-          obj.compiled_test7[i++].should.be(v);
+          obj.compiled_test7[i++].should.equal(v);
         }
 
         var i = 0;
         for (v in [One, Three, Two])
         {
           obj.compiled_test10.push(v);
-          obj.compiled_test10[i++].should.be(v);
+          obj.compiled_test10[i++].should.equal(v);
         }
       });
       it('should be able to pass enums back and forth to C++', {

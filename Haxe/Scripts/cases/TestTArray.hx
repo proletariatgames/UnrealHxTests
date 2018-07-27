@@ -197,11 +197,22 @@ class TestTArray extends buddy.BuddySuite {
           (obj.objArray1[0].getSelf() == basicType).should.be(true);
           obj.objArray1[0].getSomeNumber().should.be(42);
 
+          obj.weakArray.push(basicType);
+          Std.is(obj.weakArray[0], UBasicTypesUObject).should.be(true);
+          (obj.weakArray[0].getSelf() == basicType).should.be(true);
+          obj.weakArray[0].getSomeNumber().should.be(42);
+
           var sub1 = UBasicTypesSub1.CreateFromCpp();
           obj.objArray1.push(sub1);
           Std.is(obj.objArray1[1], UBasicTypesSub1).should.be(true);
           (obj.objArray1[1].getSelf() == sub1).should.be(true);
           obj.objArray1[1].getSomeNumber().should.be(43);
+
+          var sub1 = UBasicTypesSub1.CreateFromCpp();
+          obj.weakArray.push(sub1);
+          Std.is(obj.weakArray[1], UBasicTypesSub1).should.be(true);
+          (obj.weakArray[1].getSelf() == sub1).should.be(true);
+          obj.weakArray[1].getSomeNumber().should.be(43);
 
           var derived = UHaxeDerived1.create();
           obj.objArray1.push(derived);
@@ -210,6 +221,15 @@ class TestTArray extends buddy.BuddySuite {
           obj.objArray1[2].getSomeNumber().should.be(220);
           obj.objArray1.pop().getSomeNumber().should.be(220);
           derived.getSomeNumber().should.be(220);
+
+          var derived = UHaxeDerived1.create();
+          obj.weakArray.push(derived);
+          (obj.weakArray[2].getSelf() == derived).should.be(true);
+          obj.weakArray[2].i32Prop = 22;
+          obj.weakArray[2].getSomeNumber().should.be(220);
+          obj.weakArray.pop().getSomeNumber().should.be(220);
+          derived.getSomeNumber().should.be(220);
+
 
           var derived = UHaxeDerived1.create();
           obj.objArray2.push(derived);
@@ -258,17 +278,36 @@ class TestTArray extends buddy.BuddySuite {
           (obj.objArray1[0].getSelf() == basicType).should.be(true);
           obj.objArray1[0].getSomeNumber().should.be(42);
 
+          var basicType =  UBasicTypesUObject.CreateFromCpp();
+          obj.weakArray.push(basicType);
+          Std.is(obj.weakArray[0], UBasicTypesUObject).should.be(true);
+          (obj.weakArray[0].getSelf() == basicType).should.be(true);
+          obj.weakArray[0].getSomeNumber().should.be(42);
+
           var sub1 = UBasicTypesSub1.CreateFromCpp();
           obj.objArray1.push(sub1);
           Std.is(obj.objArray1[1], UBasicTypesSub1).should.be(true);
           (obj.objArray1[1].getSelf() == sub1).should.be(true);
           obj.objArray1[1].getSomeNumber().should.be(43);
 
+          var sub1 = UBasicTypesSub1.CreateFromCpp();
+          obj.weakArray.push(sub1);
+          Std.is(obj.weakArray[1], UBasicTypesSub1).should.be(true);
+          (obj.weakArray[1].getSelf() == sub1).should.be(true);
+          obj.weakArray[1].getSomeNumber().should.be(43);
+
           var derived = UHaxeDerived1.create();
           obj.objArray1.push(derived);
           (obj.objArray1[2].getSelf() == derived).should.be(true);
           obj.objArray1[2].i32Prop = 22;
           obj.objArray1[2].getSomeNumber().should.be(220);
+          derived.getSomeNumber().should.be(220);
+
+          var derived = UHaxeDerived1.create();
+          obj.weakArray.push(derived);
+          (obj.weakArray[2].getSelf() == derived).should.be(true);
+          obj.weakArray[2].i32Prop = 22;
+          obj.weakArray[2].getSomeNumber().should.be(220);
           derived.getSomeNumber().should.be(220);
 
           obj.objArray2.push(derived);
@@ -906,6 +945,14 @@ class UTestTArray extends UObject {
   }
 
   @:uexpose @:uproperty
+  public var weakArray:TArray<TWeakObjectPtr<UBasicTypesUObject>>;
+
+  @:uexpose @:ufunction
+  public function ufuncGet_weakArray():TArray<TWeakObjectPtr<UBasicTypesUObject>> {
+    return weakArray;
+  }
+
+  @:uexpose @:uproperty
   public var objArray1:TArray<UBasicTypesUObject>;
 
   @:uexpose @:ufunction
@@ -1031,6 +1078,14 @@ class UTestTArray extends UObject {
   @:ufunction
   public function ufuncGet_enumArray2():TArray<ETestHxEnumClass> {
     return this.enumArray2;
+  }
+
+  @:uproperty
+  public var weakArray:TArray<TWeakObjectPtr<UBasicTypesUObject>>;
+
+  @:ufunction
+  public function ufuncGet_weakArray():TArray<TWeakObjectPtr<UBasicTypesUObject>> {
+    return weakArray;
   }
 
   @:uproperty
