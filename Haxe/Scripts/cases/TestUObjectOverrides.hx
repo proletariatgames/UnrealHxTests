@@ -348,8 +348,33 @@ class TestUObjectOverrides extends buddy.BuddySuite {
 #end
         derived.intProp.should.be(0xBA5);
       });
+      var objs:Array<UHaxeBigObject> = [for (_ in 0...1000) {var ret:UHaxeBigObject = UObject.NewObject(UObject.GetTransientPackage(), UHaxeBigObject.StaticClass()); ret.AddToRoot(); ret; } ];
+      it('should be able to tell whether objects are valid', {
+        for (obj in objs)
+        {
+          obj.isValid().should.be(true);
+          obj.test2 = 100;
+          obj.RemoveFromRoot();
+        }
+      });
+      // Do NOT put any test code after this:
+      it('should be able to tell whether it is valid', {
+        // (GIsEditor ? RF_Native|RF_AsyncLoading|RF_Standalone|RF_Async : RF_Native|RF_AsyncLoading|RF_Async)
+        UObject.CollectGarbage(0, true);
+        UObject.CollectGarbage(0, true);
+        for (obj in objs)
+        {
+          obj.isValid().should.be(false);
+          obj.test2.should.be(100); // the haxe object hasn't died
+        }
+      });
+      // Do NOT put any test code here
     });
   }
+}
+
+@:uclass class UHaxeBigObject extends UBigObject {
+  public var test2:Int;
 }
 
 #if (cppia || WITH_CPPIA)

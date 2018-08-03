@@ -15,6 +15,7 @@ class RunCi {
   static var headless:Bool = Sys.getEnv('HEADLESS') == "1";
   static var service:Bool = Sys.getEnv('SERVICE') == "1";
   static var interactive:Bool = Sys.getEnv("INTERACTIVE") == "1";
+  static var normalMalloc:Bool = Sys.getEnv("NORMAL_MALLOC") == "1";
   static var setServer = false;
 
   public static function main() {
@@ -67,6 +68,8 @@ class RunCi {
         { name:'VERBOSE', desc:'Build with verbose flag' },
         { name:'SERVICE', desc:'This is called under a service and an intermediate caller must be made for GUI applications' },
         { name:'INTERACTIVE', desc:'This is set if compile-detection should run in interactive mode' },
+        { name:'NORMAL_MALLOC', desc:'Use the system default malloc system (otherwise, -binnedmalloc2 is used)' },
+        { name:'EXTRA_UE4_ARGS', desc:'Extra UE4 arguments' },
       ];
       var avTargets = [
         { name:'all', desc:'A shorthand for `build-initial build main pass3 run-hotreload run-cserver`', fn:doTargets.bind(['build-initial','build','main','pass3','run-hotreload','run-cserver'])},
@@ -329,6 +332,15 @@ class RunCi {
     }
     if (config.toLowerCase() == 'debuggame') {
       args.push('RunConfig=Debug');
+    }
+    if (!normalMalloc)
+    {
+      args.push('-binnedmalloc2');
+    }
+    var extra = Sys.getEnv('EXTRA_UE4_ARGS');
+    if (extra != null)
+    {
+      args.push(extra);
     }
     var old = Sys.getCwd();
     Sys.setCwd(ue4);

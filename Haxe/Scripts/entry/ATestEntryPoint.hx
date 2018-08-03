@@ -47,6 +47,9 @@ class ATestEntryPoint extends unreal.AActor {
 #end
 
     trace('running pass $curPass');
+    #if cppia
+    uhx.internal.HaxeHelpers.setReflectionDebugMode(#if (pass >= 3) false #else true #end);
+    #end
 
     runner.run().then(function(_) {
       cpp.vm.Gc.run(true);

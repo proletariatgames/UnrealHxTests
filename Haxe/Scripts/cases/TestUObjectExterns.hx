@@ -328,6 +328,14 @@ class TestUObjectExterns extends buddy.BuddySuite {
         vec.X.should.be(30);
         vecRef.get().should.be(null);
       });
+      var objs:Array<UBigObject> = [for (_ in 0...100) {var ret:UBigObject = UObject.NewObject(UObject.GetTransientPackage(), UBigObject.StaticClass()); ret.AddToRoot(); ret; } ];
+      it('should be able to tell whether objects are valid', {
+        for (obj in objs)
+        {
+          obj.isValid().should.be(true);
+          obj.RemoveFromRoot();
+        }
+      });
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
       it('should be able to be created by Haxe code');
@@ -341,11 +349,19 @@ class TestUObjectExterns extends buddy.BuddySuite {
       // Do NOT put any test code after this:
       it('should be able to tell whether it is valid', {
         var sub2 = UBasicTypesSub2.CreateFromCpp();
-        // (GIsEditor ? RF_Native|RF_AsyncLoading|RF_Standalone|RF_Async : RF_Native|RF_AsyncLoading|RF_Async)
-        var flags = EObjectFlags.RF_Native|EObjectFlags.RF_AsyncLoading|EObjectFlags.RF_Async;
-        UObject.CollectGarbage(flags, true);
+        UObject.CollectGarbage(0, true);
+        // UObject.CollectGarbage(0, true);
         sub2.isValid().should.be(false);
+        var nullPtr:unreal.UIntPtr = 0;
+        var nullPtr2:unreal.UIntPtr = cast null;
+        for (obj in objs)
+        {
+          var ptr = @:privateAccess obj.wrapped;
+          (ptr == nullPtr || ptr == nullPtr2).should.be(true);
+          obj.isValid().should.be(false);
+        }
       });
+      // Do NOT put any test code here
     });
   }
 }
