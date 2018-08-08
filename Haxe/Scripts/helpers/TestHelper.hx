@@ -27,7 +27,7 @@ class TestHelper {
     switch(e.expr) {
     case ECall({ expr:EField(ef, name) }, args):
       var ret = macro unreal.ReflectAPI.callMethod($ef, $v{name}, $a{args});
-      if (type == null) {
+      if (type == null || type.match(TPath({ sub:'Void' }))) {
         return ret;
       } else {
         return macro ($ret : $type);

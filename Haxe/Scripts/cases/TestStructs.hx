@@ -17,7 +17,7 @@ typedef FHaxeStruct = UnrealStruct<FHaxeStruct, [{
   function someFunction() {
     return "name: " + name.toString();
   }
-}]>
+}]>;
 
 typedef FHaxeStruct2 = UnrealStruct<FHaxeStruct2, [{
   @:uproperty
@@ -27,11 +27,25 @@ typedef FHaxeStruct2 = UnrealStruct<FHaxeStruct2, [{
 typedef FDerivedStruct = UnrealStruct<FDerivedStruct, FPODStruct, [{
   @:uproperty
   var addedProperty:FHaxeStruct;
-}]>
+}]>;
 
 @:uclass class UStructTest extends UObject {
   @:uproperty
   public var s:FHaxeStruct2;
+
+  @:ufunction public function setPOD(pod:PRef<FPODStruct>) {
+    pod.ui32 = 1;
+    pod.i32 = 2;
+    pod.d = 3.3;
+    pod.f = 4.4;
+  }
+
+  @:ufunction public function checkPOD(pod:Const<PRef<FPODStruct>>) {
+    pod.ui32.should().be(1);
+    pod.i32.should().be(2);
+    pod.d.should().beCloseTo(3.3);
+    pod.f.should().beCloseTo(4.4);
+  }
 }
 
 class TestStructs extends buddy.BuddySuite {
@@ -518,6 +532,28 @@ class TestStructs extends buddy.BuddySuite {
 
         var s2 = s.embedded;
         s2.fname.toString().should.be("foo");
+      });
+      it('should be able to declare/use haxe-defined structs', {
+        var s = new FDerivedStruct();
+
+        var test:UStructTest = UObject.NewObject(UObject.GetTransientPackage(), UStructTest.StaticClass());
+        test.setPOD(s);
+        test.checkPOD(s);
+
+        s.addedProperty.name = "hey";
+        s.ui32 = 1;
+        s.i32 = 2;
+        s.d = 2.2;
+        s.f = 3.3;
+        s.addedProperty.name.toString().should.be("hey");
+        s.ui32.should.be(1);
+        s.i32.should.be(2);
+        s.d.should.beCloseTo(2.2);
+        s.f.should.beCloseTo(3.3);
+
+        TestHelper.reflectCall(test.setPOD(s));
+        s.addedProperty.name.toString().should.be("hey");
+        TestHelper.reflectCall(test.checkPOD(s));
       });
       it('should be able to use FVector_NetQuantize objects', {
         var X = FVector_NetQuantize.createFromVector(new FVector(1,2,3));
