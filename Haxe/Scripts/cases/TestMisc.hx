@@ -71,6 +71,12 @@ class TestMisc extends buddy.BuddySuite {
         var vec2 = FVector.ZeroVector;
         vec2.X.should.be(0);
       });
+      it('should return the uname of a type', {
+        CoreAPI.getTypeUName(TestStructs.FHaxeStruct2).should.be("FHaxeStruct2Name");
+        CoreAPI.getTypeUName(TestStructs.FHaxeStruct).should.be("FHaxeStruct");
+        CoreAPI.getTypeUName(TestUEnum.ETestHxEnumClass).should.be("ETestHxEnumClass");
+        CoreAPI.getTypeUName(TestUEnum.ETestHxEnumClassWithName).should.be("ETestHxEnumClassWithName2");
+      });
     });
   }
 }

@@ -19,6 +19,7 @@ typedef FHaxeStruct = UnrealStruct<FHaxeStruct, [{
   }
 }]>;
 
+@:uname("FHaxeStruct2Name")
 typedef FHaxeStruct2 = UnrealStruct<FHaxeStruct2, [{
   @:uproperty
   var embedded:FHaxeStruct;
@@ -560,6 +561,13 @@ class TestStructs extends buddy.BuddySuite {
         X.X.should.beCloseTo(1);
         X.Y.should.beCloseTo(2);
         X.Z.should.beCloseTo(3);
+      });
+      it('should expose their StaticStruct type', {
+        var s1 = FDerivedStruct.StaticStruct();
+        s1.should.not.be(null);
+        var s2 = FPODStruct.StaticStruct();
+        s2.should.not.be(null);
+        s1.IsChildOf(s2).should.be(true);
       });
 #if (debug || UHX_CHECK_POINTER)
       it('should catch null references when running on debug mode / UE_CHECK_POINTER', {

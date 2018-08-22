@@ -13,6 +13,13 @@ using buddy.Should;
   @:umeta(DisplayName="ThirdOne") E_3rd;
 }
 
+@:uname("ETestHxEnumClassWithName2")
+@:uenum(BlueprintType) @:class(uint8) enum ETestHxEnumClassWithName {
+  @:umeta(DisplayName="FirstOne") EE_1st;
+  @:umeta(DisplayName="SecondOne") EE_2nd;
+  @:umeta(DisplayName="ThirdOne") EE_3rd;
+}
+
 @:uclass class UTestUseEnum extends unreal.UObject {
   @:uproperty(BlueprintReadWrite)
   public var test1:ETestHxEnumClass;
