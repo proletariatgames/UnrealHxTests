@@ -20,6 +20,8 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
   public:
   bool isSub1 = true;
 
+  static UBasicTypesUObject *SomeObject;
+
   UFUNCTION()
   virtual int64 setText(FText text) override;
 

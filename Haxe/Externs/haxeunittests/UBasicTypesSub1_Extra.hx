@@ -10,4 +10,6 @@ extern class UBasicTypesSub1_Extra {
 
   function getSomeEnum(i:Int, out:Ref<EMyEnum>):Void;
   function getSomeCppEnum(i:Int, out:Ref<EMyCppEnum>):Void;
+
+  static var SomeObject:UBasicTypesUObject;
 }

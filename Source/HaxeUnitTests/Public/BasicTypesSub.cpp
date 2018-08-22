@@ -19,3 +19,5 @@ bool UBasicTypesSub3::setUI64_I64_Float_Double(uint64 ui64, int64 i64, float f, 
   Super::setUI64_I64_Float_Double(ui64, i64, f, d);
   return true;
 }
+
+UBasicTypesUObject *UBasicTypesSub1::SomeObject = nullptr;

@@ -348,8 +348,13 @@ class TestUObjectExterns extends buddy.BuddySuite {
       it('should be able to be referenced by weak pointer');
       // Do NOT put any test code after this:
       it('should be able to tell whether it is valid', {
-        var sub2 = UBasicTypesSub2.CreateFromCpp();
         UObject.CollectGarbage(0, true);
+        var sub2 = UBasicTypesSub2.CreateFromCpp();
+        UBasicTypesSub1.SomeObject = sub2;
+        UBasicTypesSub1.SomeObject.isValid().should.be(true);
+        UObject.CollectGarbage(0, true);
+        UBasicTypesSub1.SomeObject.should.be(null);
+
         // UObject.CollectGarbage(0, true);
         sub2.isValid().should.be(false);
         var nullPtr:unreal.UIntPtr = 0;

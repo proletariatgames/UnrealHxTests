@@ -350,12 +350,15 @@ class TestUObjectOverrides extends buddy.BuddySuite {
       });
       var objs:Array<UHaxeBigObject> = [for (_ in 0...1000) {var ret:UHaxeBigObject = UObject.NewObject(UObject.GetTransientPackage(), UHaxeBigObject.StaticClass()); ret.AddToRoot(); ret; } ];
       it('should be able to tell whether objects are valid', {
+        var derived =  UHaxeDerived1.create();
+        UBasicTypesSub1.SomeObject = derived;
         for (obj in objs)
         {
           obj.isValid().should.be(true);
           obj.test2 = 100;
           obj.RemoveFromRoot();
         }
+        UBasicTypesSub1.SomeObject.isValid().should.be(true);
       });
       // Do NOT put any test code after this:
       it('should be able to tell whether it is valid', {
@@ -367,6 +370,7 @@ class TestUObjectOverrides extends buddy.BuddySuite {
           obj.isValid().should.be(false);
           obj.test2.should.be(100); // the haxe object hasn't died
         }
+        UBasicTypesSub1.SomeObject.should.be(null);
       });
       // Do NOT put any test code here
     });
