@@ -1,5 +1,5 @@
-#include "HaxeUnitTests.h"
 #include "TestTools.h"
+#include "HaxeUnitTests.h"
 #include "Modules/ModuleManager.h"
 #if WITH_EDITOR
 #include "ISessionFrontendModule.h"

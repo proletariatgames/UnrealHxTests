@@ -1,5 +1,5 @@
-#include "HaxeUnitTests.h"
 #include "BasicTypesUObject.h"
+#include "HaxeUnitTests.h"
 
 int UBasicTypesUObject::someStaticInt = 0;
 
