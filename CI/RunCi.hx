@@ -77,6 +77,7 @@ class RunCi {
         { name:'main', desc:'The main build check - shorthand for `build pass0 cmd run pass1 run pass2 run', fn:doTargets.bind(['build','pass0','cmd','run','pass1','run','pass2','run'])},
         { name:'compile-detection[-n]', desc:'Performs some static compilation tests', fn:null },
         { name:'build-initial', desc:'Performs a full editor (initial) build', fn:doInitialBuild },
+        { name:'editor', desc:'Runs the editor', fn:doEditor },
         { name:'build', desc:'Performs a full editor build', fn:doBuild },
         { name:'cmd', desc:'Runs a test commandlet', fn:doCmd },
         { name:'run', desc:'Runs the main unit tests', fn:doRun },
@@ -248,6 +249,11 @@ class RunCi {
     var stamp = Date.now().toString();
     Sys.putEnv('CUSTOM_STAMP', stamp);
     runUE(['$workspace/HaxeUnitTests.uproject', '-run=HaxeUnitTests.UpdateAsset', stamp, '-AllowStdOutLogVerbosity'], true, false);
+  }
+
+  static function doEditor()
+  {
+    runUE(['$workspace/HaxeUnitTests.uproject', '-AllowStdOutLogVerbosity'], true, false);
   }
 
   static function doRun() {
@@ -427,7 +433,7 @@ class RunCi {
             var pfiles = Sys.getEnv('ProgramFiles(x86)');
             if (pfiles != null && FileSystem.exists('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe')) {
               var cmd = new sys.io.Process('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe', ['-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64', '-property','installationPath']);
-              tools = cmd.stdout.readAll().toString().trim().split('\n')[0] + '/Common7/IDE';
+              tools = cmd.stdout.readAll().toString().trim().split('\n')[0] + '/../Community/Common7/IDE';
               cmd.exitCode();
             }
           }
