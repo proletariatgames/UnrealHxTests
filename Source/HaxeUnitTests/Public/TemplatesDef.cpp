@@ -1,5 +1,5 @@
-#include "TemplatesDef.h"
 #include "HaxeUnitTests.h"
+#include "TemplatesDef.h"
 
 int UTemplatesDef::someStaticInt = 42;
 

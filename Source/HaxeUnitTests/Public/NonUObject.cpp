@@ -1,5 +1,5 @@
-#include "NonUObject.h"
 #include "HaxeUnitTests.h"
+#include "NonUObject.h"
 
 int FSimpleStruct::someStaticInt = 442;
 

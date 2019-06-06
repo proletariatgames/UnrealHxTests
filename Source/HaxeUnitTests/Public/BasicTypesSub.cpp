@@ -1,5 +1,5 @@
-#include "BasicTypesSub.h"
 #include "HaxeUnitTests.h"
+#include "BasicTypesSub.h"
 
 int64 UBasicTypesSub1::setText(FText text)
 {
