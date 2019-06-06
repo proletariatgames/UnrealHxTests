@@ -6,6 +6,27 @@ import haxeunittests.*;
 
 using buddy.Should;
 
+class SomethingBase
+{
+  public function new() {}
+  public function getVal() {
+    return 42;
+  }
+}
+
+class Something extends SomethingBase
+{
+  public var data:{ i:Int };
+  public function new(data) {
+    super();
+    this.data = data;
+  }
+  override public function getVal() {
+    return data.i;
+  }
+}
+
+
 class TestMisc extends buddy.BuddySuite {
   public function new() {
     var __status:buddy.SpecAssertion = null;
@@ -76,6 +97,52 @@ class TestMisc extends buddy.BuddySuite {
         CoreAPI.getTypeUName(TestStructs.FHaxeStruct).should.be("FHaxeStruct");
         CoreAPI.getTypeUName(TestUEnum.ETestHxEnumClass).should.be("ETestHxEnumClass");
         CoreAPI.getTypeUName(TestUEnum.ETestHxEnumClassWithName).should.be("ETestHxEnumClassWithName2");
+      });
+    });
+    describe('Haxe - Threads', {
+      var fields = [];
+      it('should not crash when allocating from external threads', {
+        var deque = new cpp.vm.Deque();
+        for (i in 0...100)
+        {
+          var arr = [];
+          if (i % 2 == 0)
+          {
+            fields.push(arr);
+          }
+          var init = new FSimpleDelegate();
+          init.BindLambda(function() arr.push(new SomethingBase()));
+          var loop = new FSimpleDelegate();
+          loop.BindLambda(function() {
+            arr.push(Std.random(2) == 0 ? new SomethingBase() : new Something({ i:i }));
+            if (Std.random(50) == 1) {
+              cpp.vm.Gc.run(true);
+            }
+          });
+          var end = new FSimpleDelegate();
+          end.BindLambda(function() {
+            deque.push(null);
+          });
+
+          haxeunittests.FThreadRunner.start(init, loop, end, 10000);
+        }
+
+        for (i in 0...100)
+        {
+          deque.pop(true);
+        }
+        for (i in 0...50)
+        {
+          for (val in fields[i])
+          {
+            if (Std.is(val, SomethingBase))
+            {
+              val.getVal().should.be(42);
+            } else {
+              val.getVal().should.be(i * 2);
+            }
+          }
+        }
       });
     });
   }
