@@ -8,16 +8,9 @@ public class HaxeProgramTestTarget : TargetRules
     LaunchModuleName = "HaxeProgramTest";
     LinkType = TargetLinkType.Monolithic;
     ExtraModuleNames.Add("HaxeProgramTest");
-  }
 
-  public override void SetupGlobalEnvironment(
-		TargetInfo Target,
-		ref LinkEnvironmentConfiguration OutLinkEnvironmentConfiguration,
-		ref CPPEnvironmentConfiguration OutCPPEnvironmentConfiguration
-		)
-	{
 		// Lean and mean
-		bCompileLeanAndMeanUE = true;
+		bBuildDeveloperTools = false;
 
 		// Never use malloc profiling in Unreal Header Tool.
 		bUseMallocProfiler = false;
@@ -32,26 +25,26 @@ public class HaxeProgramTestTarget : TargetRules
 		bCompileAgainstCoreUObject = false;
 
 		// Our test project is a console application, not a Windows app (sets entry point to main(), instead of WinMain())
-		OutLinkEnvironmentConfiguration.bIsBuildingConsoleApplication = true;
+		bIsBuildingConsoleApplication = true;
     bUseLoggingInShipping = true;
 
-		bIncludeADO = false;
-
 		// Do not include ICU for Linux (this is a temporary workaround, separate headless CrashReportClient target should be created, see UECORE-14 for details).
-		if (Target.Platform == UnrealTargetPlatform.Linux)
+		if (Platform == UnrealTargetPlatform.Linux)
 		{
 			bCompileICU = false;
 		}
 
 		// CrashReportClient.exe has no exports, so no need to verify that a .lib and .exp file was emitted by
 		// the linker.
-		OutLinkEnvironmentConfiguration.bHasExports = false;
+		bHasExports = false;
 
 		bUseChecksInShipping = true;
 
 		// Epic Games Launcher needs to run on OS X 10.9, so CrashReportClient needs this as well
-		OutCPPEnvironmentConfiguration.bEnableOSX109Support = true;
+		bEnableOSX109Support = true;
 
-		OutCPPEnvironmentConfiguration.Definitions.Add("NOINITCRASHREPORTER=1");
+		GlobalDefinitions.Add("NOINITCRASHREPORTER=1");
+
+		bUseLoggingInShipping = true;
 	}
 }

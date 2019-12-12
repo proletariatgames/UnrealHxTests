@@ -85,6 +85,7 @@ class RunCi {
         { name:'run-cserver', desc:'Runs the client-server tests', fn:doCServer },
         { name:'cooked-test', desc:'A shorthand for `build-cooked run-cooked', fn:doTargets.bind(['build-cooked','run-cooked']) },
         { name:'build-cooked', desc:'Builds a cooked game', fn:doBuildCooked },
+        { name:'build-cooked-server', desc:'Builds a cooked game', fn:doBuildCookedServer },
         { name:'run-cooked', desc:'Runs a cooked game', fn:doRunCooked },
         { name:'build-program', desc:'Builds a program (only works with dev engines)', fn:doBuildProgram },
         { name:'run-program', desc:'Runs the program', fn:doRunProgram },
@@ -295,7 +296,12 @@ class RunCi {
 
   static function doBuildCooked() {
     runUBT([platform, config, 'HaxeUnitTests', '-project=$workspace/HaxeUnitTests.uproject']);
-    runUAT(['BuildCookRun', '-platform=$platform', '-project=$workspace/HaxeUnitTests.uproject', '-cook', '-clientconfig=$config', '-serverconfig=$config', '-allmaps', '-stage', '-pak', '-archive', '-prereqs', '-archivedirectory=$workspace/bin', '-distribution']);
+    runUAT(['BuildCookRun', '-platform=$platform', '-project=$workspace/HaxeUnitTests.uproject', '-cook', '-nocompile', '-serverplatform=$platform', '-clientconfig=$config', '-serverconfig=$config', '-allmaps', '-stage', '-pak', '-archive', '-prereqs', '-archivedirectory=$workspace/bin', '-distribution']);
+  }
+
+  static function doBuildCookedServer() {
+    runUBT([platform, config, 'HaxeUnitTestsServer', '-project=$workspace/HaxeUnitTests.uproject']);
+    runUAT(['BuildCookRun', '-platform=$platform', '-project=$workspace/HaxeUnitTests.uproject', '-server', '-cook', '-nocompile', '-serverplatform=$platform', '-clientconfig=$config', '-serverconfig=$config', '-allmaps', '-stage', '-pak', '-archive', '-prereqs', '-archivedirectory=$workspace/bin', '-distribution']);
   }
 
   static function doRunCooked() {
@@ -416,20 +422,20 @@ class RunCi {
         return call('gdb', args, throwOnError, gui);
       case 'Windows':
         if (tools == null) {
+          var pfiles = Sys.getEnv('ProgramFiles(x86)');
+          if (pfiles != null && FileSystem.exists('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe')) {
+            var cmd = new sys.io.Process('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe', ['-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64', '-property','installationPath']);
+            tools = cmd.stdout.readAll().toString().trim().split('\n')[0] + '/Common7/IDE';
+            cmd.exitCode();
+          }
+        }
+        if (tools == null) {
           tools = Sys.getEnv('VS140COMNTOOLS');
           if (tools == null) {
             tools = Sys.getEnv('VS130COMNTOOLS');
           }
           if (tools == null) {
             tools = Sys.getEnv('VS120COMNTOOLS');
-          }
-          if (tools == null) {
-            var pfiles = Sys.getEnv('ProgramFiles(x86)');
-            if (pfiles != null && FileSystem.exists('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe')) {
-              var cmd = new sys.io.Process('$pfiles/Microsoft Visual Studio/Installer/vswhere.exe', ['-latest','-products','*','-requires','Microsoft.VisualStudio.Component.VC.Tools.x86.x64', '-property','installationPath']);
-              tools = cmd.stdout.readAll().toString().trim().split('\n')[0] + '/Common7/IDE';
-              cmd.exitCode();
-            }
           }
           if (tools == null) {
             throw 'Cannot find VSCOMNTOOLS to debug';
