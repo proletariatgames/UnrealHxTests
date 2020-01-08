@@ -336,6 +336,10 @@ class TestUObjectExterns extends buddy.BuddySuite {
           obj.RemoveFromRoot();
         }
       });
+      it('should autogenerate interface members', {
+        var sub2 = UBasicTypesSub2.CreateFromCpp();
+        sub2.getAnotherInt().should.be(0xdead);
+      });
       it('should be able to call global functions');
       it('should be able to be called when overloads exist');
       it('should be able to be created by Haxe code');

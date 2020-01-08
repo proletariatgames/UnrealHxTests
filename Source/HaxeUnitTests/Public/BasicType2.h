@@ -19,4 +19,5 @@ class HAXEUNITTESTS_API IBasicType2
     virtual FString getSubName() = 0;
     UFUNCTION()
     virtual int32 getSomeInt() = 0;
+    virtual int32 getAnotherInt() = 0;
 };

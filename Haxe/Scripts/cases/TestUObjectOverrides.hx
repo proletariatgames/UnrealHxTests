@@ -369,7 +369,6 @@ class TestUObjectOverrides extends buddy.BuddySuite {
         {
           obj.isValid().should.be(false);
           obj.test2.should.be(100); // the haxe object hasn't died
-          obj.destroying.should.be(true);
         }
         UBasicTypesSub1.SomeObject.should.be(null);
       });
@@ -380,13 +379,6 @@ class TestUObjectOverrides extends buddy.BuddySuite {
 
 @:uclass class UHaxeBigObject extends UBigObject {
   public var test2:Int;
-  public var destroying:Bool;
-
-  override function BeginDestroy()
-  {
-    this.destroying = true;
-    super.BeginDestroy();
-  }
 }
 
 #if (cppia || WITH_CPPIA)
@@ -405,6 +397,10 @@ class UHaxeDerived0 extends UBasicTypesSub1 implements IBasicType2 {
 
   public function getSomeInt():unreal.Int32 {
     return 0xf0f0;
+  }
+
+  public function getAnotherInt():Int32 {
+    return 0xd33d;
   }
 }
 #end
@@ -551,6 +547,10 @@ class UHaxeDerived2 extends UHaxeDerived1 #if !(cppia || WITH_CPPIA) implements 
 
   #if (cppia || WITH_CPPIA) override #end public function getSomeInt():unreal.Int32 {
     return 0xf00ba5;
+  }
+
+  #if (cppia || WITH_CPPIA) override #end public function getAnotherInt():Int32 {
+    return 0xd33d;
   }
 
   override public function uFunction4_Implementation() {

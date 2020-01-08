@@ -22,7 +22,6 @@ class HAXEUNITTESTS_API UBasicTypesSub1 : public UBasicTypesUObject
 
   static UBasicTypesUObject *SomeObject;
 
-  UFUNCTION()
   virtual int64 setText(FText text) override;
 
   UFUNCTION(BlueprintImplementableEvent)
@@ -122,6 +121,10 @@ class HAXEUNITTESTS_API UBasicTypesSub2 : public UBasicTypesUObject, public IBas
   virtual int32 getSomeInt() override {
     return 0xf00;
   }
+
+  virtual int32 getAnotherInt() override {
+    return 0xdead;
+  }
 };
 
 UCLASS()
@@ -133,7 +136,6 @@ class HAXEUNITTESTS_API UBasicTypesSub3 : public UBasicTypesSub2
   bool isSub3 = true;
   virtual bool setUI64_I64_Float_Double(uint64 ui64, int64 i64, float f, double d) override;
 
-  UFUNCTION()
   virtual int64 setText(FText text) override;
 
   static UBasicTypesSub3 *CreateFromCpp() {

@@ -1472,5 +1472,29 @@ import unreal.*;
 ',
       ]
     },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/FGDelegate.hx" =>
+'package generated;
+import unreal.*;
+
+typedef FGDelegate = DynamicDelegate<FGDelegate, Void->Void>;
+',
+      ]
+    },
+    {
+      needsCppia: true,
+      needsStatic: true,
+      files: [
+        "Haxe/Scripts/generated/FGDelegate.hx" =>
+'package generated;
+import unreal.*;
+
+typedef FGDelegate = DynamicDelegate<FGDelegate, Int->Bool>;
+',
+      ]
+    },
   ];
 }
