@@ -42,6 +42,30 @@ class TestUnrealInteraction extends buddy.BuddySuite {
         ACppDynamicExtern.getStringSize(ret).should.be('theString'.length);
       });
 #end
+      it('should be able to use TSoftObjectPtr and SoftClassPtr', {
+        var cls:UClass = getObjectClass("/Game/Blueprints/BlueprintHaxeClass");
+        cls.should.not.be(null);
+        var obj:UBPTest = UObject.NewObject(null, UObject.GetTransientPackage(), cls);
+
+        var bpTest:UBPTest = UObject.NewObject(null, UObject.GetTransientPackage(), UBPTest.StaticClass());
+        bpTest.softObj.Get().should.be(null);
+        bpTest.softObj2.Get().should.be(null);
+        bpTest.softCls.Get().should.be(null);
+        bpTest.softCls2.Get().should.be(null);
+
+        bpTest.softObj.Set(bpTest);
+        bpTest.softObj.Get().should.be(bpTest);
+        // trace(bpTest.softObj.Get());
+        // Sys.println(bpTest.softObj.Get());
+        bpTest.softObj2 = bpTest.softObj;
+        bpTest.softObj.Get().should.be(bpTest);
+        bpTest.softObj2.Get().should.be(bpTest);
+
+        bpTest.softCls.Set(cls);
+        bpTest.softCls2 = bpTest.softCls;
+        bpTest.softCls.Get().should.be(cls);
+        bpTest.softCls2.Get().should.be(cls);
+      });
       it('should be able to override C++ blueprint functions', {
         var staticExtern:UCppStaticExternObject = UObject.NewObject(null, UObject.GetTransientPackage(), types.UBPOverrideTest.StaticClass());
         staticExtern.run_runBlueprints("Hey").should.be(43 * 3);
@@ -245,6 +269,18 @@ class UBPOverrideTest4_Child extends UBPOverrideTest4 {
 class UBPTest extends UObject {
   @:uproperty(BlueprintReadWrite, Category="Cppia")
   public var theString:FString;
+
+  @:uproperty(BlueprintReadWrite, Category="Cppia")
+  public var softObj:TSoftObjectPtr<UBPTest>;
+
+  @:uproperty(BlueprintReadWrite, Category="Cppia")
+  public var softObj2:TSoftObjectPtr<UBPTest>;
+
+  @:uproperty(BlueprintReadWrite, Category="Cppia")
+  public var softCls:TSoftClassPtr<UBPTest>;
+
+  @:uproperty(BlueprintReadWrite, Category="Cppia")
+  public var softCls2:TSoftClassPtr<UBPTest>;
 
   public var theInt:Int;
 
