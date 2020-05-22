@@ -34,4 +34,8 @@ class UStaticClass extends UObject {
   @:ufunction(BlueprintImplementableEvent) public function test2():Void;
   private function test_Implementation():Void {
   }
+  //Test Single quotes
+  @:uproperty(EditDefaultsOnly, Category='Character')
+  var CharacterClass:FString;
+	//var CharacterClass:TSubclassOf<AGCharacter>;
 }
