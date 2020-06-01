@@ -361,25 +361,39 @@ class TestTArray extends buddy.BuddySuite {
         for (s in [obj.set, ReflectAPI.callMethod(obj, "ufuncGet_set", []), obj2.set, ReflectAPI.callMethod(obj2, "ufuncGet_set", []), TSet.create(new TypeParam<FString>())]) {
           s.Contains("Test").should.be(false);
           s.Contains("Test2").should.be(false);
+          s.Num().should.be(0);
+          s.IsValidId(FSetElementId.FromInteger(-1)).should.be(false);
+          s.IsValidId(FSetElementId.FromInteger(0)).should.be(false);
           var t1 = s.Add("Test");
           s.Contains("Test").should.be(true);
-          s.Contains("Test2").should.be(false);
+          s.Contains("Test2").should.be(false);         
+          s.Num().should.be(1);
+          s.IsValidId(FSetElementId.FromInteger(0)).should.be(true);
+          [for( item in s) item.toString()].should.containAll(["Test"]);         
           var scpy = s.copy();
           var t2 = s.Add("Test2");
           s.Contains("Test").should.be(true);
           s.Contains("Test2").should.be(true);
+          s.Num().should.be(2);
+          [for( item in s) item.toString()].should.containAll(["Test", "Test2"]);      
           s.Remove(t1);
           s.Contains("Test").should.be(false);
           s.Contains("Test2").should.be(true);
+          s.Num().should.be(1);
+          s.IsValidId(FSetElementId.FromInteger(0)).should.be(false);
+          [for( item in s) item.toString()].should.containAll(["Test2"]);
           s.Remove(t2);
           s.Contains("Test").should.be(false);
-          s.Contains("Test2").should.be(false);
-
+          s.Contains("Test2").should.be(false);         
           scpy.Contains("Test").should.be(true);
           scpy.Contains("Test2").should.be(false);
+          scpy.Num().should.be(1);
+          [for( item in scpy) item.toString()].should.containAll(["Test"]);
           s.assign(scpy);
           s.Contains("Test").should.be(true);
           s.Contains("Test2").should.be(false);
+          s.Num().should.be(1);
+          [for( item in s) item.toString()].should.containAll(["Test"]);
         }
         for (s in [obj.set2, ReflectAPI.callMethod(obj, "ufuncGet_set2", []), obj2.set2, ReflectAPI.callMethod(obj2, "ufuncGet_set2", []), TSet.create(new TypeParam<Int>())]) {
           s.Contains(42).should.be(false);
