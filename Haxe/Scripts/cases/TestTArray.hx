@@ -566,7 +566,15 @@ class TestTArray extends buddy.BuddySuite {
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
           [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
           s.Contains("Test").should.be(false);
-          s.Contains("Test2").should.be(false);
+          s.Contains("Test2").should.be(false);         
+          s["Test3"] = "42";//setter with a previously non existent key
+          s.Contains("Test3").should.be(true);
+          s["Test3"].toString().should.be("42");
+          s["Test3"] = "43";
+          s["Test3"].toString().should.be("43");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test3"]);
+          s.Remove("Test3");
+          s.Contains("Test3").should.be(false);         
           s.Add("Test", "10");
           s.Contains("Test").should.be(true);
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
