@@ -58,21 +58,29 @@ class TestUnrealInteraction extends buddy.BuddySuite {
         bpTest.softObj2 = bpTest.softObj;
         bpTest.softObj.Get().should.be(bpTest);
         bpTest.softObj2.Get().should.be(bpTest);
+        bpTest.softObj.LoadSynchronous().should.beType(UBPTest);    
+        bpTest.softObj2.LoadSynchronous().should.beType(UBPTest);
 
         bpTest.softCls.Set(cls);
         bpTest.softCls2 = bpTest.softCls;
         bpTest.softCls.Get().should.be(cls);
         bpTest.softCls2.Get().should.be(cls);
+        bpTest.softCls.LoadSynchronous().should.be(cls);
+        bpTest.softCls2.LoadSynchronous().should.be(cls);
 
         bpTest.softObj = TSoftObjectPtr.create();
         bpTest.softCls = TSoftClassPtr.create();
         bpTest.softObj.Get().should.be(null);
         bpTest.softCls.Get().should.be(null);
+        bpTest.softObj.LoadSynchronous().should.be(null);
+        bpTest.softCls.LoadSynchronous().should.be(null);
 
         bpTest.softObj = TSoftObjectPtr.createWithObject(bpTest);
         bpTest.softCls = TSoftClassPtr.createWithClass(new TypeParam<UBPTest>(), cls);
         bpTest.softObj.Get().should.be(bpTest);
         bpTest.softCls.Get().should.be(cls);
+        bpTest.softObj.LoadSynchronous().should.beType(UBPTest);   
+        bpTest.softCls.LoadSynchronous().should.be(cls); 
       });
       it('should be able to override C++ blueprint functions', {
         var staticExtern:UCppStaticExternObject = UObject.NewObject(null, UObject.GetTransientPackage(), types.UBPOverrideTest.StaticClass());
