@@ -580,9 +580,8 @@ class TestTArray extends buddy.BuddySuite {
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test3"]);
           s.Remove("Test3");
           s.Contains("Test3").should.be(false);  
-          trace("AAAAAAAAAAAAAAAAAAAAAA");
+          //test failing
           //trace(s["Test4"].toString());
-          trace("BBBBBBBBBBBBBBBBBBBBBB");
           //s["Test4"].toString().should.be("");
           s.Remove("Test4");        
 
