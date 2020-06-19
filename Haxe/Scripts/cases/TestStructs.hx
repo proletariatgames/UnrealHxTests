@@ -495,9 +495,9 @@ class TestStructs extends buddy.BuddySuite {
         (ref1 != ref2).should.be(false);
         (FSimpleStruct.getRef() == null).should.be(false);
         (FSimpleStruct.getRef() == FSimpleStruct.getRef()).should.be(true);
-        var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
-        var simple2 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
-        (simple1 == simple2).should.be(false);
+        //var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        //var simple2 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        //(simple1 == simple2).should.be(false);
       });
       it('should be able to check structural equality', {
         var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
@@ -518,6 +518,24 @@ class TestStructs extends buddy.BuddySuite {
         //These tests should fail because there is no equals operator!!!
         noOp1.equals(noOp2).should.be(false);
         noOp1.equals(noOp3).should.be(false);
+        
+        //tests using '==' operator
+        (simple1 == null).should.be(false);
+        (simple1 == simple1).should.be(true);
+        (simple1 == simple2).should.be(true);
+        (simple1 == simple3).should.be(false);
+        //test using '==' with nulls
+        simple1 = null;
+        (simple1 == null).should.be(true);
+        (simple1 == simple2).should.be(false);
+        simple2 = null;
+        (simple1 == simple2).should.be(true);
+        //using '==' on no equals operator should be false
+        (noOp1 == null).should.be(false);
+        (noOp1 == noOp2).should.be(false);
+        (noOp1 == noOp3).should.be(false);
+        //This test should pass because we check for physical equal first!
+        (noOp1 == noOp1).should.be(true);
       });
       it('should be able to construct haxe-defined structs', {
         var s = FHaxeStruct.create();
