@@ -380,7 +380,11 @@ class TestTArray extends buddy.BuddySuite {
           s.Contains("Test").should.be(false);
           s.Contains("Test2").should.be(true);
           s.Num().should.be(1);
-          s.IsValidId(FSetElementId.FromInteger(0)).should.be(false);
+          var validId = s.FindId("Test2");
+          var invalidId = FSetElementId.FromInteger(validId.AsInteger()-1);
+          s.IsValidId(validId).should.be(true);
+          s.IsValidId(invalidId).should.be(false);
+
           [for( item in s) item.toString()].should.containAll(["Test2"]);
           s.Remove(t2);
           s.Contains("Test").should.be(false);
@@ -566,15 +570,22 @@ class TestTArray extends buddy.BuddySuite {
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
           [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
           s.Contains("Test").should.be(false);
-          s.Contains("Test2").should.be(false);         
-          s["Test3"] = "42";//setter with a previously non existent key
+          s.Contains("Test2").should.be(false); 
+          //testing setter with a previously non existent key        
+          s["Test3"] = "42";
           s.Contains("Test3").should.be(true);
           s["Test3"].toString().should.be("42");
           s["Test3"] = "43";
           s["Test3"].toString().should.be("43");
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test3"]);
           s.Remove("Test3");
-          s.Contains("Test3").should.be(false);         
+          s.Contains("Test3").should.be(false);  
+          trace("AAAAAAAAAAAAAAAAAAAAAA");
+          //trace(s["Test4"].toString());
+          trace("BBBBBBBBBBBBBBBBBBBBBB");
+          //s["Test4"].toString().should.be("");
+          s.Remove("Test4");        
+
           s.Add("Test", "10");
           s.Contains("Test").should.be(true);
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
