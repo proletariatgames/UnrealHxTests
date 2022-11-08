@@ -495,9 +495,9 @@ class TestStructs extends buddy.BuddySuite {
         (ref1 != ref2).should.be(false);
         (FSimpleStruct.getRef() == null).should.be(false);
         (FSimpleStruct.getRef() == FSimpleStruct.getRef()).should.be(true);
-        var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
-        var simple2 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
-        (simple1 == simple2).should.be(false);
+        //var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        //var simple2 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);
+        //(simple1 == simple2).should.be(false);
       });
       it('should be able to check structural equality', {
         var simple1 = FSimpleStruct.createWithArgs(100.1,200.2,5,10);

@@ -361,25 +361,43 @@ class TestTArray extends buddy.BuddySuite {
         for (s in [obj.set, ReflectAPI.callMethod(obj, "ufuncGet_set", []), obj2.set, ReflectAPI.callMethod(obj2, "ufuncGet_set", []), TSet.create(new TypeParam<FString>())]) {
           s.Contains("Test").should.be(false);
           s.Contains("Test2").should.be(false);
+          s.Num().should.be(0);
+          s.IsValidId(FSetElementId.FromInteger(-1)).should.be(false);
+          s.IsValidId(FSetElementId.FromInteger(0)).should.be(false);
           var t1 = s.Add("Test");
           s.Contains("Test").should.be(true);
-          s.Contains("Test2").should.be(false);
+          s.Contains("Test2").should.be(false);         
+          s.Num().should.be(1);
+          s.IsValidId(FSetElementId.FromInteger(0)).should.be(true);
+          [for( item in s) item.toString()].should.containAll(["Test"]);         
           var scpy = s.copy();
           var t2 = s.Add("Test2");
           s.Contains("Test").should.be(true);
           s.Contains("Test2").should.be(true);
+          s.Num().should.be(2);
+          [for( item in s) item.toString()].should.containAll(["Test", "Test2"]);      
           s.Remove(t1);
           s.Contains("Test").should.be(false);
           s.Contains("Test2").should.be(true);
+          s.Num().should.be(1);
+          var validId = s.FindId("Test2");
+          var invalidId = FSetElementId.FromInteger(validId.AsInteger()-1);
+          s.IsValidId(validId).should.be(true);
+          s.IsValidId(invalidId).should.be(false);
+
+          [for( item in s) item.toString()].should.containAll(["Test2"]);
           s.Remove(t2);
           s.Contains("Test").should.be(false);
-          s.Contains("Test2").should.be(false);
-
+          s.Contains("Test2").should.be(false);         
           scpy.Contains("Test").should.be(true);
           scpy.Contains("Test2").should.be(false);
+          scpy.Num().should.be(1);
+          [for( item in scpy) item.toString()].should.containAll(["Test"]);
           s.assign(scpy);
           s.Contains("Test").should.be(true);
           s.Contains("Test2").should.be(false);
+          s.Num().should.be(1);
+          [for( item in s) item.toString()].should.containAll(["Test"]);
         }
         for (s in [obj.set2, ReflectAPI.callMethod(obj, "ufuncGet_set2", []), obj2.set2, ReflectAPI.callMethod(obj2, "ufuncGet_set2", []), TSet.create(new TypeParam<Int>())]) {
           s.Contains(42).should.be(false);
@@ -552,7 +570,21 @@ class TestTArray extends buddy.BuddySuite {
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly([]);
           [ for (val in s.GenerateValueArray()) val.toString() ].should.containExactly([]);
           s.Contains("Test").should.be(false);
-          s.Contains("Test2").should.be(false);
+          s.Contains("Test2").should.be(false); 
+          //testing setter with a previously non existent key        
+          s["Test3"] = "42";
+          s.Contains("Test3").should.be(true);
+          s["Test3"].toString().should.be("42");
+          s["Test3"] = "43";
+          s["Test3"].toString().should.be("43");
+          [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test3"]);
+          s.Remove("Test3");
+          s.Contains("Test3").should.be(false);  
+          //test failing
+          //trace(s["Test4"].toString());
+          //s["Test4"].toString().should.be("");
+          s.Remove("Test4");        
+
           s.Add("Test", "10");
           s.Contains("Test").should.be(true);
           [ for (key in s.GenerateKeyArray()) key.toString() ].should.containExactly(["Test"]);
